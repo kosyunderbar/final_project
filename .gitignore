@@ -1,0 +1,14 @@
+# Temporary review and transfer artifacts
+/tmp/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Python cache and OS metadata
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db
