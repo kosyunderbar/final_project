@@ -1,0 +1,44 @@
+관제 HMI 시안 - 라즈베리파이에서 띄우는 법
+================================================
+
+이 폴더(hmi_demo)를 통째로 Pi 5에 복사한다 (USB, git, scp 아무거나).
+코드는 PySide6가 있으면 PySide6로, 없으면 PySide2로 돈다. 고칠 것 없음.
+
+1. OS 판 확인 (터미널)
+   cat /etc/os-release | grep CODENAME
+   -> bookworm 또는 trixie
+
+2. 설치 (인터넷 필요, 한 번만)
+   [bookworm] PySide2만 apt로 설치된다. pip로는 PySide2도 PySide6(최신판)도 설치되지 않는다.
+     sudo apt update
+     sudo apt install python3-pyside2.qtwidgets python3-pyside2.qtgui python3-pyside2.qtcore fonts-nanum
+
+   [trixie] 둘 다 apt로 설치된다. 팀에서 정한 쪽 하나만 깔면 된다.
+     PySide2: sudo apt install python3-pyside2.qtwidgets python3-pyside2.qtgui python3-pyside2.qtcore fonts-nanum
+     PySide6: sudo apt install python3-pyside6.qtwidgets python3-pyside6.qtgui python3-pyside6.qtcore fonts-nanum
+
+   fonts-nanum = 한글 글꼴. 빠뜨리면 한글이 네모로 깨진다.
+   인터넷이 없을 때를 대비해 나눔고딕 .ttf 파일을 이 폴더의 fonts/ 안에 넣어 두면 그것을 먼저 쓴다.
+
+3. 실행 (Pi 바탕화면의 터미널에서)
+   cd hmi_demo
+   python3 hmi_demo.py --fullscreen     7인치 화면에 전체 화면으로
+   python3 hmi_demo.py                  800x480 창으로
+   스페이스 = 평소 / 이상 화면 바꾸기,  Esc = 종료
+   처음 줄에 "Qt 바인딩: PySide2 (Qt 5.15.x) · 글꼴: NanumGothic"처럼 무엇으로 돌았는지 찍힌다.
+
+4. 안 뜰 때
+   - SSH로 접속해서 실행하면 화면을 찾지 못한다. Pi 화면 앞에서 터미널을 열어 실행한다.
+   - 창이 안 뜨고 플랫폼 오류가 나면: QT_QPA_PLATFORM=xcb python3 hmi_demo.py --fullscreen
+   - 화면이 모니터가 아니라 리본 케이블 7인치라면, 화면이 먼저 Pi 바탕화면을 띄우는지부터 확인한다.
+
+5. 확인한 조합 (2026-11-18, 라즈베리파이와 같은 ARM64 Debian 컨테이너에서 캡처. 실물 Pi는 아직)
+   - Debian 12 bookworm · Python 3.11 · apt PySide2 (Qt 5.15.8) · NanumGothic  -> 정상 (확인_화면/bookworm_pyside2_*)
+   - Debian 13 trixie   · Python 3.13 · apt PySide6 (Qt 6.8.2)  · NanumGothic  -> 정상 (확인_화면/trixie_pyside6_*)
+     (Qt 6.8에서는 맨 위 상태 칩의 모서리가 둥글지 않고 각지게 나온다. 동작에는 영향 없음)
+   - Windows 11 · Python 3.12 · pip PySide6 (Qt 6.12) · 맑은 고딕            -> 정상 (PC 개발용)
+
+6. 아직 안 한 것
+   - Pi가 켜지면 자동으로 전체 화면으로 뜨게 하는 설정 (OS 판에 따라 설정 위치가 달라 Pi에서 확인 후)
+   - 실제 데이터 연결 (지금은 예시 값. 현장 기록장 SQLite와 MQTT 알림을 읽도록 바꿀 차례)
+   - 버튼 동작 (지금은 눌러도 아무 일 없음)
