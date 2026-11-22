@@ -350,7 +350,7 @@ NORMAL = dict(
     side=dict(title="오늘 생산", nums=[("11", "완료", None), ("1", "보류", "warn"), ("1", "진행 중", None)],
               note="다음 지시  BODY-003",
               devices=[("P1", 1), ("P2", 1), ("P3", 1), ("P4", 1), ("검사", 1), ("AGV", 1), ("태그", 1)],
-              buttons=[("AGV 수동 조작", None), ("검사 정정", None), ("부품 부족 띄우기", None), ("새 회차", None)]),
+              buttons=[("AGV 수동 조작", None), ("검사 정정", None), ("새 회차", None)]),
 )
 ALARM = dict(
     run="회차 r-20261201-1405", clock="14:23:40",

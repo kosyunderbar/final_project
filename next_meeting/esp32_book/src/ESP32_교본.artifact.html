@@ -1,0 +1,1016 @@
+<title>ESP32 교본</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* 레이아웃: 한 단 읽기 흐름(최대 860px) + 그림은 본문 폭 그대로. 회로 기판의 색(솔더마스크 초록, 금색 핀, 은색 캔)에서 가져온 팔레트 */
+:root{
+  --bg:#f1f4f2; --panel:#ffffff; --sunk:#e6ebe8; --fg:#15201b; --mut:#55635c; --line:#cbd5cf;
+  --acc:#0b6e4f; --acc-soft:#d7ece3; --gold:#a8741a; --gold-soft:#f3e6c9;
+  --ok:#0b6e4f; --ok-bg:#d7ece3; --warn:#96610a; --warn-bg:#f6e7c4; --bad:#a3301f; --bad-bg:#f5d9d3; --pow:#3b4a8c; --pow-bg:#dfe3f4;
+  --pcb:#1b2a24; --pcb2:#24362f; --can:#c9cfd2; --can2:#aab2b6; --black:#22282b;
+  --sans:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1512; --panel:#17201c; --sunk:#1d2823; --fg:#e6ede9; --mut:#9aaaa2; --line:#2e3d36;
+  --acc:#4fc39a; --acc-soft:#173a2e; --gold:#e0b25a; --gold-soft:#3a2f17;
+  --ok:#4fc39a; --ok-bg:#173a2e; --warn:#e0b25a; --warn-bg:#3a2f17; --bad:#f08a78; --bad-bg:#43211b; --pow:#9aa8ee; --pow-bg:#222a4d;
+  --pcb:#20322b; --pcb2:#2a4037; --can:#b9c1c5; --can2:#8f999e; --black:#0b0e0f; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f1512; --panel:#17201c; --sunk:#1d2823; --fg:#e6ede9; --mut:#9aaaa2; --line:#2e3d36;
+  --acc:#4fc39a; --acc-soft:#173a2e; --gold:#e0b25a; --gold-soft:#3a2f17;
+  --ok:#4fc39a; --ok-bg:#173a2e; --warn:#e0b25a; --warn-bg:#3a2f17; --bad:#f08a78; --bad-bg:#43211b; --pow:#9aa8ee; --pow-bg:#222a4d;
+  --pcb:#20322b; --pcb2:#2a4037; --can:#b9c1c5; --can2:#8f999e; --black:#0b0e0f; color-scheme:dark }
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-size:16px;line-height:1.7;margin:0}
+.wrap{max-width:860px;margin:0 auto;padding-block:28px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:44px}
+h1{font-size:clamp(30px,6vw,44px);line-height:1.15;margin:0;letter-spacing:-.02em;text-wrap:balance}
+h2{font-size:24px;line-height:1.3;margin:0;letter-spacing:-.01em;text-wrap:balance}
+h3{font-size:17px;margin:0;line-height:1.4}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;color:var(--acc);text-transform:uppercase}
+.lead{font-size:18px;color:var(--mut);max-width:62ch}
+section{display:flex;flex-direction:column;gap:16px;scroll-margin-top:16px}
+.goal{font-size:14.5px;color:var(--mut);border-left:3px solid var(--acc);padding-left:12px}
+.prose{display:flex;flex-direction:column;gap:12px;max-width:68ch}
+ul,ol{margin:0;padding-left:1.25em;display:flex;flex-direction:column;gap:6px}
+code,kbd{font-family:var(--mono);font-size:.88em;background:var(--sunk);padding:.08em .35em;border-radius:4px;overflow-wrap:anywhere}
+a{color:var(--acc)}
+.toc{display:flex;flex-wrap:wrap;gap:8px}
+.toc a{font-size:14px;text-decoration:none;color:var(--fg);background:var(--panel);border:1px solid var(--line);padding:6px 11px;border-radius:999px}
+.toc a:hover,.toc a:focus-visible{border-color:var(--acc);color:var(--acc)}
+.fig{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.fig > .cap{font-size:13.5px;color:var(--mut)}
+.scroll{overflow-x:auto}
+.scroll svg{max-width:none}
+svg{display:block;max-width:100%;height:auto}
+svg text{font-family:var(--sans);fill:var(--fg)}
+svg .m{fill:var(--mut)} svg .mono{font-family:var(--mono)}
+svg .ln{stroke:var(--mut);fill:none;stroke-width:1.8}
+svg .bx{fill:var(--panel);stroke:var(--line);stroke-width:1.5}
+svg .bxa{fill:var(--acc-soft);stroke:var(--acc);stroke-width:1.5}
+svg .bxg{fill:var(--gold-soft);stroke:var(--gold);stroke-width:1.5}
+svg .bxs{fill:var(--sunk);stroke:var(--line);stroke-width:1.5}
+svg .ah{fill:var(--mut)}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th,td{text-align:left;vertical-align:top;padding:7px 10px;border-bottom:1px solid var(--line)}
+th{font-size:12.5px;color:var(--mut);font-weight:600;letter-spacing:.02em}
+.tbl{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+.tbl table{min-width:520px}
+.note{background:var(--acc-soft);border-radius:8px;padding:12px 14px;font-size:15px}
+.warn{background:var(--warn-bg);border-radius:8px;padding:12px 14px;font-size:15px}
+.bad{background:var(--bad-bg);border-radius:8px;padding:12px 14px;font-size:15px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.grid2 > *{min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+pre{margin:0;background:var(--sunk);border-radius:8px;padding:12px 14px;overflow-x:auto;font-family:var(--mono);font-size:13px;line-height:1.55;tab-size:2}
+pre code{background:none;padding:0;font-size:inherit;overflow-wrap:normal}
+.codebox{position:relative;min-width:0}
+.copy{position:absolute;top:8px;right:8px;font:500 12px var(--sans);background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:6px;padding:4px 9px;cursor:pointer}
+.copy:hover,.copy:focus-visible{border-color:var(--acc);color:var(--acc)}
+button{font-family:inherit}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+details{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+details > summary{cursor:pointer;font-weight:600}
+details[open] > summary{margin-bottom:10px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;white-space:nowrap}
+.p-ok{background:var(--ok-bg);color:var(--ok)} .p-warn{background:var(--warn-bg);color:var(--warn)} .p-bad{background:var(--bad-bg);color:var(--bad)} .p-pow{background:var(--pow-bg);color:var(--pow)}
+
+/* 3D 보드 */
+.b3d{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:16px;align-items:start}
+@media (max-width:640px){.b3d{grid-template-columns:1fr}}
+.stage{height:320px;perspective:900px;display:grid;place-items:center;background:var(--sunk);border-radius:8px;overflow:hidden;touch-action:none;cursor:grab;user-select:none}
+.stage:active{cursor:grabbing}
+.board{position:relative;width:408px;height:200px;transform-style:preserve-3d;transform:scale(var(--sc,1)) rotateX(var(--rx,58deg)) rotateZ(var(--rz,-32deg))}
+.cub{position:absolute;transform-style:preserve-3d}
+.cub i{position:absolute;display:block;background:var(--c);border:1px solid rgba(0,0,0,.28)}
+.cub i.top{inset:0;cursor:pointer}
+.cub.sel i{outline:2px solid var(--gold);outline-offset:-1px}
+.cub .lbl{position:absolute;inset:0;display:grid;place-items:center;font:600 10px var(--mono);color:#0d1512;pointer-events:none;text-align:center;line-height:1.1}
+.pads{position:absolute;left:14px;width:374px;height:8px;background:radial-gradient(circle at 4px 4px,#d6a94a 0 3px,transparent 3.4px) 0 0/20.32px 8px repeat-x;transform:translateZ(13.5px);pointer-events:none}
+.ant{position:absolute;inset:3px;background:repeating-linear-gradient(90deg,#d6a94a 0 3px,transparent 3px 7px);opacity:.9;pointer-events:none}
+.partlist{display:flex;flex-wrap:wrap;gap:6px}
+.partlist button{font-size:13px;background:var(--panel);color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:4px 10px;cursor:pointer}
+.partlist button[aria-pressed="true"]{background:var(--acc);border-color:var(--acc);color:var(--bg)}
+.info{background:var(--sunk);border-radius:8px;padding:12px 14px;font-size:14.5px;min-height:120px;display:flex;flex-direction:column;gap:6px}
+.info b{font-size:16px}
+
+/* 핀 지도 */
+.pinmap{display:grid;grid-template-columns:minmax(0,1fr) 76px minmax(0,1fr);gap:0 8px;align-items:center;font-family:var(--mono);font-size:13px;max-width:460px;margin:0 auto;width:100%}
+.pinmap .mid{grid-column:2;grid-row:1 / span 21;align-self:stretch;background:var(--pcb);border-radius:8px;display:flex;flex-direction:column;justify-content:space-between;align-items:center;padding:8px 4px;color:#cfe3da;font-size:11px;text-align:center}
+.pinmap .mid span{display:block}
+.pin{display:flex;align-items:center;gap:6px;border:1px solid transparent;background:none;color:var(--fg);padding:3px 6px;border-radius:6px;cursor:pointer;font:inherit;min-width:0;width:100%}
+.pin.l{justify-content:flex-end;text-align:right} .pin.r{justify-content:flex-start}
+.pin .dot{width:11px;height:11px;border-radius:50%;flex:none;border:1px solid rgba(0,0,0,.25)}
+.pin[data-k="ok"] .dot{background:var(--ok)} .pin[data-k="warn"] .dot{background:var(--warn)} .pin[data-k="bad"] .dot{background:var(--bad)} .pin[data-k="pow"] .dot{background:var(--pow)}
+.pin .use{font-family:var(--sans);font-size:11px;color:var(--gold);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pin[aria-pressed="true"]{border-color:var(--acc);background:var(--acc-soft)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;font-size:13px}
+
+/* 줄 해부 · 계산기 */
+.frame{font-family:var(--mono);font-size:clamp(13px,3.2vw,19px);display:flex;flex-wrap:wrap;gap:3px}
+.frame span{padding:6px 7px;border-radius:5px}
+.f-s{background:var(--sunk)} .f-t{background:var(--gold-soft);color:var(--gold);font-weight:600} .f-p{background:var(--acc-soft)} .f-c{background:var(--pow-bg);color:var(--pow);font-weight:600}
+.calc{display:flex;flex-direction:column;gap:10px}
+.calc label{font-size:13.5px;color:var(--mut)}
+.calc input{width:100%;font:500 15px var(--mono);padding:9px 11px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--fg)}
+.out{font-family:var(--mono);font-size:15px;background:var(--sunk);border-radius:8px;padding:10px 12px;overflow-wrap:anywhere}
+.steps{display:flex;flex-wrap:wrap;gap:4px;font-family:var(--mono);font-size:12px}
+.steps span{background:var(--sunk);border-radius:4px;padding:2px 5px;white-space:nowrap}
+
+/* 실습 */
+.lab{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.lab header{display:flex;gap:10px;align-items:flex-start}
+.lab input[type=checkbox]{width:20px;height:20px;margin-top:3px;accent-color:var(--acc);flex:none}
+.lab .meta{font-size:13px;color:var(--mut)}
+.lab dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:14.5px}
+.lab dt{color:var(--mut);font-size:13px;white-space:nowrap;padding-top:1px} .lab dd{margin:0}
+.prog{font-family:var(--mono);font-size:14px;color:var(--acc)}
+.cheat{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.cheat .card{font-size:14px;gap:6px}
+.cheat h3{font-size:14px;color:var(--acc)}
+footer{font-size:13.5px;color:var(--mut);border-top:1px solid var(--line);padding-top:16px;display:flex;flex-direction:column;gap:6px}
+@media (prefers-reduced-motion:no-preference){.board{transition:transform .12s linear}}
+</style>
+
+<div class="wrap">
+
+<header style="display:flex;flex-direction:column;gap:14px">
+  <div class="eyebrow">관통 프로젝트 · NodeMCU-32 (ESP32-WROOM-32)</div>
+  <h1>ESP32 교본</h1>
+  <p class="lead">읽고, 여덟 가지 실습을 해 보면 프로젝트의 통신 모뎀과 스마트태그를 바로 만들 수 있게 썼습니다. 예시는 모두 우리 공장 라인의 것입니다.</p>
+  <nav class="toc" aria-label="목차">
+    <a href="#why">1 왜 쓰나</a><a href="#board">2 보드 둘러보기</a><a href="#setup">3 첫 업로드</a><a href="#gpio">4 핀과 loop</a><a href="#uart">5 시리얼과 한 줄</a><a href="#mqtt">6 Wi-Fi와 MQTT</a><a href="#recover">7 끊김과 저장</a><a href="#use">8 프로젝트에 쓰기</a><a href="#labs">실습</a><a href="#stuck">막혔을 때</a><a href="#cheat">한 장 요약</a><a href="#quiz">자가 점검</a>
+  </nav>
+  <div class="note"><b>먼저 알아 둘 것.</b> 아래 코드는 Mac에서 로직 시험만 통과했고, 실제 보드에 올려 보지는 못했습니다. 실습 0에서 처음 올릴 때 확인하게 됩니다. 확인하지 못한 항목은 맨 아래에 모아 두었습니다.</div>
+</header>
+
+<!-- 1 -->
+<section id="why">
+  <div class="eyebrow">1</div>
+  <h2>ESP32가 무엇이고, 우리 프로젝트에서 무슨 일을 하나</h2>
+  <p class="goal">읽고 나면: ESP32 다섯 대가 각각 무엇을 맡는지 그림 한 장으로 설명할 수 있다.</p>
+  <div class="prose">
+    <p>ESP32는 <b>Wi-Fi가 달린 손가락만 한 컴퓨터</b>입니다. 운영체제 없이 우리가 올린 프로그램 하나만 켜지자마자 돌립니다. 핀으로 전기 신호를 읽고 쓰고, Wi-Fi로 메시지를 주고받습니다.</p>
+    <p>우리가 쓰는 이유는 하나입니다. <b>공정 보드(STM32)에는 Wi-Fi가 없습니다.</b> 그래서 공정마다 ESP32를 옆에 붙여, 보드가 선으로 넘긴 한 줄을 관제 Pi5에 무선으로 전해 줍니다. 차체에 붙는 스마트태그도 ESP32입니다.</p>
+  </div>
+  <div class="fig">
+    <div class="scroll">
+    <svg viewBox="0 0 800 300" width="800" role="img" aria-label="공정 보드, ESP32, 관제 Pi5의 연결">
+      <rect class="bxs" x="10" y="40" width="170" height="86" rx="8"/><text x="95" y="72" text-anchor="middle" font-weight="700" font-size="16">공정 보드</text><text class="m" x="95" y="94" text-anchor="middle" font-size="13">STM32 · 설비를 움직임</text><text class="m" x="95" y="112" text-anchor="middle" font-size="13">Wi-Fi 없음</text>
+      <rect class="bxa" x="290" y="40" width="170" height="86" rx="8"/><text x="375" y="72" text-anchor="middle" font-weight="700" font-size="16">ESP32 모뎀 ×4</text><text class="m" x="375" y="94" text-anchor="middle" font-size="13">옮기기만 한다</text><text class="m" x="375" y="112" text-anchor="middle" font-size="13">판단하지 않는다</text>
+      <rect class="bx" x="600" y="40" width="190" height="200" rx="8"/><text x="695" y="72" text-anchor="middle" font-weight="700" font-size="16">관제 Pi5</text><text class="m" x="695" y="96" text-anchor="middle" font-size="13">브로커(메시지 우체국)</text><text class="m" x="695" y="116" text-anchor="middle" font-size="13">기록 프로그램 · 화면</text>
+      <rect class="bxg" x="290" y="170" width="170" height="70" rx="8"/><text x="375" y="200" text-anchor="middle" font-weight="700" font-size="16">스마트태그 ×1</text><text class="m" x="375" y="222" text-anchor="middle" font-size="13">차체에 붙어 다니는 ESP32</text>
+      <path class="ln" d="M180 83 H290"/><path class="ah" d="M290 83 l-9 -5 v10z"/><path class="ah" d="M180 83 l9 -5 v10z"/>
+      <text x="235" y="70" text-anchor="middle" font-size="13" font-weight="600">선 3가닥</text><text class="m" x="235" y="104" text-anchor="middle" font-size="12">UART · 한 줄씩</text>
+      <path class="ln" d="M460 83 H600" stroke-dasharray="6 5"/><path class="ah" d="M600 83 l-9 -5 v10z"/><path class="ah" d="M460 83 l9 -5 v10z"/>
+      <text x="530" y="70" text-anchor="middle" font-size="13" font-weight="600">Wi-Fi</text><text class="m" x="530" y="104" text-anchor="middle" font-size="12">MQTT 메시지</text>
+      <path class="ln" d="M460 205 H600" stroke-dasharray="6 5"/><path class="ah" d="M600 205 l-9 -5 v10z"/><path class="ah" d="M460 205 l9 -5 v10z"/>
+      <text class="m" x="530" y="194" text-anchor="middle" font-size="12">이력 사본을 받음</text>
+      <text class="m" x="10" y="282" font-size="13">보드가 선으로 보낸 줄  $R{"n":42,"k":"DONE"}*7B  →  ESP32가 토픽 factory/station/P2/report 로 발행</text>
+    </svg>
+    </div>
+    <div class="cap">모뎀 ESP32는 줄을 받아 토픽으로 옮기고, 토픽으로 온 메시지를 줄로 바꿔 보드에 넘깁니다. 내용을 보고 판단하는 일은 하지 않습니다.</div>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>무엇</th><th>수량</th><th>하는 일</th></tr>
+    <tr><td><b>공정 통신 모뎀</b></td><td>4</td><td>P1~P4 공정 보드 옆. 선(UART) ↔ Wi-Fi(MQTT). 네 대가 같은 코드이고 공정 이름만 다릅니다</td></tr>
+    <tr><td><b>스마트태그</b></td><td>1</td><td>차체에 부착. 관제가 보내는 이력 사본을 받아 저장하고, 불빛과 버튼이 있습니다</td></tr>
+    <tr><td>단독 공정 <span class="pill p-warn">미정</span></td><td>0~2</td><td>보드 구성 B′안을 고르면 일부 공정은 ESP32 혼자 리더기와 설비까지 맡습니다. 메시지는 같습니다</td></tr>
+  </table></div>
+  <div class="prose"><p><b>이 교본에서 다루지 않는 것:</b> 블루투스, 절전, 무선 업데이트, ESP-IDF, FreeRTOS 내부. 4주 안에 쓸 일이 없습니다. 납땜도 여기서는 하지 않고 점퍼선만 씁니다.</p></div>
+</section>
+
+<!-- 2 -->
+<section id="board">
+  <div class="eyebrow">2</div>
+  <h2>보드 둘러보기</h2>
+  <p class="goal">읽고 나면: USB, 버튼 두 개, 안테나, 전원 핀을 짚을 수 있고, 써도 되는 핀과 안 되는 핀을 말할 수 있다.</p>
+  <div class="fig">
+    <div class="b3d">
+      <div>
+        <div class="stage" id="stage" aria-label="보드 3D 모형. 끌어서 돌릴 수 있습니다"><div class="board" id="brd"></div></div>
+        <div class="cap" style="font-size:13px;color:var(--mut);margin-top:6px">끌어서 돌리고, 부품을 누르면 설명이 나옵니다. 부품 위치는 대략이며 보드마다 조금 다릅니다.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;min-width:0">
+        <div class="partlist" id="parts" role="group" aria-label="부품 고르기"></div>
+        <div class="info" id="pinfo" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>핀 지도</h3>
+  <div class="prose"><p>양쪽에 19개씩, 모두 38개입니다. 핀을 누르면 이유와 우리 프로젝트에서의 쓰임이 나옵니다. <b>배선할 때는 그림 위치가 아니라 보드에 인쇄된 글자를 보고 꽂으세요.</b> 한쪽이 15개인 30핀 보드는 순서가 다릅니다.</p></div>
+  <div class="fig">
+    <div class="legend"><span class="pill p-ok">써도 됨</span><span class="pill p-warn">조심</span><span class="pill p-bad">쓰지 않음</span><span class="pill p-pow">전원</span><span style="color:var(--gold);font-weight:600;font-size:13px">금색 글자 = 프로젝트 배정</span></div>
+    <div class="pinmap" id="pinmap"></div>
+    <div class="info" id="pininfo" aria-live="polite" style="min-height:64px"></div>
+    <div class="cap">1~14번 줄은 자료로 확인했고, 15~19번 줄은 같은 계열 보드의 배열입니다. 실물 글자로 확인하세요.</div>
+  </div>
+  <div class="grid2">
+    <div class="card"><h3>먼저 쓸 핀</h3><p style="font-family:var(--mono);font-size:14px">16 17 18 19 21 22 23 25 26 27 32 33 13 4</p><p style="font-size:14px;color:var(--mut)">아날로그 입력은 32~39만(Wi-Fi를 쓰는 동안 나머지 아날로그 핀은 못 읽습니다).</p></div>
+    <div class="card"><h3>건드리지 않을 핀</h3><p style="font-family:var(--mono);font-size:14px">0 2 5 12 15 · 6~11 · 1 3</p><p style="font-size:14px;color:var(--mut)">부팅 방식을 정하는 핀, 내부 저장장치에 묶인 핀, USB와 같이 쓰는 핀입니다. 여기에 뭔가 달면 부팅이나 업로드가 안 됩니다.</p></div>
+  </div>
+  <div class="bad"><b>전압 세 가지만 기억하세요.</b> ① 핀은 <b>3.3V까지</b>입니다. 5V를 넣으면 망가집니다. ② 핀 하나로 모터·서보·부저를 직접 돌리지 않습니다. ③ 배선은 <b>USB를 뽑고</b> 바꿉니다. 3V3과 GND가 닿으면 보드나 Mac 포트가 죽을 수 있습니다.</div>
+</section>
+
+<!-- 3 -->
+<section id="setup">
+  <div class="eyebrow">3</div>
+  <h2>개발 환경과 첫 업로드 (Mac)</h2>
+  <p class="goal">읽고 나면: 포트를 찾아 프로그램을 올리고, 업로드가 안 될 때 스스로 풀 수 있다.</p>
+  <ol>
+    <li><b>Arduino IDE 2</b>를 설치합니다. Settings의 Additional boards manager URLs에 아래 주소를 넣습니다.
+      <div class="codebox"><pre><code>https://espressif.github.io/arduino-esp32/package_esp32_index.json</code></pre><button class="copy" type="button">복사</button></div></li>
+    <li>Boards Manager에서 <b>esp32 by Espressif Systems</b>를 설치합니다. <b>버전은 3.3.x로 고르세요.</b> 4.0이 며칠 전에 나왔는데 우리가 쓰는 라이브러리와 맞는지 아직 모릅니다.</li>
+    <li>Library Manager에서 <b>PubSubClient</b>(Nick O'Leary)와 <b>ArduinoJson</b>(Benoit Blanchon, 7.x)을 설치합니다.</li>
+    <li>Tools → Board → esp32 → <b>NodeMCU-32S</b>. 없으면 ESP32 Dev Module.</li>
+    <li>보드를 USB로 꽂고 Tools → Port에서 <code>/dev/cu.usbserial-…</code> 또는 <code>/dev/cu.SLAB_USBtoUART</code>를 고릅니다. 터미널에서 <code>ls /dev/cu.*</code>를 꽂기 전후로 쳐서 새로 생긴 이름이 그 포트입니다.</li>
+    <li>Serial Monitor는 <b>115200</b>, 줄 끝은 <b>New Line</b>으로 둡니다.</li>
+  </ol>
+  <div class="warn"><b>업로드가 안 될 때, 이 순서로.</b> ① 케이블을 바꿉니다(충전 전용 케이블이면 포트가 아예 안 뜹니다. 가장 흔한 원인). ② Serial Monitor를 닫습니다. ③ <b>BOOT 버튼을 누른 채</b> 업로드를 시작하고 "Writing"이 보이면 뗍니다. ④ 핀 0·2·12·15에 꽂은 선을 뺍니다. ⑤ Upload Speed를 115200으로 낮춥니다.</div>
+  <div class="prose"><p><b>EN 버튼</b>은 다시 시작(리셋)입니다. 올린 프로그램은 지워지지 않습니다.</p></div>
+</section>
+
+<!-- 4 -->
+<section id="gpio">
+  <div class="eyebrow">4</div>
+  <h2>핀 읽고 쓰기, 그리고 멈추지 않는 loop</h2>
+  <p class="goal">읽고 나면: <code>delay</code> 없이 불빛을 깜빡이면서 버튼의 짧게·길게 누름을 구분할 수 있다.</p>
+  <div class="grid2">
+    <div class="card"><h3>핀(GPIO)</h3><p>전압으로 읽고 쓰는 참·거짓 변수입니다. 3.3V가 참, 0V가 거짓.</p></div>
+    <div class="card"><h3>풀업</h3><p>아무도 안 건드릴 때의 기본값입니다. 없으면 초기화 안 한 변수처럼 값이 떠돕니다. 그래서 버튼은 <b>눌렀을 때 LOW</b>입니다.</p></div>
+    <div class="card"><h3>setup과 loop</h3><p><code>setup</code>은 켜질 때 한 번, <code>loop</code>는 끝없이 반복됩니다. 이벤트 루프와 같습니다.</p></div>
+    <div class="card"><h3>delay를 쓰면</h3><p>프로그램 전체가 잠듭니다. 그동안 버튼도, 선으로 오는 글자도, Wi-Fi도 놓칩니다.</p></div>
+  </div>
+  <div class="fig">
+    <div class="scroll">
+    <svg viewBox="0 0 760 150" width="760" role="img" aria-label="LED와 버튼 배선">
+      <text x="10" y="22" font-weight="700" font-size="15">불빛</text>
+      <rect class="bxa" x="10" y="40" width="90" height="44" rx="6"/><text class="mono" x="55" y="67" text-anchor="middle" font-size="14">IO25</text>
+      <path class="ln" d="M100 62 H140"/><rect class="bxs" x="140" y="50" width="62" height="24" rx="4"/><text x="171" y="67" text-anchor="middle" font-size="12">220Ω</text>
+      <path class="ln" d="M202 62 H236"/><path d="M236 48 L262 62 L236 76 Z" fill="var(--gold)"/><path class="ln" d="M262 46 V78"/><text class="m" x="250" y="100" text-anchor="middle" font-size="12">LED</text><text class="m" x="238" y="42" text-anchor="middle" font-size="11">긴 다리</text>
+      <path class="ln" d="M262 62 H300"/><rect class="bxs" x="300" y="40" width="64" height="44" rx="6"/><text class="mono" x="332" y="67" text-anchor="middle" font-size="14">GND</text>
+      <text x="420" y="22" font-weight="700" font-size="15">버튼</text>
+      <rect class="bxa" x="420" y="40" width="90" height="44" rx="6"/><text class="mono" x="465" y="67" text-anchor="middle" font-size="14">IO33</text>
+      <path class="ln" d="M510 62 H552"/><circle cx="556" cy="62" r="4" fill="var(--mut)"/><path class="ln" d="M556 62 L592 44"/><circle cx="598" cy="62" r="4" fill="var(--mut)"/><text class="m" x="577" y="100" text-anchor="middle" font-size="12">버튼</text>
+      <path class="ln" d="M602 62 H640"/><rect class="bxs" x="640" y="40" width="64" height="44" rx="6"/><text class="mono" x="672" y="67" text-anchor="middle" font-size="14">GND</text>
+      <text class="m" x="420" y="130" font-size="13">코드에서 pinMode(33, INPUT_PULLUP). 저항이 필요 없습니다.</text>
+      <text class="m" x="10" y="130" font-size="13">저항은 꼭 넣습니다. 파란 LED가 어두우면 100Ω.</text>
+    </svg>
+    </div>
+    <div class="cap">스마트태그의 배정입니다(불빛 IO25, 버튼 IO33). 부품이 없으면 보드의 내장 LED(IO2)와 BOOT 버튼(IO0)으로 연습할 수 있습니다.</div>
+  </div>
+  <div class="codebox"><pre><code>// delay 대신: "지난번 이후 얼마나 지났나"만 본다
+static uint32_t last = 0;
+if (millis() - last >= 500) {        // 0.5초마다
+  last = millis();
+  digitalWrite(25, !digitalRead(25)); // 불빛 뒤집기
+}
+
+// 버튼: 눌림 = LOW. 30ms 동안 같은 값이면 진짜로 본다(떨림 거르기)
+pinMode(33, INPUT_PULLUP);
+bool pressed = digitalRead(33) == LOW;</code></pre><button class="copy" type="button">복사</button></div>
+  <div class="prose"><p>우리 라인에서 이게 왜 중요한가: 이상이 났을 때 버튼을 <b>짧게 누르면 '봤다', 2초 누르면 '해제'</b>입니다. 누르는 시간을 재려면 프로그램이 멈추지 않아야 합니다.</p></div>
+</section>
+
+<!-- 5 -->
+<section id="uart">
+  <div class="eyebrow">5</div>
+  <h2>시리얼 두 개와 우리의 한 줄 규격</h2>
+  <p class="goal">읽고 나면: <code>$…*XX</code> 줄을 읽고, 검사값을 확인하고, 직접 만들 수 있다.</p>
+  <div class="prose">
+    <p><b>UART</b>는 선 두 가닥으로 글자를 차례로 보내는 통신입니다. ESP32에는 여러 개가 있고, 우리는 두 개를 씁니다.</p>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>이름</th><th>핀</th><th>어디로</th><th>쓰임</th></tr>
+    <tr><td><code>Serial</code></td><td>1, 3</td><td>USB를 거쳐 Mac</td><td>업로드와 로그. 다른 데 쓰지 않습니다</td></tr>
+    <tr><td><code>Serial2</code></td><td><b>RX 16, TX 17</b></td><td>공정 보드</td><td>한 줄 규격으로 주고받기</td></tr>
+  </table></div>
+  <div class="warn"><b>핀 번호를 꼭 직접 적으세요.</b> 새 버전(3.x)에서 <code>Serial2</code>의 기본 핀이 바뀌었습니다. 인터넷 예제처럼 <code>Serial2.begin(115200)</code>만 쓰면 16·17이 아닌 다른 핀으로 나갑니다.
+    <div class="codebox" style="margin-top:8px"><pre><code>Serial2.begin(115200, SERIAL_8N1, 16, 17);   // RX=16, TX=17</code></pre><button class="copy" type="button">복사</button></div></div>
+  <div class="fig">
+    <div class="scroll">
+    <svg viewBox="0 0 720 190" width="720" role="img" aria-label="ESP32와 STM32 NUCLEO의 세 가닥 배선">
+      <rect class="bxa" x="10" y="20" width="220" height="150" rx="8"/><text x="120" y="46" text-anchor="middle" font-weight="700" font-size="15">ESP32</text>
+      <rect class="bxs" x="490" y="20" width="220" height="150" rx="8"/><text x="600" y="46" text-anchor="middle" font-weight="700" font-size="15">STM32 NUCLEO-F103RB</text>
+      <text class="mono" x="218" y="82" text-anchor="end" font-size="13">IO17 (TX2)</text><text class="mono" x="502" y="82" font-size="13">PA10 (USART1 RX)</text>
+      <text class="mono" x="218" y="118" text-anchor="end" font-size="13">IO16 (RX2)</text><text class="mono" x="502" y="118" font-size="13">PA9 (USART1 TX)</text>
+      <text class="mono" x="218" y="154" text-anchor="end" font-size="13">GND</text><text class="mono" x="502" y="154" font-size="13">GND</text>
+      <path class="ln" d="M230 78 H490" stroke="var(--acc)"/><path d="M490 78 l-10 -5 v10z" fill="var(--acc)"/>
+      <path class="ln" d="M230 114 H490" stroke="var(--gold)"/><path d="M230 114 l10 -5 v10z" fill="var(--gold)"/>
+      <path class="ln" d="M230 150 H490"/>
+      <text class="m" x="360" y="70" text-anchor="middle" font-size="12">보내는 쪽 → 받는 쪽</text><text class="m" x="360" y="106" text-anchor="middle" font-size="12">받는 쪽 ← 보내는 쪽</text><text class="m" x="360" y="142" text-anchor="middle" font-size="12">기준 전압. 꼭 잇는다</text>
+    </svg>
+    </div>
+    <div class="cap">TX는 상대의 RX로 갑니다(교차). 둘 다 3.3V라 바로 이어도 됩니다. NUCLEO의 USART2는 PC 연결에 묶여 있어 USART1을 씁니다. NUCLEO 쪽 핀 위치는 보드 설명서 그림으로 한 번 확인하세요.</div>
+  </div>
+
+  <h3>한 줄의 모양</h3>
+  <div class="fig">
+    <div class="frame" aria-label="줄 해부"><span class="f-s">$</span><span class="f-t">R</span><span class="f-p">{"n":42,"k":"DONE"}</span><span class="f-s">*</span><span class="f-c">7B</span></div>
+    <div class="tbl" style="border:0"><table>
+      <tr><td style="white-space:nowrap"><span class="pill" style="background:var(--sunk)">$ 와 *</span></td><td>시작과 끝 표시</td></tr>
+      <tr><td><span class="pill" style="background:var(--gold-soft);color:var(--gold)">종류 한 글자</span></td><td>보드 → ESP32: <code>T</code> 태그 읽음, <code>R</code> 신고, <code>H</code> 살아 있음. ESP32 → 보드: <code>C</code> 답, <code>S</code> 지금 상태, <code>L</code> 연결 상태, <code>X</code> 시험 입력</td></tr>
+      <tr><td><span class="pill" style="background:var(--acc-soft);color:var(--acc)">내용</span></td><td>보드가 보내는 것은 JSON 그대로. 보드가 받는 것은 <code>이름=값</code>을 쉼표로 이은 것(보드가 JSON을 풀지 않아도 되게)</td></tr>
+      <tr><td><span class="pill" style="background:var(--pow-bg);color:var(--pow)">검사값 2자리</span></td><td><b>$ 와 * 사이의 모든 글자(종류 글자 포함)</b>를 XOR한 값을 16진수 두 자리로. 선에서 글자가 깨졌는지 알아냅니다</td></tr>
+    </table></div>
+  </div>
+  <div class="fig calc">
+    <h3>검사값 계산기</h3>
+    <div><label for="cbody">$ 와 * 사이에 들어갈 글자 (종류 글자부터)</label><input id="cbody" value='R{"n":42,"k":"DONE"}' spellcheck="false" autocomplete="off"></div>
+    <div class="out" id="cout"></div>
+    <div class="steps" id="csteps" aria-label="한 글자씩 XOR한 과정"></div>
+    <div><label for="cline">줄 전체를 붙여 넣어 확인</label><input id="cline" value="$C,re=42,ok=1*67" spellcheck="false" autocomplete="off"></div>
+    <div class="out" id="cres"></div>
+    <div class="cap">문서나 메신저에서 복사하면 따옴표가 둥근 모양(“ ”)으로 바뀌어 검사값이 틀려집니다. 그럴 때는 직접 치세요.</div>
+  </div>
+</section>
+
+<!-- 6 -->
+<section id="mqtt">
+  <div class="eyebrow">6</div>
+  <h2>Wi-Fi와 MQTT</h2>
+  <p class="goal">읽고 나면: 브로커에 붙어 메시지를 보내고 받고, '보관'과 '유언'을 쓸 수 있다.</p>
+  <div class="grid2">
+    <div class="card"><h3>브로커와 토픽</h3><p>우체국과 주소입니다. 보내는 쪽은 주소(토픽)에 붙이기만 하고, 누가 받는지 모릅니다. 받는 쪽은 주소를 구독합니다.</p></div>
+    <div class="card"><h3>보관 (retained)</h3><p>게시판에 붙여 둔 마지막 쪽지입니다. 늦게 온 구독자도 붙자마자 봅니다. 우리의 '지금 상태'와 '연결 상태'가 이것입니다.</p></div>
+    <div class="card"><h3>유언 (LWT)</h3><p>브로커에 미리 맡겨 둔 메시지입니다. 내가 말없이 사라지면 브로커가 대신 붙입니다. "이 공정 끊김"을 이것으로 알립니다.</p></div>
+    <div class="card"><h3>Wi-Fi는 2.4GHz만</h3><p>ESP32는 5GHz에 붙지 못합니다. 학교 인증 Wi-Fi도 안 됩니다. 전용 공유기나 휴대폰 핫스팟(2.4GHz)을 씁니다.</p></div>
+  </div>
+  <div class="fig">
+    <div class="scroll">
+    <svg viewBox="0 0 780 290" width="780" role="img" aria-label="공정 P2의 토픽 흐름">
+      <rect class="bxa" x="10" y="20" width="170" height="250" rx="8"/><text x="95" y="48" text-anchor="middle" font-weight="700" font-size="15">ESP32 (P2)</text>
+      <rect class="bx" x="600" y="20" width="170" height="250" rx="8"/><text x="685" y="48" text-anchor="middle" font-weight="700" font-size="15">관제 Pi5</text>
+      <g font-size="13">
+        <path class="ln" d="M180 82 H600" stroke="var(--acc)"/><path d="M600 82 l-10 -5 v10z" fill="var(--acc)"/><text class="mono" x="390" y="75" text-anchor="middle">factory/station/P2/tag · report · alive</text><text class="m" x="390" y="100" text-anchor="middle" font-size="12">올라가는 것: 태그 읽음, 신고, 살아 있음</text>
+        <path class="ln" d="M180 150 H600" stroke="var(--gold)"/><path d="M180 150 l10 -5 v10z" fill="var(--gold)"/><text class="mono" x="390" y="143" text-anchor="middle">factory/station/P2/cmd · state · test</text><text class="m" x="390" y="168" text-anchor="middle" font-size="12">내려오는 것: 답, 지금 상태(보관), 시험 입력</text>
+        <path class="ln" d="M180 222 H600" stroke-dasharray="6 5"/><path class="ah" d="M600 222 l-10 -5 v10z"/><text class="mono" x="390" y="215" text-anchor="middle">factory/station/P2/link = 1 또는 0</text><text class="m" x="390" y="240" text-anchor="middle" font-size="12">연결 상태(보관). 0은 유언으로, 브로커가 대신 붙인다</text>
+      </g>
+    </svg>
+    </div>
+    <div class="cap">공정 이름만 바꾸면 네 공정이 모두 같습니다. 스마트태그는 <code>factory/tag/{이름}/cmd · report · link</code>를 씁니다.</div>
+  </div>
+  <div class="codebox"><pre><code>// 연결 → 구독 → loop()를 계속 부른다. 다시 연결되면 구독도 다시 한다
+mqtt.setServer(MQTT_HOST, 1883);
+mqtt.setCallback(onMqtt);
+mqtt.setBufferSize(512);                 // 기본 256바이트는 모자란다
+mqtt.setKeepAlive(4);                    // 말없이 죽으면 약 6초 뒤 유언이 나간다
+
+// 유언: 내가 죽으면 link=0(보관). 붙자마자 내가 link=1(보관)
+if (mqtt.connect("modem-P2", "factory/station/P2/link", 0, true, "0")) {
+  mqtt.publish("factory/station/P2/link", "1", true);
+  mqtt.subscribe("factory/station/P2/cmd");
+  mqtt.subscribe("factory/station/P2/state");
+}
+mqtt.loop();                             // 이게 없으면 받은 메시지가 처리되지 않는다
+
+void onMqtt(char *topic, byte *payload, unsigned int len) {
+  // payload는 문자열 끝 표시(0)가 없다. 반드시 len만큼만 읽는다
+}</code></pre><button class="copy" type="button">복사</button></div>
+  <h3>Mac을 브로커로 쓰기 (집에서)</h3>
+  <div class="codebox"><pre><code>brew install mosquitto
+# 설정 파일에 두 줄 추가 (Apple Silicon: /opt/homebrew/etc/mosquitto/mosquitto.conf)
+listener 1883
+allow_anonymous true
+
+brew services restart mosquitto
+ipconfig getifaddr en0                               # ESP32에 넣을 Mac의 IP
+mosquitto_sub -h localhost -t 'factory/#' -v         # 지나가는 메시지 전부 보기
+mosquitto_pub -h localhost -t factory/station/P2/cmd -m '{"re":42,"ok":1}'</code></pre><button class="copy" type="button">복사</button></div>
+  <div class="prose"><p>설정 두 줄이 없으면 mosquitto는 자기 컴퓨터에서 온 연결만 받습니다. ESP32가 붙지 못하는 가장 흔한 이유입니다. Mac이 방화벽 허용을 물으면 허용하세요.</p>
+  <p><b>보드마다 이름(client ID)을 다르게 하세요.</b> 같은 이름 두 대가 붙으면 브로커가 먼저 온 쪽을 끊어서, 서로 번갈아 끊깁니다.</p></div>
+</section>
+
+<!-- 7 -->
+<section id="recover">
+  <div class="eyebrow">7</div>
+  <h2>끊김과 복구, 그리고 꺼져도 남는 저장</h2>
+  <p class="goal">읽고 나면: 끊겨도 스스로 다시 붙게 만들고, 전원이 꺼져도 값을 남길 수 있다.</p>
+  <div class="fig">
+    <div class="scroll">
+    <svg viewBox="0 0 800 170" width="800" role="img" aria-label="전원을 뽑았다 꽂을 때의 시간 순서">
+      <path class="ln" d="M20 70 H780"/>
+      <g font-size="13">
+        <circle cx="60" cy="70" r="7" fill="var(--bad)"/><text x="60" y="48" text-anchor="middle" font-weight="700">전원 뽑음</text><text class="m" x="60" y="98" text-anchor="middle" font-size="12">인사 없이 사라짐</text>
+        <text class="m" x="165" y="62" text-anchor="middle" font-size="12">약 6초</text>
+        <circle cx="270" cy="70" r="7" fill="var(--warn)"/><text x="270" y="48" text-anchor="middle" font-weight="700">link = 0</text><text class="m" x="270" y="98" text-anchor="middle" font-size="12">브로커가 유언을 붙임</text><text class="m" x="270" y="114" text-anchor="middle" font-size="12">화면에 '끊김'</text>
+        <circle cx="440" cy="70" r="7" fill="var(--ok)"/><text x="440" y="48" text-anchor="middle" font-weight="700">다시 꽂음</text><text class="m" x="440" y="98" text-anchor="middle" font-size="12">Wi-Fi → 브로커 재접속</text>
+        <circle cx="580" cy="70" r="7" fill="var(--ok)"/><text x="580" y="48" text-anchor="middle" font-weight="700">link = 1</text><text class="m" x="580" y="98" text-anchor="middle" font-size="12">보관된 지금 상태가</text><text class="m" x="580" y="114" text-anchor="middle" font-size="12">바로 다시 온다</text>
+        <circle cx="720" cy="70" r="7" fill="var(--acc)"/><text x="720" y="48" text-anchor="middle" font-weight="700">밀린 신고</text><text class="m" x="720" y="98" text-anchor="middle" font-size="12">공정 보드가 같은</text><text class="m" x="720" y="114" text-anchor="middle" font-size="12">번호로 다시 보냄</text>
+      </g>
+      <text class="m" x="20" y="152" font-size="13">그동안 공정 보드는 ESP32가 2초마다 주던 '연결 상태' 줄($L)이 끊긴 것으로 끊김을 알고, 하던 작업만 끝냅니다.</text>
+    </svg>
+    </div>
+    <div class="cap">영상으로 찍을 장면이 바로 이것입니다. 밀린 신고를 쥐고 다시 보내는 일은 공정 보드가 하고, 모뎀은 연결을 되살리는 일만 합니다.</div>
+  </div>
+  <div class="prose">
+    <p><b>왜 바로 0이 안 되나.</b> 전원이 뽑히면 "끊는다"는 말을 못 합니다. 브로커는 약속한 시간(keepalive)의 1.5배 동안 소식이 없어야 유언을 붙입니다. 4초로 두면 약 6초입니다.</p>
+    <p><b>다시 붙는 코드는 loop 안에 있어야 합니다.</b> <code>setup</code>에서 한 번만 연결하면 끊긴 뒤 영영 돌아오지 않습니다. 기다릴 때도 <code>while</code>로 붙잡지 말고 <code>millis()</code>로 3초마다 한 번씩만 시도합니다.</p>
+  </div>
+  <div class="codebox"><pre><code>#include &lt;Preferences.h&gt;
+Preferences nv;
+nv.begin("tag", false);                  // 이름표 "tag" (15자 이하)
+uint32_t seq = nv.getUInt("seq", 0);     // 없으면 0
+nv.putUInt("seq", 1042);                 // 전원이 꺼져도 남는다</code></pre><button class="copy" type="button">복사</button></div>
+  <div class="prose"><p>저장장치(플래시)는 작은 SSD입니다. 꺼져도 남지만 쓰는 횟수에 한계가 있습니다. <b>값이 바뀔 때만</b> 쓰고, <code>loop</code>에서 매번 쓰지 않습니다. 스마트태그가 이력 사본을 이렇게 저장합니다.</p>
+  <p><b>재부팅을 되풀이하면서 "Brownout"이 찍힌다면</b> 전기가 모자란 것입니다. Wi-Fi를 켜는 순간 전류가 크게 튑니다. 짧은 케이블을 Mac에 직접 꽂고, 서보 같은 부품은 다른 전원에서 먹입니다.</p></div>
+</section>
+
+<!-- 8 -->
+<section id="use">
+  <div class="eyebrow">8</div>
+  <h2>프로젝트에 바로 쓰기</h2>
+  <p class="goal">읽고 나면: 모뎀과 태그 코드를 자기 공정 이름으로 바꿔 올릴 수 있다.</p>
+  <div class="prose">
+    <p>코드는 <code>next_meeting/esp32_book/code/</code>에 있습니다. 스케치 폴더마다 <code>secrets.example.h</code>를 <code>secrets.h</code>로 복사해 Wi-Fi 이름, 비밀번호, 브로커 IP를 채웁니다. <b><code>secrets.h</code>는 git에 올리지 않습니다.</b></p>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>바꿀 곳</th><th>모뎀</th><th>스마트태그</th></tr>
+    <tr><td>이름</td><td><code>#define STATION "P2"</code></td><td><code>#define TAG_NAME "tag1"</code></td></tr>
+    <tr><td>핀</td><td>RX 16, TX 17 그대로</td><td>불빛과 버튼. 연습은 내장 LED(2)와 BOOT(0), 실물은 25와 33</td></tr>
+    <tr><td>시험 방식</td><td><code>TEST_MODE 1</code>: 공정 보드 없이 Serial Monitor가 보드 역할<br><code>TEST_MODE 2</code>: 17→16을 점퍼로 이어 선 자체를 확인<br><code>0</code>: 실제 사용</td><td>BOOT 버튼 짧게 = 신고 한 번, 길게 = 저장된 이력 출력 (둘 다 예시 동작)</td></tr>
+  </table></div>
+  <details><summary>모뎀 코드 전체 (modem.ino)</summary><div class="codebox"><pre><code>// modem.ino — 공정 통신 모뎀: 공정보드 UART &lt;-&gt; MQTT
+// 대상: Arduino-ESP32 3.x / PubSubClient 2.8 / ArduinoJson 7
+#include &lt;WiFi.h&gt;
+#include &lt;PubSubClient.h&gt;
+#include &lt;ArduinoJson.h&gt;
+#include "secrets.h"             // WIFI_SSID, WIFI_PASS, MQTT_HOST, MQTT_PORT
+
+// ───── 설정: 보드마다 STATION만 바꾼다 ─────
+#define STATION        "P2" 
+#define TEST_MODE      0         // 0 실사용 | 1 USB 시리얼 모니터가 공정보드 역할 | 2 TX2→RX2 점퍼 루프백
+#define PIN_RX2        16        // 코어 3.x는 Serial2 기본 핀이 4/25로 바뀌었다 → 반드시 직접 지정
+#define PIN_TX2        17
+#define LINE_CAP       240       // '$'부터 체크섬까지 한 줄 최대 길이
+#define MQTT_BUF       512       // PubSubClient 버퍼 (기본 256은 부족)
+#define LINK_REPEAT_MS 2000      // $L(연결 상태)을 2초마다 보드에 알린다. 보드는 5초 동안 못 받으면 끊김으로 본다
+
+#define BASE "factory/station/" STATION "/"
+#if TEST_MODE == 1
+  #define BOARD Serial           // USB로 줄을 직접 타이핑
+#else
+  #define BOARD Serial2
+#endif
+#define DBG(...) Serial.printf(__VA_ARGS__)   // 디버그는 항상 USB, '#'으로 시작
+
+WiFiClient   net;
+PubSubClient mqtt(net);
+
+// ───── 체크섬 / 보드로 한 줄 보내기 ─────
+uint8_t xorOf(const char *p, size_t n) { uint8_t c = 0; while (n--) c ^= (uint8_t)*p++; return c; }
+
+void sendToBoard(const char *body) {          // body = 종류 글자 + 내용, 예: "C,re=42,ok=1"
+  BOARD.printf("$%s*%02X\n", body, xorOf(body, strlen(body)));
+  DBG("# -&gt;board $%s\n", body);
+}
+
+// ───── 보드 → MQTT ─────
+void handleLine(char *line, size_t len) {     // line = "$...*HH" (개행 제거됨)
+  if (len &lt; 5 || line[0] != '$' || line[len - 3] != '*') { DBG("# 형식 오류: %s\n", line); return; }
+  char *end;
+  uint8_t want = (uint8_t)strtoul(line + len - 2, &amp;end, 16);
+  if (end != line + len || xorOf(line + 1, len - 4) != want) { DBG("# 체크섬 오류: %s\n", line); return; }
+
+  char type = line[1];
+  const uint8_t *payload = (const uint8_t *)line + 2;   // 종류 글자 다음부터 '*' 앞까지
+  size_t plen = len - 5;
+  const char *topic = type == 'T' ? BASE "tag" : type == 'R' ? BASE "report" : type == 'H' ? BASE "alive" : nullptr;
+  if (!topic) { DBG(TEST_MODE == 2 ? "# 루프백 OK: %s\n" : "# 모르는 종류: %s\n", line); return; }
+  if (!mqtt.connected()) { DBG("# 링크 없음, 버림 (보드가 재전송)\n"); return; }
+  bool ok = mqtt.publish(topic, payload, plen, false);  // JSON을 그대로, QoS 0
+  DBG("# -&gt;mqtt %s %s\n", topic, ok ? "ok" : "실패(버퍼 초과?)");
+}
+
+void pollBoard() {                            // 한 글자씩 모아서 '\n'에서 한 줄 완성. 절대 기다리지 않는다
+  static char buf[LINE_CAP + 1];
+  static size_t n = 0;
+  static bool over = false;
+  while (BOARD.available()) {
+    char c = (char)BOARD.read();
+    if (c == '\r') continue;
+    if (c == '\n') {
+      if (over) DBG("# 줄이 너무 김, 버림\n");
+      else if (n) { buf[n] = 0; handleLine(buf, n); }
+      n = 0; over = false;
+    } else if (n &lt; LINE_CAP) buf[n++] = c;
+    else over = true;                         // 길이 초과: 다음 '\n'까지 통째로 버린다
+  }
+}
+
+// ───── MQTT → 보드: JSON {"re":42,"ok":1} → "$C,re=42,ok=1*67" ─────
+void onMqtt(char *topic, byte *payload, unsigned int len) {
+  if (strncmp(topic, BASE, strlen(BASE)) != 0) return;
+  const char *leaf = topic + strlen(BASE);
+  char type = !strcmp(leaf, "cmd") ? 'C' : !strcmp(leaf, "state") ? 'S' : !strcmp(leaf, "test") ? 'X' : 0;
+  if (!type) return;
+
+  JsonDocument doc;                           // payload는 0으로 끝나지 않는다 → 길이를 꼭 넘긴다
+  DeserializationError err = deserializeJson(doc, (const char *)payload, len);
+  JsonObject obj = doc.as&lt;JsonObject&gt;();
+  if (err || obj.isNull()) { DBG("# JSON 오류(%s): %s\n", leaf, err.c_str()); return; }
+
+  char body[LINE_CAP - 3];
+  size_t n = 0;
+  body[n++] = type; body[n] = 0;
+  for (JsonPair kv : obj) {                   // 보낸 순서 그대로 나온다
+    const char *k = kv.key().c_str();
+    if (type == 'S' &amp;&amp; !strcmp(k, "body")) continue;      // state의 body는 보드에 안 보낸다
+    char val[48];
+    JsonVariant v = kv.value();
+    if (v.is&lt;JsonObject&gt;() || v.is&lt;JsonArray&gt;()) { DBG("# 중첩 값 거부: %s\n", k); return; }
+    size_t vl = v.is&lt;const char *&gt;() ? strlcpy(val, v.as&lt;const char *&gt;(), sizeof val)
+                                     : serializeJson(v, val, sizeof val);   // 숫자는 글자로
+    if (vl &gt;= sizeof val || strpbrk(k, ",=*$\r\n") || strpbrk(val, ",=*$\r\n")) { DBG("# 값 거부: %s\n", k); return; }
+    int w = snprintf(body + n, sizeof body - n, ",%s=%s", k, val);
+    if (w &lt; 0 || (size_t)w &gt;= sizeof body - n) { DBG("# 줄 길이 초과\n"); return; }
+    n += w;
+  }
+  sendToBoard(body);
+}
+
+// ───── Wi-Fi / MQTT 유지 (loop에서 계속 호출, 기다리지 않음) ─────
+void serviceWifi() {
+  static uint32_t lastTry = 0;
+  static bool was = false;
+  bool ok = WiFi.status() == WL_CONNECTED;
+  if (ok &amp;&amp; !was) DBG("# WiFi 연결 %s\n", WiFi.localIP().toString().c_str());
+  if (!ok &amp;&amp; was) DBG("# WiFi 끊김\n");
+  was = ok;
+  if (!ok &amp;&amp; millis() - lastTry &gt;= 15000) {   // 15초마다 처음부터 다시 시도
+    lastTry = millis();
+    WiFi.disconnect();
+    WiFi.begin(WIFI_SSID, WIFI_PASS);
+  }
+}
+
+void serviceMqtt() {
+  static bool wasUp = false;
+  static uint32_t lastTry = 0, lastLink = 0;
+  bool up = mqtt.connected();
+  if (up) {
+    mqtt.loop();                              // 수신 처리 + keepalive. 자주 불러야 한다
+  } else if (WiFi.status() == WL_CONNECTED &amp;&amp; millis() - lastTry &gt;= 3000) {
+    lastTry = millis();
+    // 유언(LWT): 내가 말없이 죽으면 브로커가 link=0(retained)을 대신 발행
+    if (mqtt.connect("modem-" STATION, BASE "link", 0, true, "0")) {
+      mqtt.publish(BASE "link", "1", true);   // retained
+      mqtt.subscribe(BASE "cmd");
+      mqtt.subscribe(BASE "state");           // retained라 구독 즉시 현재 상태가 온다 → $S가 보드로 간다
+      mqtt.subscribe(BASE "test");
+      up = true;
+      DBG("# MQTT 연결\n");
+    } else DBG("# MQTT 실패 rc=%d\n", mqtt.state());
+  }
+  if (up != wasUp || (LINK_REPEAT_MS &amp;&amp; millis() - lastLink &gt;= LINK_REPEAT_MS)) {
+    wasUp = up; lastLink = millis();
+    sendToBoard(up ? "L,up=1" : "L,up=0");
+  }
+}
+
+void setup() {
+  Serial.begin(115200);
+  Serial2.setRxBufferSize(1024);              // begin 전에. MQTT 재접속으로 잠깐 막혀도 안 넘치게
+  Serial2.begin(115200, SERIAL_8N1, PIN_RX2, PIN_TX2);
+  WiFi.mode(WIFI_STA);
+  WiFi.setSleep(false);                       // 절전 끔: 응답 지연 줄임
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+  mqtt.setServer(MQTT_HOST, MQTT_PORT);
+  mqtt.setCallback(onMqtt);
+  mqtt.setBufferSize(MQTT_BUF);
+  mqtt.setKeepAlive(4);                       // 전원이 뽑히면 약 1.5배(6초쯤) 뒤 브로커가 link=0을 낸다
+  mqtt.setSocketTimeout(3);                   // 브로커가 없을 때 connect()가 막히는 시간 줄임
+  DBG("\n# modem %s 시작 (TEST_MODE=%d)\n", STATION, TEST_MODE);
+}
+
+void loop() {
+  pollBoard();
+  serviceWifi();
+  serviceMqtt();
+}</code></pre><button class="copy" type="button">복사</button></div></details>
+  <details><summary>스마트태그 코드 전체 (tag.ino)</summary><div class="codebox"><pre><code>// tag.ino — 스마트태그 뼈대 (Arduino-ESP32 3.x / PubSubClient 2.8 / ArduinoJson 7)
+#include &lt;WiFi.h&gt;
+#include &lt;PubSubClient.h&gt;
+#include &lt;ArduinoJson.h&gt;
+#include &lt;Preferences.h&gt;
+#include "secrets.h"
+
+#define TAG_NAME "tag1"
+#define BASE     "factory/tag/" TAG_NAME "/"
+#define PIN_LED  2               // NodeMCU-32S 내장 LED
+#define PIN_BTN  0               // 보드의 BOOT 버튼 (부팅 후에는 일반 버튼으로 쓸 수 있다). 실물에선 교체
+#define LOG_N    16              // 최근 N건만 보관 (링 로그)
+
+struct Rec { uint32_t seq; uint16_t id; char body[16]; char p[4]; char r[4]; };
+
+WiFiClient   net;
+PubSubClient mqtt(net);
+Preferences  nv;
+uint32_t lastSeq = 0, msgN = 0;
+uint8_t  head = 0, count = 0;    // head = 다음에 쓸 칸
+uint16_t lastId = 0;
+
+// ───── 상태 기계 + LED 패턴 (100ms × 16칸 비트 패턴, delay 없음) ─────
+enum State { ST_OFFLINE, ST_IDLE, ST_WROTE, ST_ERROR };
+const uint16_t PATTERN[] = { 0x5555,   // OFFLINE: 빠른 깜빡임
+                             0x0001,   // IDLE: 1.6초마다 짧게 한 번
+                             0xFFFF,   // WROTE: 켜짐
+                             0x0005 }; // ERROR: 두 번 깜빡
+State state = ST_OFFLINE;
+uint32_t stateSince = 0;
+void setState(State s) { state = s; stateSince = millis(); }
+void serviceLed() { digitalWrite(PIN_LED, (PATTERN[state] &gt;&gt; ((millis() / 100) % 16)) &amp; 1); }
+
+// ───── 플래시 링 로그 (NVS) ─────
+void logLoad() {
+  nv.begin("tag", false);                     // 이름공간 "tag", 읽기/쓰기
+  head = nv.getUChar("head", 0); count = nv.getUChar("cnt", 0); lastSeq = nv.getUInt("seq", 0);
+}
+void logAdd(const Rec &amp;r) {
+  char key[8]; snprintf(key, sizeof key, "r%u", (unsigned)head);
+  nv.putBytes(key, &amp;r, sizeof r);             // 기록 먼저, 위치/seq는 그 다음 (중간에 꺼져도 재전송으로 복구)
+  head = (head + 1) % LOG_N; if (count &lt; LOG_N) count++;
+  nv.putUChar("head", head); nv.putUChar("cnt", count); nv.putUInt("seq", r.seq);
+  lastSeq = r.seq;
+}
+void logDump() {                              // 오래된 것부터 USB로 출력
+  for (uint8_t i = 0; i &lt; count; i++) {
+    char key[8]; snprintf(key, sizeof key, "r%u", (unsigned)((head + LOG_N - count + i) % LOG_N));
+    Rec r;
+    if (nv.getBytes(key, &amp;r, sizeof r) == sizeof r)
+      Serial.printf("# seq=%lu id=%u body=%s p=%s r=%s\n", (unsigned long)r.seq, (unsigned)r.id, r.body, r.p, r.r);
+  }
+}
+
+void answer(uint16_t id) {                    // 명령에 대한 답: {"re":5,"ok":1} (신고 번호 없음, 다시 보내지 않는다)
+  char out[40];
+  snprintf(out, sizeof out, "{\"re\":%u,\"ok\":1}", (unsigned)id);
+  mqtt.publish(BASE "report", out);
+}
+void report(const char *kind) {               // 태그가 먼저 알리는 신고: {"n":3,"k":"BTN"}
+  char out[48];
+  msgN = msgN % 255 + 1;                      // 신고 번호는 1~255를 돌려 쓴다
+  snprintf(out, sizeof out, "{\"n\":%lu,\"k\":\"%s\"}", (unsigned long)msgN, kind);
+  mqtt.publish(BASE "report", out);
+}
+
+// ───── 명령 수신 ─────
+void onMqtt(char *topic, byte *payload, unsigned int len) {
+  if (strcmp(topic, BASE "cmd") != 0) return;
+  JsonDocument doc;
+  if (deserializeJson(doc, (const char *)payload, len)) { setState(ST_ERROR); return; }
+  const char *what = doc["do"] | "";          // 키가 없으면 "" (기본값)
+  uint16_t id = doc["id"] | 0;
+  if (strcmp(what, "WRITE") == 0) {
+    Rec r = {};
+    r.seq = doc["seq"] | 0u; r.id = id;
+    strlcpy(r.body, doc["body"] | "", sizeof r.body);
+    strlcpy(r.p, doc["p"] | "", sizeof r.p);
+    strlcpy(r.r, doc["r"] | "", sizeof r.r);
+    if (count == 0 || r.seq != lastSeq) logAdd(r);   // 같은 seq 재전송이면 저장은 건너뛰고 답만 다시
+    lastId = id;
+    answer(id);                               // payload는 이미 다 복사했으므로 여기서 publish해도 안전
+    setState(ST_WROTE);
+  }
+}
+
+// ───── 버튼: 짧게/길게 (30ms 디바운스, 눌림 = LOW) ─────
+void onShort() { if (mqtt.connected()) report("BTN"); }           // 예시 동작 — 팀 규격으로 교체
+void onLong()  { logDump(); }                                     // 예시 동작 — 팀 규격으로 교체
+void pollButton() {
+  static bool stable = HIGH, last = HIGH, longDone = false;
+  static uint32_t tEdge = 0, tDown = 0;
+  bool now = digitalRead(PIN_BTN);
+  if (now != last) { last = now; tEdge = millis(); }
+  if (now != stable &amp;&amp; millis() - tEdge &gt;= 30) {
+    stable = now;
+    if (stable == LOW) { tDown = millis(); longDone = false; }
+    else if (!longDone) onShort();            // 길게 누르기가 이미 처리됐으면 뗄 때는 무시
+  }
+  if (stable == LOW &amp;&amp; !longDone &amp;&amp; millis() - tDown &gt;= 1500) { longDone = true; onLong(); }
+}
+
+// ───── 연결 유지 ─────
+void serviceNet() {
+  static uint32_t lastWifi = 0, lastMqtt = 0;
+  if (WiFi.status() != WL_CONNECTED) {
+    if (millis() - lastWifi &gt;= 15000) { lastWifi = millis(); WiFi.disconnect(); WiFi.begin(WIFI_SSID, WIFI_PASS); }
+  } else if (!mqtt.connected() &amp;&amp; millis() - lastMqtt &gt;= 3000) {
+    lastMqtt = millis();
+    if (mqtt.connect("tag-" TAG_NAME, BASE "link", 0, true, "0")) {
+      mqtt.publish(BASE "link", "1", true);
+      mqtt.subscribe(BASE "cmd");
+    } else Serial.printf("# MQTT 실패 rc=%d\n", mqtt.state());
+  }
+  if (mqtt.connected()) mqtt.loop();
+
+  // 상태 전이
+  if (!mqtt.connected()) { if (state != ST_OFFLINE) setState(ST_OFFLINE); }
+  else if (state == ST_OFFLINE) setState(ST_IDLE);
+  else if ((state == ST_WROTE || state == ST_ERROR) &amp;&amp; millis() - stateSince &gt;= 2000) setState(ST_IDLE);
+}
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(PIN_LED, OUTPUT);
+  pinMode(PIN_BTN, INPUT_PULLUP);
+  logLoad();
+  Serial.printf("\n# tag %s 시작, 저장 %u건, lastSeq=%lu\n", TAG_NAME, (unsigned)count, (unsigned long)lastSeq);
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+  mqtt.setServer(MQTT_HOST, MQTT_PORT);
+  mqtt.setCallback(onMqtt);
+  mqtt.setBufferSize(512);
+  mqtt.setKeepAlive(4);
+  mqtt.setSocketTimeout(3);
+}
+
+void loop() {
+  serviceNet();
+  pollButton();
+  serviceLed();
+}</code></pre><button class="copy" type="button">복사</button></div></details>
+  <details><summary>검사값 함수 (공정 보드용 C, PC 시험용 Python)</summary>
+    <div class="codebox"><pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;stdlib.h&gt;
+/* body = '$'와 '*' 사이 전부 (종류 글자 포함) */
+uint8_t frame_xor(const char *body, size_t len) {
+    uint8_t cs = 0;
+    while (len--) cs ^= (uint8_t)*body++;
+    return cs;
+}
+/* out에 "$body*HH\n" 작성. 반환: 길이, 공간 부족이면 0 */
+int frame_build(char *out, size_t cap, const char *body) {
+    int n = snprintf(out, cap, "$%s*%02X\n", body, frame_xor(body, strlen(body)));
+    return (n &gt; 0 &amp;&amp; (size_t)n &lt; cap) ? n : 0;
+}
+/* line = "$....*HH" (개행 제거된 상태). 맞으면 1, body 시작/길이를 돌려줌 */
+int frame_check(const char *line, size_t len, const char **body, size_t *blen) {
+    if (len &lt; 5 || line[0] != '$' || line[len - 3] != '*') return 0;
+    char hex[3] = { line[len - 2], line[len - 1], 0 };
+    char *end;
+    unsigned long want = strtoul(hex, &amp;end, 16);
+    if (end != hex + 2) return 0;
+    if (frame_xor(line + 1, len - 4) != (uint8_t)want) return 0;
+    *body = line + 1; *blen = len - 4;
+    return 1;
+}
+int main(void) {
+    const char *v[] = {"$R{\"n\":42,\"k\":\"DONE\"}*7B","$C,re=42,ok=1*67",
+      "$T{\"n\":41,\"k\":\"TAG\",\"uid\":\"04A1B2C3\"}*36","$H{\"up\":123,\"st\":\"WORK\"}*51",
+      "$S,st=WORK,lamp=Yb,fault=0*35","$X,id=7,in=S1,v=1*51","$C,re=42,ok=1*68","$C,re=42,ok=1*6G"};
+    for (int i = 0; i &lt; 8; i++) { const char *b; size_t bl;
+      printf("%s -&gt; %d\n", v[i], frame_check(v[i], strlen(v[i]), &amp;b, &amp;bl)); }
+    char o[64]; frame_build(o, sizeof o, "L,up=0"); printf("%s", o);
+    frame_build(o, sizeof o, "L,up=1"); printf("%s", o);
+    return 0;
+}</code></pre><button class="copy" type="button">복사</button></div>
+    <div class="codebox" style="margin-top:10px"><pre><code>from functools import reduce
+def frame(body: str) -&gt; str:
+    """body = 종류 글자 + 내용 (예: 'C,re=42,ok=1')"""
+    cs = reduce(lambda a, b: a ^ b, body.encode(), 0)
+    return f"${body}*{cs:02X}"
+def check(line: str) -&gt; bool:
+    line = line.strip()
+    if not line.startswith("$") or len(line) &lt; 5 or line[-3] != "*": return False
+    try: return frame(line[1:-3]).upper() == line.upper()
+    except ValueError: return False
+if __name__ == "__main__":
+    for want in ['$R{"n":42,"k":"DONE"}*7B', '$C,re=42,ok=1*67',
+                 '$T{"n":41,"k":"TAG","uid":"04A1B2C3"}*36', '$H{"up":123,"st":"WORK"}*51',
+                 '$S,st=WORK,lamp=Yb,fault=0*35', '$X,id=7,in=S1,v=1*51']:
+        got = frame(want[1:-3]); print(got, "OK" if got == want and check(want) else "FAIL")
+    print(frame("L,up=0"), frame("L,up=1"))</code></pre><button class="copy" type="button">복사</button></div>
+  </details>
+  <h3>모뎀이 지키는 규칙</h3>
+  <ul>
+    <li>줄은 240자까지. 넘으면 다음 줄바꿈까지 통째로 버립니다. 검사값이 틀려도 버립니다.</li>
+    <li>브로커에 붙어 있지 않을 때 보드에서 온 줄은 버립니다. 다시 보내는 것은 보드의 일입니다.</li>
+    <li>2초마다 보드에 연결 상태를 알립니다: <code>$L,up=1*69</code> 또는 <code>$L,up=0*68</code>.</li>
+    <li>'지금 상태'의 차체 번호(<code>body</code>)는 보드에 넘기지 않습니다. 보드는 몰라도 됩니다.</li>
+  </ul>
+  <h3>아직 정해야 하는 것 (코드에 가정으로 들어가 있음)</h3>
+  <ul>
+    <li>스마트태그 버튼의 뜻, 불빛 종류(파란 LED 하나인지 RGB인지)와 위치.</li>
+    <li>태그 이름을 무엇으로 할지(키태그 번호 / 보드 고유번호).</li>
+    <li>공정 이름 표기(<code>P2</code>처럼 쓸지). 데이터 흐름 설명서의 토픽 표와 한 번에 맞춥니다.</li>
+  </ul>
+  <details><summary>ESP32 혼자 맡는 공정이라면 (B′안): 핀 배정 제안</summary>
+    <div class="tbl" style="border:0"><table>
+      <tr><th>부품</th><th>핀</th><th>주의</th></tr>
+      <tr><td>RFID 리더기 RC522</td><td>SCK 18, MISO 19, MOSI 23, SS 21, RST 22</td><td><b>3.3V로만.</b> 5V를 넣으면 리더기가 상합니다</td></tr>
+      <tr><td>서보</td><td>신호 13</td><td>전원은 따로 5V(1A 이상). GND만 ESP32와 잇습니다. 3V3 핀에서 전원을 뽑지 않습니다</td></tr>
+      <tr><td>상태등 3개</td><td>25, 26, 27</td><td>각각 저항</td></tr>
+      <tr><td>부저</td><td>32</td><td>트랜지스터를 거치거나 작은 것만</td></tr>
+      <tr><td>버튼 2개</td><td>33, 4</td><td><code>INPUT_PULLUP</code></td></tr>
+    </table></div>
+    <p style="font-size:14px;color:var(--mut);margin-top:8px">서보 예제를 찾을 때: 새 버전(3.x)에서 PWM 함수가 바뀌었습니다. <code>ledcSetup</code>과 <code>ledcAttachPin</code>은 없어졌고 <code>ledcAttach(핀, 주파수, 해상도)</code> 하나를 씁니다. 옛 예제는 그대로 올리면 오류가 납니다.</p>
+  </details>
+  <details><summary>스마트태그 전원 (나중에 배터리를 달 때)</summary>
+    <ul>
+      <li>개발은 USB 전원으로 합니다.</li>
+      <li>배터리 → 충전 모듈 → 스위치 → 3.3V 변환기 → <b>3V3 핀</b>. 이때 <b>USB를 꽂기 전에 스위치를 끕니다.</b> 전원 두 개가 3V3에서 부딪히면 안 됩니다.</li>
+      <li>배터리 전압을 재려면 저항 둘(100kΩ, 100kΩ)로 반으로 나눠 IO36에 넣습니다. 4.2V를 바로 넣으면 안 됩니다.</li>
+      <li>안테나(보드 끝의 지그재그)는 금속, 배터리, 전선에서 10mm 이상 띄웁니다.</li>
+    </ul>
+  </details>
+</section>
+
+<!-- 실습 -->
+<section id="labs">
+  <div class="eyebrow">실습</div>
+  <h2>실습 사다리</h2>
+  <p class="goal">여덟 개 모두 <b>보드 하나와 Mac만</b> 있으면 됩니다. 순서대로 하세요. 끝낸 것은 체크해 두면 이 브라우저에 기억됩니다.</p>
+  <div class="prog" id="prog"></div>
+  <div id="lablist" style="display:flex;flex-direction:column;gap:12px"></div>
+  <div class="note"><b>실습 6과 7이 프로젝트의 절반입니다.</b> 6은 모뎀의 본업이고, 7은 영상에 넣을 '뽑았다 꽂기' 장면의 뼈대입니다. 6에서는 <code>modem.ino</code>를 <code>TEST_MODE 1</code>로 올려도 되고, 5까지 만든 코드에 직접 덧붙여 봐도 됩니다. 직접 덧붙이는 쪽이 공부가 됩니다.</div>
+</section>
+
+<!-- 막혔을 때 -->
+<section id="stuck">
+  <div class="eyebrow">막혔을 때</div>
+  <h2>증상으로 찾기</h2>
+  <div class="tbl"><table>
+    <tr><th>보이는 것</th><th>까닭</th><th>고치는 법</th></tr>
+    <tr><td>포트가 안 보인다</td><td>충전 전용 케이블, 드라이버</td><td>케이블 교체. 그래도 안 되면 보드의 USB 칩 글자(SILABS / WCH)를 보고 해당 드라이버 설치</td></tr>
+    <tr><td><code>Connecting.....</code>에서 멈춤</td><td>자동 진입 실패, 모니터가 포트를 잡음</td><td>모니터 닫기, BOOT 누른 채 업로드</td></tr>
+    <tr><td>올라갔는데 안 켜진다</td><td>핀 0·2·12·15에 뭔가 달림</td><td>그 핀을 비우고 다른 핀으로</td></tr>
+    <tr><td>재부팅 반복, <code>Brownout</code></td><td>전기 부족</td><td>짧은 케이블, 허브 말고 직접, 서보는 다른 전원</td></tr>
+    <tr><td>글자가 깨진다</td><td>속도 불일치, GND 안 이음, TX·RX 안 엇갈림</td><td>115200으로 통일, 선 세 가닥 확인</td></tr>
+    <tr><td>Wi-Fi가 안 붙는다</td><td>5GHz, 비밀번호 오타</td><td>2.4GHz 확인</td></tr>
+    <tr><td>MQTT 실패 <code>rc=-2</code></td><td>브로커에 닿지 못함</td><td>Mac IP 확인, mosquitto 설정 두 줄, 방화벽</td></tr>
+    <tr><td><code>rc=-3</code>이 되풀이</td><td>같은 이름 두 대, 또는 loop가 막힘</td><td>이름을 다르게, <code>delay</code> 제거</td></tr>
+    <tr><td><code>rc=5</code></td><td>허가 안 됨</td><td><code>allow_anonymous true</code></td></tr>
+    <tr><td>받는 함수가 안 불린다</td><td><code>mqtt.loop()</code> 없음, 다시 붙은 뒤 구독 안 함, 토픽 오타</td><td><code>mosquitto_sub -v</code>로 실제 토픽과 대조</td></tr>
+    <tr><td>긴 메시지가 사라진다</td><td>버퍼 256바이트</td><td><code>setBufferSize(512)</code></td></tr>
+    <tr><td>켜자마자 옛 명령이 실행된다</td><td>명령을 '보관'으로 보냄</td><td>명령은 보관하지 않기. <code>mosquitto_pub -t … -r -n</code>으로 지우기</td></tr>
+    <tr><td>검사값이 계속 틀리다</td><td>둥근 따옴표, 줄 끝 설정</td><td>직접 치기, 줄 끝을 New Line으로</td></tr>
+  </table></div>
+</section>
+
+<!-- 한 장 요약 -->
+<section id="cheat">
+  <div class="eyebrow">한 장 요약</div>
+  <h2>작업하면서 열어 둘 것</h2>
+  <div class="cheat">
+    <div class="card"><h3>핀</h3><p><span class="pill p-ok">써도 됨</span> 16 17 18 19 21 22 23 25 26 27 32 33 13 4</p><p><span class="pill p-warn">입력만</span> 34 35 36 39</p><p><span class="pill p-bad">금지</span> 0 2 5 12 15 · 6~11 · 1 3</p><p>모뎀: RX2 16 ← 보드 TX, TX2 17 → 보드 RX, GND</p><p>태그: 불빛 25, 버튼 33</p></div>
+    <div class="card"><h3>토픽</h3><p><code>factory/station/{이름}/</code></p><p>올라감: <code>tag</code> <code>report</code> <code>alive</code></p><p>내려옴: <code>cmd</code> <code>state</code>(보관) <code>test</code></p><p>연결: <code>link</code>(보관, 1/0)</p><p>태그: <code>factory/tag/{이름}/cmd · report · link</code></p></div>
+    <div class="card"><h3>줄 예시 (검사값 확인됨)</h3><p><code>$T{"n":41,"k":"TAG","uid":"04A1B2C3"}*36</code></p><p><code>$R{"n":42,"k":"DONE"}*7B</code></p><p><code>$H{"up":123,"st":"WORK"}*51</code></p><p><code>$C,re=42,ok=1*67</code></p><p><code>$L,up=1*69</code> · <code>$L,up=0*68</code></p></div>
+    <div class="card"><h3>명령</h3><p><code>ls /dev/cu.*</code></p><p><code>ipconfig getifaddr en0</code></p><p><code>mosquitto_sub -h IP -t 'factory/#' -v</code></p><p><code>mosquitto_pub -h IP -t 토픽 -m '내용'</code></p></div>
+    <div class="card"><h3>숫자</h3><p>선 속도 115200</p><p>연결 상태 줄 2초마다, 보드는 5초 없으면 끊김</p><p>유언까지 약 6초 (keepalive 4초)</p><p>한 줄 240자, 메시지 150바이트 이내</p><p>핀 3.3V까지</p></div>
+    <div class="card"><h3>업로드가 안 되면</h3><p>케이블 → 모니터 닫기 → BOOT 누르고 업로드 → 핀 0·2·12·15 비우기 → 속도 115200</p><h3 style="margin-top:6px">상태등 값 (lamp)</h3><p><code>0</code> 꺼짐 · <code>Yb</code> 노랑 깜빡 · <code>G</code> 초록 · <code>R</code> 빨강 · <code>Rb</code> 빨강 깜빡</p></div>
+  </div>
+</section>
+
+<!-- 자가 점검 -->
+<section id="quiz">
+  <div class="eyebrow">자가 점검</div>
+  <h2>여덟 문제</h2>
+  <p class="goal">답을 가리고 말로 설명해 보세요. 다 맞으면 프로젝트 코드를 고칠 준비가 됐습니다.</p>
+  <div id="quizlist" style="display:flex;flex-direction:column;gap:8px"></div>
+</section>
+
+<footer>
+  <div><b>확인하지 못한 것.</b> ① 실제 보드에서의 컴파일과 동작(코드는 Mac에서 가짜 부품으로 로직만 시험). ② 보드의 USB 칩 종류와 드라이버 필요 여부. ③ 핀 15~19번 줄의 정확한 순서와 3D 모형의 부품 위치. ④ NUCLEO 쪽 핀의 커넥터 위치. ⑤ 새 버전 4.0과 라이브러리의 호환. ⑥ Homebrew의 mosquitto 설정 파일 경로. 전류·시간 숫자는 보통 값입니다.</div>
+  <div>2026-11-21 · 에이전트 팀(ESP32 하드웨어 전문가, 펌웨어 개발자, 교육 설계자)의 자료를 합쳐 작성. 메시지 규격은 데이터 흐름 설명서 v2를 따릅니다.</div>
+</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s);
+/* ---------- 복사 버튼 ---------- */
+document.querySelectorAll(".copy").forEach(b=>b.addEventListener("click",()=>{
+  const code=b.parentElement.querySelector("code"); const t=code.textContent;
+  const done=()=>{const o=b.textContent;b.textContent="복사됨";setTimeout(()=>b.textContent=o,1200)};
+  const sel=()=>{const r=document.createRange();r.selectNodeContents(code);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="선택됨 · Cmd+C"};
+  try{navigator.clipboard.writeText(t).then(done,sel)}catch(e){sel()}
+}));
+
+/* ---------- 3D 보드 ---------- */
+const S=8; // px per mm
+const PARTS=[
+ {id:"pcb",name:"기판",x:0,y:0,w:51,d:25,h:1.6,z:0,c:"var(--pcb)",t:"초록(또는 검정) 판입니다. 양쪽 긴 변을 따라 금색 구멍에 핀이 19개씩 박혀 있습니다."},
+ {id:"mod",name:"ESP32 모듈",x:0.5,y:3.5,w:25,d:18,h:0.8,z:1.6,c:"var(--pcb2)",t:"ESP32-WROOM-32. 두뇌와 Wi-Fi, 4MB 저장장치가 이 안에 다 들어 있습니다."},
+ {id:"ant",name:"안테나",x:0.8,y:4,w:5.6,d:17,h:0.15,z:2.4,c:"var(--pcb2)",ant:1,t:"모듈 끝의 지그재그 금색 선이 Wi-Fi 안테나입니다. 금속, 배터리, 전선을 10mm 이상 띄우세요. 손으로 덮어도 신호가 약해집니다."},
+ {id:"can",name:"금속 캔",x:7,y:4.5,w:17.5,d:16,h:2.3,z:2.4,c:"var(--can)",lbl:"ESP32",t:"잡음을 막는 덮개입니다. 일하는 동안 따뜻해집니다. 갑자기 뜨거우면 합선이니 바로 USB를 뽑으세요."},
+ {id:"reg",name:"전압 변환기",x:28,y:3.2,w:6.5,d:3.6,h:1.6,z:1.6,c:"var(--black)",lbl:"3.3V",t:"AMS1117. USB의 5V를 3.3V로 낮춥니다. 여기서 낼 수 있는 전기는 많지 않아서, 서보 같은 부품의 전원으로 쓰면 안 됩니다."},
+ {id:"usbic",name:"USB 변환 칩",x:33,y:10,w:5,d:5,h:0.9,z:1.6,c:"var(--black)",t:"USB와 Serial(핀 1, 3) 사이를 이어 줍니다. 글자가 SILABS면 CP2102, WCH면 CH340입니다. 종류에 따라 Mac 드라이버가 다릅니다."},
+ {id:"led",name:"불빛 2개",x:40,y:4,w:1.6,d:1,h:0.6,z:1.6,c:"#d94b3d",t:"빨강은 전원, 파랑은 IO2에 달린 내장 LED입니다. 실습 0에서 이 파란 불을 깜빡입니다. (위치와 색은 보드마다 다를 수 있습니다)"},
+ {id:"led2",grp:"led",x:40,y:20,w:1.6,d:1,h:0.6,z:1.6,c:"#3d7bd9"},
+ {id:"en",name:"EN 버튼",x:44,y:2.6,w:4,d:4,h:1.8,z:1.6,c:"var(--can2)",lbl:"EN",t:"다시 시작(리셋) 버튼입니다. 프로그램은 지워지지 않고 처음부터 다시 돕니다. (EN과 BOOT의 좌우는 보드의 글자로 확인하세요)"},
+ {id:"boot",name:"BOOT 버튼",x:44,y:18.4,w:4,d:4,h:1.8,z:1.6,c:"var(--can2)",lbl:"BOOT",t:"IO0에 달린 버튼입니다. 업로드가 안 될 때 누른 채로 올립니다. 켜진 뒤에는 그냥 버튼으로도 쓸 수 있어 실습에 씁니다."},
+ {id:"usb",name:"USB 단자",x:45.5,y:8.7,w:6.8,d:7.6,h:2.6,z:1.6,c:"var(--can)",lbl:"USB",t:"Micro-USB. 전원과 업로드를 겸합니다. 데이터가 되는 케이블이어야 포트가 보입니다."},
+ {id:"pins",name:"핀",t:"양쪽 금색 점이 핀 자리입니다. 2.54mm 간격으로 19개씩. 모서리의 3V3, 5V, GND가 전원 핀입니다. 아래 핀 지도에서 하나씩 볼 수 있습니다."}
+];
+const brd=$("#brd"), stage=$("#stage"), info=$("#pinfo"), plist=$("#parts");
+function cuboid(p){
+  const w=p.w*S,d=p.d*S,h=p.h*S,z=p.z*S;
+  const el=document.createElement("div"); el.className="cub"; el.dataset.id=p.grp||p.id;
+  el.style.cssText=`left:${p.x*S}px;top:${p.y*S}px;width:${w}px;height:${d}px;transform:translateZ(${z}px);--c:${p.c}`;
+  const f=(cls,css)=>{const i=document.createElement("i");i.className=cls;i.style.cssText=css;el.appendChild(i);return i};
+  const top=f("top",`transform:translateZ(${h}px)`);
+  f("s",`left:0;top:${d}px;width:${w}px;height:${h}px;transform-origin:top;transform:rotateX(90deg);filter:brightness(.82)`);
+  f("s",`left:0;top:${-h}px;width:${w}px;height:${h}px;transform-origin:bottom;transform:rotateX(-90deg);filter:brightness(.7)`);
+  f("s",`left:${-h}px;top:0;width:${h}px;height:${d}px;transform-origin:right;transform:rotateY(90deg);filter:brightness(.75)`);
+  f("s",`left:${w}px;top:0;width:${h}px;height:${d}px;transform-origin:left;transform:rotateY(-90deg);filter:brightness(.88)`);
+  if(p.ant){const a=document.createElement("div");a.className="ant";top.appendChild(a)}
+  if(p.lbl){const l=document.createElement("div");l.className="lbl";l.textContent=p.lbl;top.appendChild(l)}
+  top.addEventListener("click",()=>{if(!moved)pick(p.grp||p.id)});
+  brd.appendChild(el);
+}
+PARTS.filter(p=>p.w).forEach(cuboid);
+["18px","174px"].forEach(t=>{const d=document.createElement("div");d.className="pads";d.style.top=t;brd.appendChild(d)});
+function pick(id){
+  const p=PARTS.find(q=>q.id===id); if(!p)return;
+  brd.querySelectorAll(".cub").forEach(c=>c.classList.toggle("sel",c.dataset.id===id));
+  plist.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===id));
+  info.innerHTML=""; const b=document.createElement("b"); b.textContent=p.name; const s=document.createElement("span"); s.textContent=p.t; info.append(b,s);
+}
+PARTS.filter(p=>p.name).forEach(p=>{const b=document.createElement("button");b.type="button";b.textContent=p.name;b.dataset.id=p.id;b.setAttribute("aria-pressed","false");b.addEventListener("click",()=>pick(p.id));plist.appendChild(b)});
+let rx=58,rz=-32,drag=null,moved=false;
+function fit(){const sc=Math.min(1,(stage.clientWidth-24)/470);brd.style.setProperty("--sc",sc)}
+function apply(){brd.style.setProperty("--rx",rx+"deg");brd.style.setProperty("--rz",rz+"deg")}
+stage.addEventListener("pointerdown",e=>{drag={x:e.clientX,y:e.clientY,rx,rz};moved=false;stage.setPointerCapture(e.pointerId)});
+stage.addEventListener("pointermove",e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.abs(dx)+Math.abs(dy)>4)moved=true;rz=drag.rz+dx*0.5;rx=Math.max(0,Math.min(85,drag.rx-dy*0.5));apply()});
+const end=()=>{drag=null;setTimeout(()=>moved=false,0)};
+stage.addEventListener("pointerup",end);stage.addEventListener("pointercancel",end);
+stage.tabIndex=0;stage.addEventListener("keydown",e=>{const k=e.key;if(k==="ArrowLeft")rz-=8;else if(k==="ArrowRight")rz+=8;else if(k==="ArrowUp")rx=Math.max(0,rx-6);else if(k==="ArrowDown")rx=Math.min(85,rx+6);else return;e.preventDefault();apply()});
+addEventListener("resize",fit);fit();apply();pick("ant");
+
+/* ---------- 핀 지도 ---------- */
+const L=[["3V3","pow","3.3V가 나옵니다. 작은 부품의 전원으로 씁니다. 밖에서 3.3V를 넣을 수도 있지만, 그때는 USB를 같이 꽂지 않습니다.",""],["EN","warn","LOW가 되면 다시 시작합니다. 버튼이 이미 달려 있으니 건드리지 않습니다.",""],["36 (SVP)","warn","입력만 됩니다. 풀업이 없습니다. 아날로그 읽기용.","배터리 측정(나중)"],["39 (SVN)","warn","입력만 됩니다. 풀업이 없습니다.","USB 감지(나중)"],["34","warn","입력만 됩니다. 풀업이 없어 버튼에 쓰려면 저항이 따로 필요합니다.",""],["35","warn","입력만 됩니다. 풀업이 없습니다.",""],["32","ok","자유롭게 씁니다. 아날로그도 읽을 수 있습니다.","단독 공정: 부저"],["33","ok","자유롭게 씁니다.","태그 버튼"],["25","ok","출력에 좋습니다. Wi-Fi 중에는 아날로그로 읽을 수 없습니다.","태그 불빛"],["26","ok","출력에 좋습니다.","단독 공정: 상태등"],["27","ok","출력에 좋습니다.","단독 공정: 상태등"],["14","warn","켜질 때 잠깐 신호가 튑니다. 켜지자마자 움직이면 안 되는 부품은 달지 않습니다.",""],["12","bad","켜질 때 HIGH면 부팅에 실패합니다. 쓰지 않습니다.",""],["GND","pow","0V 기준. 연결하는 모든 장치와 GND를 잇습니다.",""],["13","ok","자유롭게 씁니다.","단독 공정: 서보 신호"],["9 (SD2)","bad","내부 저장장치에 묶여 있습니다. 절대 쓰지 않습니다.",""],["10 (SD3)","bad","내부 저장장치에 묶여 있습니다.",""],["11 (CMD)","bad","내부 저장장치에 묶여 있습니다.",""],["5V","pow","USB의 5V가 나옵니다. 밖에서 5V를 넣을 때도 여기. USB와 동시에 넣지 않습니다.",""]];
+const R=[["GND","pow","0V 기준.",""],["23","ok","자유롭게 씁니다.","단독 공정: 리더기 MOSI"],["22","ok","자유롭게 씁니다.","단독 공정: 리더기 RST"],["1 (TX)","bad","USB와 같이 씁니다. 업로드와 로그가 여기로 다닙니다.","Serial (로그)"],["3 (RX)","bad","USB와 같이 씁니다.","Serial (로그)"],["21","ok","자유롭게 씁니다.","단독 공정: 리더기 SS"],["GND","pow","0V 기준.",""],["19","ok","자유롭게 씁니다.","단독 공정: 리더기 MISO"],["18","ok","자유롭게 씁니다.","단독 공정: 리더기 SCK"],["5","warn","부팅 방식을 정하는 핀입니다. 되도록 비워 둡니다.",""],["17","ok","자유롭게 씁니다.","모뎀 TX2 → 보드 RX"],["16","ok","자유롭게 씁니다.","모뎀 RX2 ← 보드 TX"],["4","ok","자유롭게 씁니다.","단독 공정: 버튼"],["0","bad","BOOT 버튼이 달린 핀입니다. 켜질 때 LOW면 업로드 모드로 들어갑니다.","BOOT 버튼 (실습용)"],["2","warn","부팅 방식을 정하는 핀이자 내장 LED입니다. 밖에 뭔가 달지 않습니다.","내장 LED (실습용)"],["15","warn","부팅 방식을 정하는 핀입니다. 비워 둡니다.",""],["8 (SD1)","bad","내부 저장장치에 묶여 있습니다.",""],["7 (SD0)","bad","내부 저장장치에 묶여 있습니다.",""],["6 (CLK)","bad","내부 저장장치에 묶여 있습니다.",""]];
+const pm=$("#pinmap"), pinfo=$("#pininfo"), KN={ok:"써도 됨",warn:"조심",bad:"쓰지 않음",pow:"전원"};
+const mid=document.createElement("div");mid.className="mid";mid.innerHTML="<span>안테나<br>▲</span><span>ESP32<br>NodeMCU-32</span><span>▼<br>USB</span>";pm.appendChild(mid);
+function mk(p,side,row){
+  const b=document.createElement("button");b.type="button";b.className="pin "+side;b.dataset.k=p[1];b.setAttribute("aria-pressed","false");b.style.gridColumn=side==="l"?1:3;b.style.gridRow=row+1;
+  const dot='<span class="dot"></span>', nm="<span>"+p[0]+"</span>", use=p[3]?'<span class="use">'+p[3]+"</span>":"";
+  b.innerHTML=side==="l"?use+nm+dot:dot+nm+use;
+  b.addEventListener("click",()=>{pm.querySelectorAll(".pin").forEach(x=>x.setAttribute("aria-pressed","false"));b.setAttribute("aria-pressed","true");
+    pinfo.innerHTML="";const t=document.createElement("b");t.textContent=p[0]+" · "+KN[p[1]];const s=document.createElement("span");s.textContent=p[2];pinfo.append(t,s);
+    if(p[3]){const u=document.createElement("span");u.style.color="var(--gold)";u.style.fontWeight="600";u.textContent="우리 프로젝트: "+p[3];pinfo.append(u)}});
+  pm.appendChild(b);return b;
+}
+L.forEach((p,i)=>mk(p,"l",i));const rb=R.map((p,i)=>mk(p,"r",i));rb[11].click();
+
+/* ---------- 검사값 계산기 ---------- */
+const enc=new TextEncoder();
+const xor=s=>enc.encode(s).reduce((a,b)=>a^b,0);
+const hex=n=>n.toString(16).toUpperCase().padStart(2,"0");
+function calc(){
+  const v=$("#cbody").value; $("#cout").textContent=v?"$"+v+"*"+hex(xor(v)):"글자를 넣으세요";
+  const st=$("#csteps"); st.innerHTML=""; let a=0; const by=enc.encode(v);
+  if(by.length<=40){[...v].forEach(ch=>{enc.encode(ch).forEach(b=>a^=b);const s=document.createElement("span");s.textContent=ch+" → "+hex(a);st.appendChild(s)})}
+  else{const s=document.createElement("span");s.textContent="글자 "+by.length+"개를 차례로 XOR";st.appendChild(s)}
+}
+function check(){
+  const l=$("#cline").value.trim(), r=$("#cres"); let msg;
+  if(/[“”‘’]/.test(l)) msg="둥근 따옴표가 들어 있습니다. 직접 쳐서 곧은 따옴표로 바꾸세요.";
+  else if(l.length<5||l[0]!=="$"||l[l.length-3]!=="*") msg="모양이 맞지 않습니다. $로 시작하고 끝에서 세 번째가 *여야 합니다.";
+  else{const body=l.slice(1,-3), want=l.slice(-2).toUpperCase(), got=hex(xor(body)); msg=got===want?"맞습니다. 검사값 "+got:"틀립니다. 계산한 값은 "+got+", 줄에 적힌 값은 "+want}
+  r.textContent=msg;
+}
+$("#cbody").addEventListener("input",calc);$("#cline").addEventListener("input",check);calc();check();
+
+/* ---------- 실습 ---------- */
+const LABS=[
+ ["첫 업로드",30,"보드, USB 케이블","보드 패키지를 설치하고 포트를 찾은 뒤, 예제의 Blink를 올립니다(LED 핀은 2).","파란 내장 LED가 1초마다 깜빡인다.","포트가 안 보이면 케이블부터. Connecting…에서 멈추면 BOOT를 누른 채 올린다."],
+ ["선으로 한 줄 주고받기",20,"같음","115200으로 열고, Serial Monitor에서 받은 글자를 줄바꿈까지 모아 그대로 되돌려 보냅니다.","친 줄이 그대로 돌아온다.","글자가 깨지면 속도가 다르다. 아무 반응이 없으면 줄 끝 설정이 New Line이 아니다."],
+ ["버튼과 millis",30,"BOOT 버튼(IO0)과 내장 LED. 부품이 있으면 IO33 버튼, IO25 LED + 220Ω","LED는 계속 깜빡이게 두고, 버튼을 짧게 누름과 2초 누름을 구분해 출력합니다.","누르고 있는 동안에도 깜빡임이 멈추지 않는다.","멈추면 delay가 남아 있다. 한 번 눌렀는데 여러 번 찍히면 30ms 떨림 거르기를 넣는다."],
+ ["꺼져도 남는 저장",20,"같음","Preferences로 켜진 횟수를 저장하고 켤 때마다 1씩 늘려 출력합니다.","USB를 뽑았다 꽂아도 숫자가 이어진다.","이름표 철자가 다르면 0부터 다시 센다. loop에서 매번 쓰지 않는다."],
+ ["줄 검사",30,"같음","받은 줄의 $와 * 사이를 XOR해서 끝의 두 자리와 비교하고 OK / BAD를 출력합니다.","$R{\"n\":42,\"k\":\"DONE\"}*7B 는 OK, 한 글자만 바꾸면 BAD.","문서에서 복사한 따옴표가 둥글다. 직접 친다. 위의 계산기로 값을 대조한다."],
+ ["MQTT 첫 연결",40,"+ 2.4GHz Wi-Fi(휴대폰 핫스팟도 됨)","Mac에 mosquitto를 띄우고, ESP32가 2초마다 factory/station/P2/alive 에 메시지를 보냅니다.","mosquitto_sub -t 'factory/#' -v 에 2초마다 줄이 올라온다.","rc=-2면 Mac IP와 설정 두 줄, 방화벽. Wi-Fi가 안 붙으면 5GHz인지 본다."],
+ ["공정 보드 없는 모뎀",40,"같음. 선택: 점퍼선 1개","줄의 종류 글자로 토픽을 고릅니다(R→report, T→tag, H→alive). cmd를 구독해 받은 JSON을 $C,… 줄로 바꿔 출력합니다.","$R…*7B를 치면 sub 창에 JSON이 뜬다. mosquitto_pub으로 {\"re\":42,\"ok\":1}을 보내면 $C,re=42,ok=1*67 이 찍힌다.","받는 함수가 안 불리면 mqtt.loop()와 구독을 본다. 점퍼로 17→16을 이으면 Serial2 선도 혼자 시험할 수 있다."],
+ ["뽑았다 꽂기",30,"같음","유언을 link=0(보관)으로 맡기고, 붙자마자 link=1(보관)을 보냅니다. keepalive는 4초. 다시 붙는 코드는 millis로.","USB를 뽑으면 약 6초 뒤 sub 창에 link 0, 꽂으면 1. 그 사이 보관으로 보낸 state가 붙자마자 온다.","0이 안 뜨면 keepalive가 기본값(15초)이다. 1이 안 뜨면 다시 붙는 코드가 setup에만 있다."]
+];
+const ll=$("#lablist"), KEY="esp32book.labs";
+let done={}; try{done=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}
+function prog(){const n=LABS.filter((_,i)=>done[i]).length;$("#prog").textContent="진도 "+n+" / "+LABS.length+"  "+"■".repeat(n)+"□".repeat(LABS.length-n)}
+LABS.forEach((l,i)=>{
+  const a=document.createElement("article");a.className="lab";
+  const h=document.createElement("header");const c=document.createElement("input");c.type="checkbox";c.id="lab"+i;c.checked=!!done[i];
+  c.addEventListener("change",()=>{done[i]=c.checked;try{localStorage.setItem(KEY,JSON.stringify(done))}catch(e){}prog()});
+  const lb=document.createElement("label");lb.htmlFor="lab"+i;lb.innerHTML="<h3></h3><div class='meta'></div>";lb.querySelector("h3").textContent="실습 "+i+" · "+l[0];lb.querySelector(".meta").textContent="약 "+l[1]+"분 · 준비물: "+l[2];
+  h.append(c,lb);a.appendChild(h);
+  const dl=document.createElement("dl");[["할 일",l[3]],["통과 기준",l[4]],["막히면",l[5]]].forEach(([k,v])=>{const dt=document.createElement("dt");dt.textContent=k;const dd=document.createElement("dd");dd.textContent=v;dl.append(dt,dd)});
+  a.appendChild(dl);ll.appendChild(a);
+});prog();
+
+/* ---------- 자가 점검 ---------- */
+[["모뎀 ESP32가 판단하는 것은?","없습니다. 줄을 토픽으로, 토픽을 줄로 옮기기만 합니다."],
+ ["버튼을 GND에 이었는데 값이 떠돕니다. 왜?","INPUT_PULLUP을 주지 않았습니다. 기본값이 없어서 떠돕니다."],
+ ["$C,re=42,ok=1 의 검사값은 어디부터 어디까지 계산하나?","$와 * 사이 전부입니다. 종류 글자 C도 들어갑니다. 값은 67."],
+ ["공정 보드의 TX는 ESP32의 어디에 잇나?","RX2인 IO16입니다. TX와 RX는 엇갈려 잇고, GND도 꼭 잇습니다."],
+ ["전원을 뽑았는데 link가 바로 0이 되지 않습니다. 왜?","브로커는 keepalive의 1.5배 동안 소식이 없어야 유언을 붙입니다. 4초면 약 6초."],
+ ["다시 붙은 공정은 지금 상태를 어떻게 아나?","state가 보관 메시지라서 구독하자마자 마지막 값이 옵니다."],
+ ["다섯 대에 같은 코드를 올렸더니 서로 끊깁니다. 왜?","이름(client ID)이 같습니다. 보드마다 다르게 해야 합니다."],
+ ["Serial2.begin(115200)만 썼더니 보드와 통신이 안 됩니다. 왜?","새 버전에서 기본 핀이 바뀌었습니다. Serial2.begin(115200, SERIAL_8N1, 16, 17)처럼 핀을 직접 적습니다."]
+].forEach(([q,a],i)=>{const d=document.createElement("details");const s=document.createElement("summary");s.textContent=(i+1)+". "+q;const p=document.createElement("p");p.textContent=a;d.append(s,p);$("#quizlist").appendChild(d)});
+})();
+</script>

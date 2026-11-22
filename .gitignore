@@ -12,3 +12,6 @@ __pycache__/
 *.py[cod]
 .DS_Store
 Thumbs.db
+
+# ESP32 Wi-Fi / broker credentials (commit only secrets.example.h)
+secrets.h
