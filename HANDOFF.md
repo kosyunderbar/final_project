@@ -242,7 +242,7 @@
 
 ## 9. 스마트태그
 
-자료: `output/meeting/스마트태그_팟설계_NodeMCU.pdf`(설계 기준), `output/3d_print/`(출력 파일·PDF), `output/meeting/스마트태그_착수검토_종합.pdf`, `output/meeting/스마트태그_케이스_디자인안.pdf`.
+자료: `output/meeting/스마트태그_팟설계_NodeMCU.pdf`(설계 기준), `output/3d_print/`(출력 파일·PDF), `output/meeting/스마트태그_케이스_디자인안.pdf`.
 
 ### 정한 것 [확정]
 
@@ -257,6 +257,7 @@
 
 - 보드를 눕혀(모듈·안테나 위, 헤더 핀 아래) **헤더 핀을 떼지 않고** 바닥 홈에 꽂는다. 핀 홈은 1차 시험 출력에서 **가장 좁은 1.2mm로 확정**(살짝 힘을 주면 들어가 고정) → 트레이는 `pod2_tray_slot1.2.stl`.
 - 키태그를 리더 쪽 벽에 세워 보드와 직각, **10mm 이상** 띄운다. 페라이트는 쓰지 않는다. 판독 시험이 기준(정차 ±10~15mm에서 20/20)에 못 미치면 카드를 차체 옆면에 붙인다.
+- 공정 리더기와 키태그는 **평행하게 마주 보게**, 사이 간격 약 15mm, 그 사이의 케이스 벽은 1~1.5mm(위 1.2mm 벽과 맞음).
 - 안테나 끝은 USB 반대쪽, 금속·모터·배터리와 10~15mm 이상.
 - 배터리·충전 모듈·LDO 자리 **30×28×15mm를 보드 위 USB 쪽에 비워 둔다.**
 - 외형 **61.8 × 49.8 × 41.6mm**(주행 방향 × 리더 방향 × 높이, `스마트태그_팟_v0.2_출력도면.pdf`). 벽: 리더 쪽 1.2mm, 반대쪽 옆벽·안테나 쪽 끝벽 2.4mm. 보드 실측 51 × 25mm, 키태그 Ø32(손잡이 포함 42 × 35) 반영. 차체 옆면이 150mm보다 짧으면 받침판 부착을 검토.
@@ -270,6 +271,8 @@
 
 - HMI·DB·서버에 들어가는 차체 상태는 스마트태그가 보내지 않는다. 공정 ESP32가 그 순간의 사건을 보내고, 관제 Pi5가 받은 시각을 붙여 현재 상태·이력·걸린 시간을 만든다. 태그의 기록은 Pi5가 보낸 사본이라 다시 올리면 한 바퀴 돌 뿐이다('쓰는 곳은 한 곳').
 - 태그가 위로 보내는 것은 자기 자신에 대한 것뿐이다: 사본 받음 답, 연결 상태(`link`), 버튼, 나중에 배터리. 태그가 꺼져도 라인은 돈다.
+- [제안] **태그는 다시 쓰는 물건이다.** 어느 차체에 붙었는지는 '묶음(바인딩) 기록'으로 따로 관리해야 차체끼리 이력이 섞이지 않는다. 새 차체를 투입할 때 앞 차체와의 묶음은 푼다(묶는 시점은 회의 안건: P1 첫 판독 / 노랑 투입대).
+- [제안] 검사에서 관제 기록·태그 사본·카메라를 대조할 때: **태그가 답이 없으면 경고만 하고 판정은 계속**(원본은 관제 Pi5에 있으므로), **태그 사본과 관제 기록이 다르면 보류**.
 
 ### 역할 선택지 [제안 — 사용자·팀 결정 대기]
 
@@ -414,7 +417,7 @@
 
 - 언리얼 연동 구조, 위치 표현 수준, 브라우저 제공 여부
 - 최종 통합 평가에서 웹·Qt·Jupyter UI와 앞선 과제를 유지할 범위
-- 팀 Jira·Confluence 사이트가 있다(프로젝트 키 GT, 무료 요금제, 안내는 `Jira_Confluence_도입_가이드.pdf`). Confluence의 결정 기록은 이 문서를 고치기 전의 [확정] 목록으로 만들어져, 지금 결정(공정 ESP32 ×4, RTOS 등)과 다를 수 있다 → 갱신 필요(사용자 확인 후).
+- 팀 Jira·Confluence 사이트가 있다(프로젝트 키 GT, 무료 요금제, 안내는 `Jira_Confluence_도입_가이드.pdf`). Confluence의 결정 기록은 이 문서를 고치기 전의 [확정] 목록으로 만들어져, 지금 결정(공정 ESP32 ×4, RTOS 등)과 다를 수 있다. Confluence는 사용자가 직접 관리한다 — 에이전트는 건드리지 않는다.
 
 ## 14. 실물로 할 일 (아직 아무것도 재거나 만들지 않음)
 
@@ -447,9 +450,9 @@
 | `next_meeting/제공맵_공정배치도_팔없음.html/.pdf` | 팔 없는 배치 |
 | `next_meeting/제공맵_공정배치도_팔있음.html/.pdf` | 팔 있는 배치 |
 | `next_meeting/RTOS_도입_제안서.html/.pdf` | 공정 ESP32 FreeRTOS 두 태스크 제안(6쪽, 구현 가능성 쪽 포함) |
-| `next_meeting/esp32_book/` | ESP32 교본 `ESP32_교본.html`(브라우저로 열기, 원본 `src/book.tpl.html` + `src/build.py`). 온라인판은 비공개 Artifact라 팀원에게는 공유 설정 필요 |
-| `next_meeting/esp32_book/code/` | `modem/modem.ino`(loop판 통신 코드: 줄 ↔ MQTT), `tag/tag.ino`(스마트태그 뼈대: 사본 저장·답·LED·버튼), `cs.c`/`cs.py`(검사값), `secrets.example.h`. Arduino-ESP32 코어 3.3.x 고정 |
-| `output/meeting/` | `HMI_화면시안.png`, `스마트태그_착수검토_종합.pdf`(식별 원칙·상황별 처리), `스마트태그_케이스_디자인안.pdf`(케이스 형태 비교), `스마트태그_팟설계_NodeMCU.pdf`(팟 설계 기준) |
+| `next_meeting/esp32_book/` | ESP32 교본 `ESP32_교본.html`(Windows 기준, 브라우저로 열기, 원본 `src/book.tpl.html` + `src/build.py`). 0장 실습 계획(준비 체크리스트, 실습 11개 순서, 실습 8 측정 기록표). 온라인판(비공개 Artifact)은 옛 내용 |
+| `next_meeting/esp32_book/code/` | `modem/modem.ino`(loop판 통신 코드: 줄 ↔ MQTT, 기본 `TEST_MODE 1` = USB로 줄을 쳐서 시험, `MEASURE 1` = connect 걸린 시간·loop 최대 간격 출력), `rfid/rfid.ino`(RC522 키태그 → `$T` 줄), `rtos_step1/rtos_step1.ino`(FreeRTOS 두 태스크 + 큐 1단계), `tag/tag.ino`(스마트태그 뼈대), `pc/mqtt_tool.py`(Windows용 watch·send·state·reply, paho-mqtt 필요), `cs.c`/`cs.py`(검사값), `secrets.example.h`. Arduino-ESP32 코어 3.3.x 고정. rfid·rtos_step1은 컴파일 확인 전, 영문 경로(`C:\esp32\`)로 복사해서 연다 |
+| `output/meeting/` | `HMI_화면시안.png`, `스마트태그_케이스_디자인안.pdf`(케이스 형태 비교), `스마트태그_팟설계_NodeMCU.pdf`(팟 설계 기준) |
 | `output/3d_print/` | 팟 STL(`stl/`: 상자·덮개·트레이 3종·엔드캡·시험편), `1113_출력용/`, `2차_출력용/`, 생성 스크립트 `src/cad_pod2.py`, PDF 4개(`스마트태그_팟_v0.2_출력도면.pdf` 자석 덮개, `스마트태그_1113_시험체크리스트.pdf`, `스마트태그_프린터실_작업순서.pdf`, `스마트태그_보드배치_도면.pdf`) |
 | `output/hmi_demo/` | `hmi_demo.py`, `라즈베리파이에서_띄우기.txt`, `확인_화면/` PNG 4장 |
 | `tmp/` | git 제외, 손대지 않음 |

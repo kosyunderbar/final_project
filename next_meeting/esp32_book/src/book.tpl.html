@@ -136,14 +136,56 @@ footer{font-size:13.5px;color:var(--mut);border-top:1px solid var(--line);paddin
 <div class="wrap">
 
 <header style="display:flex;flex-direction:column;gap:14px">
-  <div class="eyebrow">관통 프로젝트 · NodeMCU-32 (ESP32-WROOM-32)</div>
+  <div class="eyebrow">관통 프로젝트 · NodeMCU-32 (ESP32-WROOM-32) · Windows 기준</div>
   <h1>ESP32 교본</h1>
-  <p class="lead">읽고, 아홉 가지 실습을 해 보면 공정 ESP32와 스마트태그를 바로 만들 수 있게 썼습니다. 예시는 모두 우리 공장 라인의 것입니다.</p>
+  <p class="lead">읽고, 열한 가지 실습을 해 보면 공정 ESP32와 스마트태그를 바로 만들 수 있게 썼습니다. 예시는 모두 우리 공장 라인의 것입니다.</p>
   <nav class="toc" aria-label="목차">
-    <a href="#why">1 왜 쓰나</a><a href="#board">2 보드 둘러보기</a><a href="#setup">3 첫 업로드</a><a href="#gpio">4 핀과 loop</a><a href="#uart">5 시리얼과 한 줄</a><a href="#mqtt">6 Wi-Fi와 MQTT</a><a href="#recover">7 끊김과 저장</a><a href="#use">8 프로젝트에 쓰기</a><a href="#rtos">9 두 태스크(RTOS)</a><a href="#labs">실습</a><a href="#stuck">막혔을 때</a><a href="#cheat">한 장 요약</a><a href="#quiz">자가 점검</a>
+    <a href="#plan">0 실습 계획</a><a href="#why">1 왜 쓰나</a><a href="#board">2 보드 둘러보기</a><a href="#setup">3 첫 업로드</a><a href="#gpio">4 핀과 loop</a><a href="#uart">5 시리얼과 한 줄</a><a href="#mqtt">6 Wi-Fi와 MQTT</a><a href="#recover">7 끊김과 저장</a><a href="#use">8 프로젝트에 쓰기</a><a href="#rtos">9 두 태스크(RTOS)</a><a href="#labs">실습</a><a href="#stuck">막혔을 때</a><a href="#cheat">한 장 요약</a><a href="#quiz">자가 점검</a>
   </nav>
-  <div class="note"><b>먼저 알아 둘 것.</b> 8장의 코드(modem.ino, tag.ino)는 Mac에서 로직 시험만 통과했고, 실제 보드에 올려 보지는 못했습니다. 9장의 두 태스크 뼈대는 <b>컴파일 확인 전</b>입니다. 실습 0에서 처음 올릴 때 확인하게 됩니다. 확인하지 못한 항목은 맨 아래에 모아 두었습니다.</div>
+  <div class="note"><b>먼저 알아 둘 것.</b> 이 교본은 <b>Windows 10/11</b> 기준입니다. 8장의 코드(modem.ino, tag.ino)는 가짜 부품으로 로직만 시험했고 실제 보드에는 아직 올려 보지 못했습니다. 실습 5의 <code>rfid.ino</code>와 실습 10의 <code>rtos_step1.ino</code>는 <b>컴파일 확인 전</b>입니다. 실습 0에서 처음 올릴 때 확인하게 됩니다. 확인하지 못한 항목은 맨 아래에 모아 두었습니다.</div>
 </header>
+
+<!-- 0 실습 계획 -->
+<section id="plan">
+  <div class="eyebrow">0</div>
+  <h2>실습 계획: 준비 한 번, 실습 열한 개</h2>
+  <p class="goal">이 장대로 하면: 이틀 안에 리더기로 태그를 읽어 MQTT로 보내고, RTOS를 쓸지 정할 숫자를 손에 쥔다.</p>
+  <h3>준비 (한 번만, 약 1시간)</h3>
+  <div class="tbl"><table>
+    <tr><th style="width:36px"></th><th>할 일</th><th>어디서</th></tr>
+    <tr><td>☐</td><td><b>Arduino IDE 2</b> 설치 + 보드 패키지 <b>esp32 3.3.x</b></td><td>3장</td></tr>
+    <tr><td>☐</td><td>라이브러리: <b>PubSubClient</b>, <b>ArduinoJson 7.x</b>, <b>MFRC522</b></td><td>3장</td></tr>
+    <tr><td>☐</td><td>보드를 꽂고 장치 관리자에서 <b>COM 번호</b> 확인 (안 생기면 USB 드라이버)</td><td>3장</td></tr>
+    <tr><td>☐</td><td>코드 폴더를 <b>영문 경로</b>(<code>C:\esp32\</code>)로 복사</td><td>3장</td></tr>
+    <tr><td>☐</td><td><b>mosquitto</b> 설치 + 설정 두 줄 + 방화벽 1883 열기</td><td>6장</td></tr>
+    <tr><td>☐</td><td>Python 도구: <code>py -m pip install paho-mqtt</code></td><td>6장</td></tr>
+    <tr><td>☐</td><td>2.4GHz Wi-Fi 준비(휴대폰 핫스팟도 됨). PC와 ESP32를 <b>같은 Wi-Fi</b>에</td><td>6장</td></tr>
+  </table></div>
+  <h3>실습 순서</h3>
+  <div class="fig">
+    <div class="scroll">
+    <svg viewBox="0 0 800 210" width="800" role="img" aria-label="실습 순서: 1일차 오전 0~4, 1일차 오후 5~8, 2일차 9~10, 그다음 P2 연동">
+      <rect class="bxs" x="10" y="20" width="200" height="150" rx="8"/><text x="110" y="48" text-anchor="middle" font-weight="700" font-size="15">1일차 오전</text><text class="m" x="110" y="70" text-anchor="middle" font-size="12">보드와 친해지기 · 약 2시간 10분</text>
+      <text x="26" y="98" font-size="13">0 첫 업로드</text><text x="26" y="118" font-size="13">1 시리얼 한 줄</text><text x="26" y="138" font-size="13">2 버튼과 millis</text><text x="26" y="158" font-size="13">3 저장 · 4 줄 검사</text>
+      <rect class="bxa" x="230" y="20" width="220" height="150" rx="8"/><text x="340" y="48" text-anchor="middle" font-weight="700" font-size="15">1일차 오후</text><text class="m" x="340" y="70" text-anchor="middle" font-size="12">공정 ESP32의 뼈대 · 약 2시간 40분</text>
+      <text x="246" y="98" font-size="13">5 RC522로 태그 읽기</text><text x="246" y="118" font-size="13">6 MQTT 첫 연결</text><text x="246" y="138" font-size="13">7 줄 ↔ MQTT 다리</text><text x="246" y="158" font-size="13" font-weight="700">8 막히는 시간 재기 ★</text>
+      <rect class="bxg" x="470" y="20" width="170" height="150" rx="8"/><text x="555" y="48" text-anchor="middle" font-weight="700" font-size="15">2일차</text><text class="m" x="555" y="70" text-anchor="middle" font-size="12">약 1시간 10분</text>
+      <text x="486" y="98" font-size="13">9 뽑았다 꽂기</text><text x="486" y="118" font-size="13">10 RTOS 두 태스크</text>
+      <rect class="bx" x="660" y="20" width="130" height="150" rx="8"/><text x="725" y="48" text-anchor="middle" font-weight="700" font-size="15">그다음</text><text class="m" x="725" y="76" text-anchor="middle" font-size="12">RTOS 2·3단계</text><text class="m" x="725" y="96" text-anchor="middle" font-size="12">리더기·서보 붙이기</text><text class="m" x="725" y="116" text-anchor="middle" font-size="12">→ 11-28 P2 연동</text>
+      <path class="ln" d="M210 95 H230"/><path class="ah" d="M230 95 l-8 -5 v10z"/><path class="ln" d="M450 95 H470"/><path class="ah" d="M470 95 l-8 -5 v10z"/><path class="ln" d="M640 95 H660"/><path class="ah" d="M660 95 l-8 -5 v10z"/>
+      <text class="m" x="10" y="198" font-size="13">★ 실습 8의 숫자가 'RTOS를 쓸지'의 근거입니다(12-01 판정). 짧게 나오면 그대로 적습니다.</text>
+    </svg>
+    </div>
+    <div class="cap">실습 5만 RC522 리더기와 키태그가 필요하고, 나머지는 보드 하나와 PC로 됩니다. 실습 하나하나는 아래 '실습' 장에 할 일·통과 기준·막히면이 있습니다.</div>
+  </div>
+  <h3>실습 8 기록표 (적어서 팀에 공유)</h3>
+  <div class="tbl"><table>
+    <tr><th>경우</th><th>만드는 법</th><th>connect 걸린 시간 (최소 / 평균 / 최대, 20번)</th><th>loop 최대 간격</th></tr>
+    <tr><td>① 브로커 컴퓨터가 사라짐</td><td>브로커 PC의 Wi-Fi를 끈다 (관제 Pi5가 꺼진 것과 같다)</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>② 공유기가 꺼짐</td><td>핫스팟(공유기)을 끈다</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    <tr><td>③ 브로커 프로그램만 멈춤</td><td>관리자 PowerShell에서 <code>Stop-Service mosquitto</code></td><td>&nbsp;</td><td>&nbsp;</td></tr>
+  </table></div>
+</section>
 
 <!-- 1 -->
 <section id="why">
@@ -211,24 +253,30 @@ footer{font-size:13.5px;color:var(--mut);border-top:1px solid var(--line);paddin
     <div class="card"><h3>먼저 쓸 핀</h3><p style="font-family:var(--mono);font-size:14px">16 17 18 19 21 22 23 25 26 27 32 33 13 4</p><p style="font-size:14px;color:var(--mut)">아날로그 입력은 32~39만(Wi-Fi를 쓰는 동안 나머지 아날로그 핀은 못 읽습니다).</p></div>
     <div class="card"><h3>건드리지 않을 핀</h3><p style="font-family:var(--mono);font-size:14px">0 2 5 12 15 · 6~11 · 1 3</p><p style="font-size:14px;color:var(--mut)">부팅 방식을 정하는 핀, 내부 저장장치에 묶인 핀, USB와 같이 쓰는 핀입니다. 여기에 뭔가 달면 부팅이나 업로드가 안 됩니다.</p></div>
   </div>
-  <div class="bad"><b>전압 세 가지만 기억하세요.</b> ① 핀은 <b>3.3V까지</b>입니다. 5V를 넣으면 망가집니다. ② 핀 하나로 모터·서보·부저를 직접 돌리지 않습니다. ③ 배선은 <b>USB를 뽑고</b> 바꿉니다. 3V3과 GND가 닿으면 보드나 Mac 포트가 죽을 수 있습니다.</div>
+  <div class="bad"><b>전압 세 가지만 기억하세요.</b> ① 핀은 <b>3.3V까지</b>입니다. 5V를 넣으면 망가집니다. ② 핀 하나로 모터·서보·부저를 직접 돌리지 않습니다. ③ 배선은 <b>USB를 뽑고</b> 바꿉니다. 3V3과 GND가 닿으면 보드나 PC의 USB 포트가 죽을 수 있습니다.</div>
 </section>
 
 <!-- 3 -->
 <section id="setup">
   <div class="eyebrow">3</div>
-  <h2>개발 환경과 첫 업로드 (Mac)</h2>
-  <p class="goal">읽고 나면: 포트를 찾아 프로그램을 올리고, 업로드가 안 될 때 스스로 풀 수 있다.</p>
+  <h2>개발 환경과 첫 업로드 (Windows)</h2>
+  <p class="goal">읽고 나면: 보드의 COM 포트를 찾아 프로그램을 올리고, 업로드가 안 될 때 스스로 풀 수 있다.</p>
   <ol>
-    <li><b>Arduino IDE 2</b>를 설치합니다. Settings의 Additional boards manager URLs에 아래 주소를 넣습니다.
+    <li><b>Arduino IDE 2</b>를 설치합니다(arduino.cc → Software → Windows 설치 파일). <b>File → Preferences</b>의 Additional boards manager URLs에 아래 주소를 넣습니다.
       <div class="codebox"><pre><code>https://espressif.github.io/arduino-esp32/package_esp32_index.json</code></pre><button class="copy" type="button">복사</button></div></li>
-    <li>Boards Manager에서 <b>esp32 by Espressif Systems</b>를 설치합니다. <b>버전은 3.3.x로 고르세요.</b> 4.0이 며칠 전에 나왔는데 우리가 쓰는 라이브러리와 맞는지 아직 모릅니다.</li>
-    <li>Library Manager에서 <b>PubSubClient</b>(Nick O'Leary)와 <b>ArduinoJson</b>(Benoit Blanchon, 7.x)을 설치합니다.</li>
+    <li>Boards Manager에서 <b>esp32 by Espressif Systems</b>를 설치합니다. <b>버전은 3.3.x로 고르세요.</b> 4.x는 우리가 쓰는 라이브러리와 맞는지 아직 확인하지 않았습니다.</li>
+    <li>Library Manager에서 <b>PubSubClient</b>(Nick O'Leary), <b>ArduinoJson</b>(Benoit Blanchon, 7.x), <b>MFRC522</b>(GithubCommunity, 1.4.x — 실습 5)를 설치합니다.</li>
     <li>Tools → Board → esp32 → <b>NodeMCU-32S</b>. 없으면 ESP32 Dev Module.</li>
-    <li>보드를 USB로 꽂고 Tools → Port에서 <code>/dev/cu.usbserial-…</code> 또는 <code>/dev/cu.SLAB_USBtoUART</code>를 고릅니다. 터미널에서 <code>ls /dev/cu.*</code>를 꽂기 전후로 쳐서 새로 생긴 이름이 그 포트입니다.</li>
+    <li><b>포트 찾기.</b> 시작 버튼을 오른쪽 클릭 → <b>장치 관리자</b> → <b>포트(COM &amp; LPT)</b>를 열어 두고 보드를 꽂습니다. 새로 생기는 <code>Silicon Labs CP210x … (COM5)</code>나 <code>USB-SERIAL CH340 (COM6)</code>의 번호를 Tools → Port에서 고릅니다. <b>COM1·COM2는 PC 자체 포트라 보드가 아닙니다</b>(교육장 PC에도 처음부터 있습니다). PowerShell로 볼 수도 있습니다.
+      <div class="codebox"><pre><code>Get-PnpDevice -Class Ports -PresentOnly | Select-Object FriendlyName</code></pre><button class="copy" type="button">복사</button></div></li>
+    <li>새 포트가 안 생기거나 노란 느낌표가 뜨면 드라이버입니다. 보드의 USB 칩 글자를 보고 설치합니다: <b>SILABS</b> → Silicon Labs의 CP210x Windows 드라이버, <b>WCH</b> → CH340(CH341SER) 드라이버. Windows가 스스로 잡는 경우가 많으니 케이블부터 의심하세요.</li>
     <li>Serial Monitor는 <b>115200</b>, 줄 끝은 <b>New Line</b>으로 둡니다.</li>
+    <li><b>코드 폴더는 영문 경로로 복사해서 엽니다.</b> 저장소 경로(<code>관통 프로젝트</code>)에 한글과 빈칸이 있어 빌드 도구가 경로를 못 읽을 수 있습니다(추정, 확인 전). 폴더 이름과 <code>.ino</code> 이름은 같아야 합니다(<code>modem\modem.ino</code>).
+      <div class="codebox"><pre><code># PowerShell: 저장소의 code 폴더를 C:\esp32 로 통째로 복사
+Copy-Item -Recurse "$HOME\Desktop\관통 프로젝트\next_meeting\esp32_book\code" C:\esp32
+explorer C:\esp32</code></pre><button class="copy" type="button">복사</button></div></li>
   </ol>
-  <div class="warn"><b>업로드가 안 될 때, 이 순서로.</b> ① 케이블을 바꿉니다(충전 전용 케이블이면 포트가 아예 안 뜹니다. 가장 흔한 원인). ② Serial Monitor를 닫습니다. ③ <b>BOOT 버튼을 누른 채</b> 업로드를 시작하고 "Writing"이 보이면 뗍니다. ④ 핀 0·2·12·15에 꽂은 선을 뺍니다. ⑤ Upload Speed를 115200으로 낮춥니다.</div>
+  <div class="warn"><b>업로드가 안 될 때, 이 순서로.</b> ① 케이블을 바꿉니다(충전 전용 케이블이면 포트가 아예 안 뜹니다. 가장 흔한 원인). ② Serial Monitor와 그 포트를 쓰는 다른 프로그램을 닫습니다(<code>Could not open port 'COM5'</code>). ③ <b>BOOT 버튼을 누른 채</b> 업로드를 시작하고 "Writing"이 보이면 뗍니다. ④ 핀 0·2·12·15에 꽂은 선을 뺍니다. ⑤ Upload Speed를 115200으로 낮춥니다.</div>
   <div class="prose"><p><b>EN 버튼</b>은 다시 시작(리셋)입니다. 올린 프로그램은 지워지지 않습니다.</p></div>
 </section>
 
@@ -284,7 +332,7 @@ bool pressed = digitalRead(33) == LOW;</code></pre><button class="copy" type="bu
   </div>
   <div class="tbl"><table>
     <tr><th>이름</th><th>핀</th><th>어디로</th><th>쓰임</th></tr>
-    <tr><td><code>Serial</code></td><td>1, 3</td><td>USB를 거쳐 Mac</td><td>업로드와 로그. 시험할 때는 Serial Monitor에 줄을 쳐서 설비 쪽을 흉내 냅니다</td></tr>
+    <tr><td><code>Serial</code></td><td>1, 3</td><td>USB를 거쳐 PC</td><td>업로드와 로그. 시험할 때는 Serial Monitor에 줄을 쳐서 설비 쪽을 흉내 냅니다</td></tr>
   </table></div>
   <div class="warn"><b>다른 UART(<code>Serial2</code>)를 쓸 일이 생기면 핀 번호를 꼭 직접 적으세요.</b> 새 버전(3.x)에서 <code>Serial2</code>의 기본 핀이 바뀌었습니다. 인터넷 예제처럼 <code>Serial2.begin(115200)</code>만 쓰면 16·17이 아닌 다른 핀으로 나갑니다.
     <div class="codebox" style="margin-top:8px"><pre><code>Serial2.begin(115200, SERIAL_8N1, 16, 17);   // RX=16, TX=17</code></pre><button class="copy" type="button">복사</button></div></div>
@@ -299,7 +347,7 @@ bool pressed = digitalRead(33) == LOW;</code></pre><button class="copy" type="bu
       <text class="mono" x="360" y="124" text-anchor="middle" font-size="13">$C · $S · $L · $X</text><text class="m" x="360" y="152" text-anchor="middle" font-size="12">내려오는 줄: 이름=값</text>
     </svg>
     </div>
-    <div class="cap">RTOS판에서는 같은 내용을 칩 안의 큐로 넘깁니다(큐에 담는 모양은 회의에서 정함, 권장안은 이 줄 형식 그대로). 시험할 때는 Serial Monitor에 줄을 쳐서 설비 쪽을 흉내 냅니다(<code>modem.ino</code>의 <code>TEST_MODE 1</code>, 실습 6). 칩 안에서 큐로 넘길 때는 검사값을 생략할 수 있지만, 사람이 칠 때는 오타를 잡아 줍니다.</div>
+    <div class="cap">RTOS판에서는 같은 내용을 칩 안의 큐로 넘깁니다(큐에 담는 모양은 회의에서 정함, 권장안은 이 줄 형식 그대로). 시험할 때는 Serial Monitor에 줄을 쳐서 설비 쪽을 흉내 냅니다(<code>modem.ino</code>의 <code>TEST_MODE 1</code>, 실습 7). 칩 안에서 큐로 넘길 때는 검사값을 생략할 수 있지만, 사람이 칠 때는 오타를 잡아 줍니다.</div>
   </div>
 
   <h3>한 줄의 모양</h3>
@@ -365,17 +413,34 @@ mqtt.loop();                             // 이게 없으면 받은 메시지가
 void onMqtt(char *topic, byte *payload, unsigned int len) {
   // payload는 문자열 끝 표시(0)가 없다. 반드시 len만큼만 읽는다
 }</code></pre><button class="copy" type="button">복사</button></div>
-  <h3>Mac을 브로커로 쓰기 (집에서)</h3>
-  <div class="codebox"><pre><code>brew install mosquitto
-# 설정 파일에 두 줄 추가 (Apple Silicon: /opt/homebrew/etc/mosquitto/mosquitto.conf)
-listener 1883
-allow_anonymous true
+  <h3>Windows PC를 브로커로 쓰기</h3>
+  <ol>
+    <li><b>mosquitto</b>를 설치합니다(mosquitto.org → Download → Windows 64-bit 설치 파일, 기본 경로 <code>C:\Program Files\mosquitto</code>). 설치 중 Service 항목을 켜 두면 Windows가 켜질 때 같이 켜집니다.</li>
+    <li>메모장을 <b>관리자 권한으로</b> 열어 <code>C:\Program Files\mosquitto\mosquitto.conf</code> 맨 아래에 두 줄을 넣습니다.
+      <div class="codebox"><pre><code>listener 1883
+allow_anonymous true</code></pre><button class="copy" type="button">복사</button></div></li>
+    <li><b>관리자 PowerShell</b>에서 다시 시작하고 방화벽을 엽니다.
+      <div class="codebox"><pre><code>Restart-Service mosquitto            # 서비스로 설치했을 때
+New-NetFirewallRule -DisplayName "MQTT 1883" -Direction Inbound -Protocol TCP -LocalPort 1883 -Action Allow
 
-brew services restart mosquitto
-ipconfig getifaddr en0                               # ESP32에 넣을 Mac의 IP
-mosquitto_sub -h localhost -t 'factory/#' -v         # 지나가는 메시지 전부 보기
-mosquitto_pub -h localhost -t factory/station/P2/cmd -m '{"re":42,"ok":1}'</code></pre><button class="copy" type="button">복사</button></div>
-  <div class="prose"><p>설정 두 줄이 없으면 mosquitto는 자기 컴퓨터에서 온 연결만 받습니다. ESP32가 붙지 못하는 가장 흔한 이유입니다. Mac이 방화벽 허용을 물으면 허용하세요.</p>
+# 서비스로 설치하지 않았다면 이 창을 띄워 둔다 (-v: 오가는 연결이 보인다)
+&amp; "C:\Program Files\mosquitto\mosquitto.exe" -c "C:\Program Files\mosquitto\mosquitto.conf" -v</code></pre><button class="copy" type="button">복사</button></div></li>
+    <li><b>PC의 IP</b>: PowerShell에서 <code>ipconfig</code> → '무선 LAN 어댑터 Wi-Fi'의 IPv4 주소를 <code>secrets.h</code>의 <code>MQTT_HOST</code>에 넣습니다. <b>PC와 ESP32는 같은 Wi-Fi</b>(2.4GHz 핫스팟이나 전용 공유기)에 붙어 있어야 합니다. PC는 학교 유선망, ESP32는 핫스팟이면 서로 닿지 않습니다.</li>
+    <li><b>메시지 보고 보내기</b>는 우리 도구 <code>pc\mqtt_tool.py</code>가 편합니다.
+      <div class="codebox"><pre><code>py -m pip install paho-mqtt          # 한 번만
+cd C:\esp32\pc
+py mqtt_tool.py watch                # factory/# 로 오가는 메시지 전부 보기
+py mqtt_tool.py send P2 re=42 ok=1   # P2에 {"re":42,"ok":1} 보내기
+py mqtt_tool.py state P2 WORK 7      # P2에 지금 상태 '작업 중'(보관)
+py mqtt_tool.py reply                # 공정 신고에 자동으로 답하기 (관제 흉내)
+
+# mosquitto 기본 도구로 볼 때 (PATH에 없으니 그 폴더에서)
+cd "C:\Program Files\mosquitto"
+.\mosquitto_sub -h localhost -t "factory/#" -v</code></pre><button class="copy" type="button">복사</button></div></li>
+  </ol>
+  <details><summary>도구 코드 전체 (pc/mqtt_tool.py)</summary><div class="codebox"><pre><code>{{PCTOOL}}</code></pre><button class="copy" type="button">복사</button></div></details>
+  <div class="prose"><p>설정 두 줄이 없으면 mosquitto는 자기 컴퓨터에서 온 연결만 받습니다. ESP32가 붙지 못하는 가장 흔한 이유입니다. 그다음이 Windows 방화벽입니다.</p>
+  <p><b>PowerShell에서 <code>mosquitto_pub -m</code>으로 JSON을 보내지 마세요.</b> Windows PowerShell 5.1은 외부 프로그램에 넘기는 글자에서 큰따옴표를 빼먹어 <code>{re:42}</code>처럼 깨집니다. 그래서 도구는 <code>re=42 ok=1</code>처럼 받습니다.</p>
   <p><b>보드마다 이름(client ID)을 다르게 하세요.</b> 같은 이름 두 대가 붙으면 브로커가 먼저 온 쪽을 끊어서, 서로 번갈아 끊깁니다.</p></div>
 </section>
 
@@ -411,7 +476,7 @@ nv.begin("tag", false);                  // 이름표 "tag" (15자 이하)
 uint32_t seq = nv.getUInt("seq", 0);     // 없으면 0
 nv.putUInt("seq", 1042);                 // 전원이 꺼져도 남는다</code></pre><button class="copy" type="button">복사</button></div>
   <div class="prose"><p>저장장치(플래시)는 작은 SSD입니다. 꺼져도 남지만 쓰는 횟수에 한계가 있습니다. <b>값이 바뀔 때만</b> 쓰고, <code>loop</code>에서 매번 쓰지 않습니다. 스마트태그가 이력 사본을 이렇게 저장합니다.</p>
-  <p><b>재부팅을 되풀이하면서 "Brownout"이 찍힌다면</b> 전기가 모자란 것입니다. Wi-Fi를 켜는 순간 전류가 크게 튑니다. 짧은 케이블을 Mac에 직접 꽂고, 서보 같은 부품은 다른 전원에서 먹입니다.</p></div>
+  <p><b>재부팅을 되풀이하면서 "Brownout"이 찍힌다면</b> 전기가 모자란 것입니다. Wi-Fi를 켜는 순간 전류가 크게 튑니다. 짧은 케이블을 PC에 직접 꽂고, 서보 같은 부품은 다른 전원에서 먹입니다.</p></div>
 </section>
 
 <!-- 8 -->
@@ -420,18 +485,20 @@ nv.putUInt("seq", 1042);                 // 전원이 꺼져도 남는다</code>
   <h2>프로젝트에 바로 쓰기</h2>
   <p class="goal">읽고 나면: 공정 통신 코드(modem.ino)와 태그 코드를 자기 공정 이름으로 바꿔 올릴 수 있다.</p>
   <div class="prose">
-    <p>코드는 <code>next_meeting/esp32_book/code/</code>에 있습니다. 스케치 폴더마다 <code>secrets.example.h</code>를 <code>secrets.h</code>로 복사해 Wi-Fi 이름, 비밀번호, 브로커 IP를 채웁니다. <b><code>secrets.h</code>는 git에 올리지 않습니다.</b></p>
+    <p>코드는 <code>next_meeting/esp32_book/code/</code>에 있고, 3장대로 <code>C:\esp32\</code>에 복사해서 엽니다. 스케치 폴더마다 <code>secrets.example.h</code>를 <code>secrets.h</code>로 복사해(PowerShell: <code>Copy-Item secrets.example.h secrets.h</code>) Wi-Fi 이름, 비밀번호, 브로커 IP를 채웁니다. <b><code>secrets.h</code>는 git에 올리지 않습니다.</b></p>
     <p><code>modem.ino</code>는 공정 ESP32의 <b>통신 쪽만 있는 loop판</b>입니다. 설비 쪽(리더기·서보 등) 코드는 아직 없고, 그 자리를 USB 시리얼로 줄을 쳐서 흉내 냅니다. RTOS판에서는 이 코드가 통신 태스크의 바탕이 되고(9장), RTOS판이 12-01까지 안정되지 않으면 이 loop판에 설비 쪽을 붙여 갑니다.</p>
   </div>
   <div class="tbl"><table>
     <tr><th>바꿀 곳</th><th>공정 통신 (modem.ino)</th><th>스마트태그</th></tr>
     <tr><td>이름</td><td><code>#define STATION "P2"</code></td><td><code>#define TAG_NAME "tag1"</code></td></tr>
+    <tr><td>측정</td><td><code>#define MEASURE 1</code>이면 접속 시도마다 걸린 시간, 10초마다 loop 최대 간격을 <code># [측정]</code> 줄로 찍습니다(실습 8)</td><td>—</td></tr>
     <tr><td>핀</td><td><code>TEST_MODE 1</code>에서는 USB만 씁니다</td><td>불빛과 버튼. 연습은 내장 LED(2)와 BOOT(0), 실물은 25와 33</td></tr>
-    <tr><td>시험 방식</td><td><b><code>TEST_MODE 1</code></b>: Serial Monitor에 줄을 쳐서 설비 쪽을 흉내 냅니다. <b>지금은 이것으로 올립니다</b>(파일의 기본값이 0이니 1로 바꿉니다)<br><code>0</code>, <code>2</code>: <code>Serial2</code>(16·17) 선으로 줄을 받는 방식과 그 선의 점퍼 시험. 공정 ESP32 한 대 구조에서는 쓰지 않습니다</td><td>BOOT 버튼 짧게 = 신고 한 번, 길게 = 저장된 이력 출력 (둘 다 예시 동작)</td></tr>
+    <tr><td>시험 방식</td><td><b><code>TEST_MODE 1</code></b>: Serial Monitor에 줄을 쳐서 설비 쪽을 흉내 냅니다. <b>지금은 이것으로 올립니다</b>(파일의 기본값이 1입니다)<br><code>0</code>, <code>2</code>: <code>Serial2</code>(16·17) 선으로 줄을 받는 방식과 그 선의 점퍼 시험. 공정 ESP32 한 대 구조에서는 쓰지 않습니다</td><td>BOOT 버튼 짧게 = 신고 한 번, 길게 = 저장된 이력 출력 (둘 다 예시 동작)</td></tr>
   </table></div>
   <details><summary>공정 통신 코드 전체 (modem.ino, loop판)</summary><div class="codebox"><pre><code>{{MODEM}}</code></pre><button class="copy" type="button">복사</button></div></details>
   <details><summary>스마트태그 코드 전체 (tag.ino)</summary><div class="codebox"><pre><code>{{TAG}}</code></pre><button class="copy" type="button">복사</button></div></details>
-  <details><summary>검사값 함수 (C, Python — PC에서 줄 만들기·검사 시험용)</summary>
+  <details><summary>RC522 시험 코드 (rfid.ino, 실습 5)</summary><div class="codebox"><pre><code>{{RFID}}</code></pre><button class="copy" type="button">복사</button></div></details>
+  <details><summary>검사값 함수 (C, Python — PC에서 줄 만들기·검사 시험용, <code>py cs.py</code>)</summary>
     <div class="codebox"><pre><code>{{CSC}}</code></pre><button class="copy" type="button">복사</button></div>
     <div class="codebox" style="margin-top:10px"><pre><code>{{CSPY}}</code></pre><button class="copy" type="button">복사</button></div>
   </details>
@@ -507,84 +574,9 @@ nv.putUInt("seq", 1042);                 // 전원이 꺼져도 남는다</code>
   </table></div>
   <div class="prose"><p style="font-size:14px;color:var(--mut)">숫자(박자, 스택, 큐 크기)는 시작값이고 실측 후 조정합니다.</p></div>
 
-  <h3>1단계 뼈대: 불빛 두 개와 버튼 하나 (실습 8) <span class="pill p-warn">컴파일 확인 전</span></h3>
+  <h3>1단계 뼈대: 불빛 두 개와 버튼 하나 (실습 10, <code>rtos_step1\rtos_step1.ino</code>) <span class="pill p-warn">컴파일 확인 전</span></h3>
   <div class="prose"><p>설비 태스크는 내장 LED(IO2)를 0.2초마다, 통신 태스크는 IO25 LED를 1초마다 뒤집습니다. BOOT 버튼(IO0)을 누르면 설비 태스크가 신고 줄을 신고 큐에 넣고, 통신 태스크가 꺼내 출력한 뒤 답(<code>$C</code>)을 명령 큐로 돌려줍니다. 답을 받으면 내장 LED가 0.5초 켜져 있습니다. Wi-Fi는 아직 쓰지 않습니다. IO25 LED가 없으면 시리얼 출력으로 확인합니다.</p></div>
-  <div class="codebox"><pre><code>// rtos_step1.ino — 실습 8 1단계: FreeRTOS 태스크 두 개 + 큐 두 개 (컴파일 확인 전)
-// 대상: Arduino-ESP32 3.3.x. 부품: 내장 LED(IO2), BOOT 버튼(IO0). 선택: IO25 LED + 220Ω
-#include &lt;Arduino.h&gt;
-
-#define PIN_LED_CTRL 2     // 설비 태스크만 만진다 (내장 LED)
-#define PIN_BTN      0     // 설비 태스크만 만진다 (BOOT 버튼, 눌림 = LOW)
-#define PIN_LED_COMM 25    // 통신 태스크만 만진다 (없으면 시리얼 출력으로 확인)
-
-struct Msg { char line[160]; };   // 큐 한 칸 = 한 줄 (5장의 줄 형식, 칩 안이라 검사값 생략)
-QueueHandle_t toComm, toCtrl;     // 설비 → 통신 (신고 큐) / 통신 → 설비 (명령 큐)
-
-// ───── 설비 태스크: 코어 1 · 우선순위 3 · 10ms 박자. 절대 기다리지 않는다 ─────
-void ctrlTask(void *) {
-  pinMode(PIN_LED_CTRL, OUTPUT);
-  pinMode(PIN_BTN, INPUT_PULLUP);
-  TickType_t t = xTaskGetTickCount();
-  uint32_t tick = 0, tEdge = 0, holdUntil = 0, n = 0;
-  bool stable = HIGH, last = HIGH;
-  for (;;) {
-    tick++;                                        // 10ms마다 1씩
-    bool now = digitalRead(PIN_BTN);               // 버튼: 30ms(3박자) 같은 값이면 진짜
-    if (now != last) { last = now; tEdge = tick; }
-    if (now != stable &amp;&amp; tick - tEdge &gt;= 3) {
-      stable = now;
-      if (stable == LOW) {                         // 눌린 순간 한 번
-        Msg m;
-        n = n % 255 + 1;                           // 신고 번호 1~255
-        snprintf(m.line, sizeof m.line, "$R{\"n\":%lu,\"k\":\"BTN\"}", (unsigned long)n);
-        xQueueSend(toComm, &amp;m, 0);                 // 기다림 0. 꽉 차면 못 넣는다(1단계는 그냥 둔다)
-      }
-    }
-    Msg in;
-    while (xQueueReceive(toCtrl, &amp;in, 0) == pdTRUE) {   // 기다림 0, 있는 만큼만 꺼낸다
-      if (in.line[1] == 'C') holdUntil = tick + 50;     // 답이 오면 0.5초 동안 켜 둔다
-    }
-    bool on = (tick &lt; holdUntil) || ((tick / 20) % 2);  // 평소에는 0.2초마다 뒤집기
-    digitalWrite(PIN_LED_CTRL, on);
-    vTaskDelayUntil(&amp;t, pdMS_TO_TICKS(10));        // delay() 대신. 10ms 박자를 지킨다
-  }
-}
-
-// ───── 통신 태스크: 코어 0 · 우선순위 2. Serial도 이 태스크만 쓴다 ─────
-void commTask(void *) {
-  pinMode(PIN_LED_COMM, OUTPUT);
-  bool led = false;
-  uint32_t lastBlink = 0;
-  for (;;) {
-    // 2단계: 여기에 modem.ino의 serviceWifi(); serviceMqtt(); 가 들어간다
-    Msg out;
-    while (xQueueReceive(toComm, &amp;out, 0) == pdTRUE) {
-      Serial.printf("[N] 받음 %s\n", out.line);    // 2단계: 여기서 MQTT로 발행
-      int n = 0;
-      sscanf(out.line, "$R{\"n\":%d", &amp;n);
-      Msg ans;
-      snprintf(ans.line, sizeof ans.line, "$C,re=%d,ok=1", n);
-      xQueueSend(toCtrl, &amp;ans, 0);                 // 답을 설비 쪽으로 (2단계: cmd 토픽으로 온 답)
-    }
-    if (millis() - lastBlink &gt;= 1000) {            // 1초마다 뒤집기 (설비 쪽보다 느리게)
-      lastBlink = millis();
-      led = !led;
-      digitalWrite(PIN_LED_COMM, led);
-    }
-    vTaskDelay(pdMS_TO_TICKS(5));                  // 잠깐 쉬어 다른 태스크(워치독 포함)에 차례를 준다
-  }
-}
-
-void setup() {
-  Serial.begin(115200);
-  Serial.println("\n[N] rtos_step1 시작");         // 태스크를 만들기 전이라 섞이지 않는다
-  toComm = xQueueCreate(8, sizeof(Msg));           // 8칸 × 160바이트
-  toCtrl = xQueueCreate(8, sizeof(Msg));
-  xTaskCreatePinnedToCore(ctrlTask, "ctrl", 6144, nullptr, 3, nullptr, 1);   // 스택 6KB, 코어 1
-  xTaskCreatePinnedToCore(commTask, "comm", 8192, nullptr, 2, nullptr, 0);   // 스택 8KB, 코어 0
-}
-
-void loop() { vTaskDelete(nullptr); }              // loop는 쓸 일이 없어 스스로 지운다</code></pre><button class="copy" type="button">복사</button></div>
+  <div class="codebox"><pre><code>{{RTOS1}}</code></pre><button class="copy" type="button">복사</button></div>
   <h3>다음 단계</h3>
   <ol>
     <li><b>2단계:</b> 통신 태스크에 <code>modem.ino</code>의 <code>serviceWifi()</code>·<code>serviceMqtt()</code>·<code>onMqtt()</code>를 옮깁니다. <code>Serial.printf</code> 자리에서 MQTT로 발행하고, <code>cmd</code>로 온 답을 명령 큐에 넣습니다. <code>onMqtt()</code>는 <code>mqtt.loop()</code> 안에서 불리므로 통신 태스크 안에서 돕니다.</li>
@@ -610,10 +602,10 @@ void loop() { vTaskDelete(nullptr); }              // loop는 쓸 일이 없어 
 <section id="labs">
   <div class="eyebrow">실습</div>
   <h2>실습 사다리</h2>
-  <p class="goal">아홉 개 모두 <b>보드 하나와 Mac만</b> 있으면 됩니다(LED와 버튼은 있으면 쓰고, 없으면 내장 LED와 BOOT 버튼으로). 순서대로 하세요. 끝낸 것은 체크해 두면 이 브라우저에 기억됩니다.</p>
+  <p class="goal">실습 5(리더기)를 빼면 모두 <b>보드 하나와 Windows PC만</b> 있으면 됩니다(LED와 버튼은 있으면 쓰고, 없으면 내장 LED와 BOOT 버튼으로). 0장의 순서대로 하세요. 끝낸 것은 체크해 두면 이 브라우저에 기억됩니다.</p>
   <div class="prog" id="prog"></div>
   <div id="lablist" style="display:flex;flex-direction:column;gap:12px"></div>
-  <div class="note"><b>실습 6~8이 공정 펌웨어의 뼈대입니다.</b> 6은 통신 쪽(줄 ↔ MQTT)이고, 7은 영상에 넣을 '뽑았다 꽂기' 장면, 8은 설비 쪽과 통신 쪽을 태스크로 나누는 첫걸음입니다. 6에서는 <code>modem.ino</code>를 <code>TEST_MODE 1</code>로 올려도 되고, 5까지 만든 코드에 직접 덧붙여 봐도 됩니다. 직접 덧붙이는 쪽이 공부가 됩니다.</div>
+  <div class="note"><b>실습 5~10이 공정 펌웨어의 뼈대입니다.</b> 5는 리더기, 7은 통신 쪽(줄 ↔ MQTT), 8은 RTOS를 쓸지 정할 숫자, 9는 영상에 넣을 '뽑았다 꽂기', 10은 설비 쪽과 통신 쪽을 태스크로 나누는 첫걸음입니다. 7에서는 <code>modem.ino</code>를 그대로 올려도 되고, 5까지 만든 코드에 직접 덧붙여 봐도 됩니다. 직접 덧붙이는 쪽이 공부가 됩니다.</div>
 </section>
 
 <!-- 막혔을 때 -->
@@ -622,18 +614,23 @@ void loop() { vTaskDelete(nullptr); }              // loop는 쓸 일이 없어 
   <h2>증상으로 찾기</h2>
   <div class="tbl"><table>
     <tr><th>보이는 것</th><th>까닭</th><th>고치는 법</th></tr>
-    <tr><td>포트가 안 보인다</td><td>충전 전용 케이블, 드라이버</td><td>케이블 교체. 그래도 안 되면 보드의 USB 칩 글자(SILABS / WCH)를 보고 해당 드라이버 설치</td></tr>
+    <tr><td>꽂아도 새 COM이 안 생긴다, 노란 느낌표</td><td>충전 전용 케이블, 드라이버</td><td>케이블 교체. 그래도 안 되면 보드의 USB 칩 글자(SILABS / WCH)를 보고 CP210x / CH340 드라이버 설치</td></tr>
+    <tr><td>COM1·COM2만 보인다</td><td>PC 자체 포트. 보드가 아직 안 잡힘</td><td>보드는 꽂을 때 새로 생기는 번호입니다. 위 줄대로</td></tr>
+    <tr><td><code>Could not open port 'COM5'</code>, Access is denied</td><td>다른 창이 포트를 쥐고 있음</td><td>Serial Monitor, 다른 IDE 창, 시리얼 프로그램을 닫고 다시</td></tr>
+    <tr><td>빌드 중 파일·경로를 못 찾는다는 오류</td><td>한글·빈칸이 든 경로</td><td><code>C:\esp32\</code>로 복사해서 엽니다(3장)</td></tr>
     <tr><td><code>Connecting.....</code>에서 멈춤</td><td>자동 진입 실패, 모니터가 포트를 잡음</td><td>모니터 닫기, BOOT 누른 채 업로드</td></tr>
     <tr><td>올라갔는데 안 켜진다</td><td>핀 0·2·12·15에 뭔가 달림</td><td>그 핀을 비우고 다른 핀으로</td></tr>
     <tr><td>재부팅 반복, <code>Brownout</code></td><td>전기 부족</td><td>짧은 케이블, 허브 말고 직접, 서보는 다른 전원</td></tr>
     <tr><td>글자가 깨진다</td><td>속도 불일치</td><td>코드와 Serial Monitor를 115200으로 통일</td></tr>
     <tr><td>Wi-Fi가 안 붙는다</td><td>5GHz, 비밀번호 오타</td><td>2.4GHz 확인</td></tr>
-    <tr><td>MQTT 실패 <code>rc=-2</code></td><td>브로커에 닿지 못함</td><td>Mac IP 확인, mosquitto 설정 두 줄, 방화벽</td></tr>
+    <tr><td>MQTT 실패 <code>rc=-2</code></td><td>브로커에 닿지 못함</td><td>PC IP(<code>ipconfig</code>), mosquitto 설정 두 줄, Windows 방화벽 1883, PC와 ESP32가 같은 Wi-Fi인지</td></tr>
+    <tr><td><code>'mosquitto_sub'</code>을(를) 인식할 수 없다</td><td>PATH에 없음</td><td><code>cd "C:\Program Files\mosquitto"</code> 후 <code>.\mosquitto_sub</code>, 또는 <code>py mqtt_tool.py watch</code></td></tr>
+    <tr><td>보낸 JSON이 <code>{re:42}</code>처럼 깨진다</td><td>PowerShell 5.1이 큰따옴표를 뺌</td><td><code>py mqtt_tool.py send P2 re=42 ok=1</code></td></tr>
     <tr><td><code>rc=-3</code>이 되풀이</td><td>같은 이름 두 대, 또는 loop가 막힘</td><td>이름을 다르게, <code>delay</code> 제거</td></tr>
     <tr><td><code>rc=5</code></td><td>허가 안 됨</td><td><code>allow_anonymous true</code></td></tr>
-    <tr><td>받는 함수가 안 불린다</td><td><code>mqtt.loop()</code> 없음, 다시 붙은 뒤 구독 안 함, 토픽 오타</td><td><code>mosquitto_sub -v</code>로 실제 토픽과 대조</td></tr>
+    <tr><td>받는 함수가 안 불린다</td><td><code>mqtt.loop()</code> 없음, 다시 붙은 뒤 구독 안 함, 토픽 오타</td><td><code>py mqtt_tool.py watch</code>로 실제 토픽과 대조</td></tr>
     <tr><td>긴 메시지가 사라진다</td><td>버퍼 256바이트</td><td><code>setBufferSize(512)</code></td></tr>
-    <tr><td>켜자마자 옛 명령이 실행된다</td><td>명령을 '보관'으로 보냄</td><td>명령은 보관하지 않기. <code>mosquitto_pub -t … -r -n</code>으로 지우기</td></tr>
+    <tr><td>켜자마자 옛 명령이 실행된다</td><td>명령을 '보관'으로 보냄</td><td>명령은 보관하지 않기. 지울 때는 mosquitto 폴더에서 <code>.\mosquitto_pub -t 토픽 -r -n</code></td></tr>
     <tr><td>검사값이 계속 틀리다</td><td>둥근 따옴표, 줄 끝 설정</td><td>직접 치기, 줄 끝을 New Line으로</td></tr>
     <tr><td>태스크를 넣자 리셋 반복, <code>Stack canary</code></td><td>태스크 스택 부족</td><td>스택 숫자를 키운다(9장)</td></tr>
     <tr><td><code>task_wdt</code>가 찍힌다</td><td>쉬지 않고 도는 태스크</td><td>루프마다 <code>vTaskDelay</code>/<code>vTaskDelayUntil</code>(9장)</td></tr>
@@ -648,7 +645,7 @@ void loop() { vTaskDelete(nullptr); }              // loop는 쓸 일이 없어 
     <div class="card"><h3>핀</h3><p><span class="pill p-ok">써도 됨</span> 16 17 18 19 21 22 23 25 26 27 32 33 13 4</p><p><span class="pill p-warn">입력만</span> 34 35 36 39</p><p><span class="pill p-bad">금지</span> 0 2 5 12 15 · 6~11 · 1 3</p><p>태그: 불빛 25, 버튼 33</p><p>공정(제안, 확정 전): 리더기 SCK 18 · MISO 19 · MOSI 23 · SS 21 · RST 22, 서보 13, 상태등 25 26 27, 부저 32, 버튼 33 4</p></div>
     <div class="card"><h3>토픽</h3><p><code>factory/station/{이름}/</code></p><p>올라감: <code>tag</code> <code>report</code> <code>alive</code></p><p>내려옴: <code>cmd</code> <code>state</code>(보관) <code>test</code></p><p>연결: <code>link</code>(보관, 1/0)</p><p>태그: <code>factory/tag/{이름}/cmd · report · link</code></p></div>
     <div class="card"><h3>줄 예시 (검사값 확인됨)</h3><p><code>$T{"n":41,"k":"TAG","uid":"04A1B2C3"}*36</code></p><p><code>$R{"n":42,"k":"DONE"}*7B</code></p><p><code>$H{"up":123,"st":"WORK"}*51</code></p><p><code>$C,re=42,ok=1*67</code></p><p><code>$L,up=1*69</code> · <code>$L,up=0*68</code></p></div>
-    <div class="card"><h3>명령</h3><p><code>ls /dev/cu.*</code></p><p><code>ipconfig getifaddr en0</code></p><p><code>mosquitto_sub -h IP -t 'factory/#' -v</code></p><p><code>mosquitto_pub -h IP -t 토픽 -m '내용'</code></p></div>
+    <div class="card"><h3>명령 (PowerShell)</h3><p><code>Get-PnpDevice -Class Ports -PresentOnly</code> 보드 COM 번호</p><p><code>ipconfig</code> PC의 IP</p><p><code>py mqtt_tool.py watch</code> · <code>send P2 re=42 ok=1</code> · <code>reply</code></p><p><code>Restart-Service mosquitto</code> (관리자)</p></div>
     <div class="card"><h3>숫자</h3><p>시리얼 속도 115200</p><p>연결 상태 줄 2초마다, 설비 쪽은 5초 없으면 끊김</p><p>유언까지 약 6초 (keepalive 4초)</p><p>한 줄 240자, 메시지 150바이트 이내</p><p>핀 3.3V까지</p></div>
     <div class="card"><h3>두 태스크 (시작값)</h3><p>설비 <code>ctrl</code>: 코어 1 · 우선순위 3 · 10ms 박자 · 스택 6KB</p><p>통신 <code>comm</code>: 코어 0 · 우선순위 2 · 스택 8KB</p><p>큐 2개: 8칸 × 160바이트</p><p>함께 쓰는 변수 0개 · 한 장치는 한 태스크 · 설비는 기다리지 않음</p></div>
     <div class="card"><h3>업로드가 안 되면</h3><p>케이블 → 모니터 닫기 → BOOT 누르고 업로드 → 핀 0·2·12·15 비우기 → 속도 115200</p><h3 style="margin-top:6px">상태등 값 (lamp)</h3><p><code>0</code> 꺼짐 · <code>Yb</code> 노랑 깜빡 · <code>G</code> 초록 · <code>R</code> 빨강 · <code>Rb</code> 빨강 깜빡</p></div>
@@ -664,7 +661,7 @@ void loop() { vTaskDelete(nullptr); }              // loop는 쓸 일이 없어 
 </section>
 
 <footer>
-  <div><b>확인하지 못한 것.</b> ① 실제 보드에서의 컴파일과 동작(modem.ino와 tag.ino는 Mac에서 가짜 부품으로 로직만 시험, 9장의 두 태스크 뼈대는 컴파일도 확인 전). ② 보드의 USB 칩 종류와 드라이버 필요 여부. ③ 핀 15~19번 줄의 정확한 순서와 3D 모형의 부품 위치. ④ 코어 3.x의 태스크 워치독 함수 이름. ⑤ 새 버전 4.0과 라이브러리의 호환. ⑥ Homebrew의 mosquitto 설정 파일 경로. 전류·시간 숫자는 보통 값입니다.</div>
+  <div><b>확인하지 못한 것.</b> ① 실제 보드에서의 컴파일과 동작(modem.ino와 tag.ino는 가짜 부품으로 로직만 시험, rfid.ino와 rtos_step1.ino는 컴파일도 확인 전, mqtt_tool.py는 문법만 확인). ② 보드의 USB 칩 종류와 Windows 드라이버 필요 여부. ③ 핀 15~19번 줄의 정확한 순서와 3D 모형의 부품 위치. ④ 코어 3.x의 태스크 워치독 함수 이름. ⑤ 새 버전 4.x와 라이브러리의 호환, MFRC522 라이브러리와 코어 3.3.x의 호환. ⑥ 한글·빈칸 경로에서의 빌드 문제 여부, mosquitto 서비스 이름. 전류·시간 숫자는 보통 값입니다.</div>
   <div>2026-11-23 · 에이전트 팀(ESP32 하드웨어 전문가, 펌웨어 개발자, 교육 설계자)의 자료를 합쳐 작성. 메시지 규격은 데이터 흐름 설명서를, 두 태스크 구조는 RTOS 도입 제안서를 따릅니다.</div>
 </footer>
 </div>
@@ -677,7 +674,7 @@ const $=s=>document.querySelector(s);
 document.querySelectorAll(".copy").forEach(b=>b.addEventListener("click",()=>{
   const code=b.parentElement.querySelector("code"); const t=code.textContent;
   const done=()=>{const o=b.textContent;b.textContent="복사됨";setTimeout(()=>b.textContent=o,1200)};
-  const sel=()=>{const r=document.createRange();r.selectNodeContents(code);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="선택됨 · Cmd+C"};
+  const sel=()=>{const r=document.createRange();r.selectNodeContents(code);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="선택됨 · Ctrl+C"};
   try{navigator.clipboard.writeText(t).then(done,sel)}catch(e){sel()}
 }));
 
@@ -689,7 +686,7 @@ const PARTS=[
  {id:"ant",name:"안테나",x:0.8,y:4,w:5.6,d:17,h:0.15,z:2.4,c:"var(--pcb2)",ant:1,t:"모듈 끝의 지그재그 금색 선이 Wi-Fi 안테나입니다. 금속, 배터리, 전선을 10mm 이상 띄우세요. 손으로 덮어도 신호가 약해집니다."},
  {id:"can",name:"금속 캔",x:7,y:4.5,w:17.5,d:16,h:2.3,z:2.4,c:"var(--can)",lbl:"ESP32",t:"잡음을 막는 덮개입니다. 일하는 동안 따뜻해집니다. 갑자기 뜨거우면 합선이니 바로 USB를 뽑으세요."},
  {id:"reg",name:"전압 변환기",x:28,y:3.2,w:6.5,d:3.6,h:1.6,z:1.6,c:"var(--black)",lbl:"3.3V",t:"AMS1117. USB의 5V를 3.3V로 낮춥니다. 여기서 낼 수 있는 전기는 많지 않아서, 서보 같은 부품의 전원으로 쓰면 안 됩니다."},
- {id:"usbic",name:"USB 변환 칩",x:33,y:10,w:5,d:5,h:0.9,z:1.6,c:"var(--black)",t:"USB와 Serial(핀 1, 3) 사이를 이어 줍니다. 글자가 SILABS면 CP2102, WCH면 CH340입니다. 종류에 따라 Mac 드라이버가 다릅니다."},
+ {id:"usbic",name:"USB 변환 칩",x:33,y:10,w:5,d:5,h:0.9,z:1.6,c:"var(--black)",t:"USB와 Serial(핀 1, 3) 사이를 이어 줍니다. 글자가 SILABS면 CP2102, WCH면 CH340입니다. 종류에 따라 Windows 드라이버가 다릅니다(대개 자동으로 잡힙니다)."},
  {id:"led",name:"불빛 2개",x:40,y:4,w:1.6,d:1,h:0.6,z:1.6,c:"#d94b3d",t:"빨강은 전원, 파랑은 IO2에 달린 내장 LED입니다. 실습 0에서 이 파란 불을 깜빡입니다. (위치와 색은 보드마다 다를 수 있습니다)"},
  {id:"led2",grp:"led",x:40,y:20,w:1.6,d:1,h:0.6,z:1.6,c:"#3d7bd9"},
  {id:"en",name:"EN 버튼",x:44,y:2.6,w:4,d:4,h:1.8,z:1.6,c:"var(--can2)",lbl:"EN",t:"다시 시작(리셋) 버튼입니다. 프로그램은 지워지지 않고 처음부터 다시 돕니다. (EN과 BOOT의 좌우는 보드의 글자로 확인하세요)"},
@@ -769,15 +766,17 @@ $("#cbody").addEventListener("input",calc);$("#cline").addEventListener("input",
 
 /* ---------- 실습 ---------- */
 const LABS=[
- ["첫 업로드",30,"보드, USB 케이블","보드 패키지를 설치하고 포트를 찾은 뒤, 예제의 Blink를 올립니다(LED 핀은 2).","파란 내장 LED가 1초마다 깜빡인다.","포트가 안 보이면 케이블부터. Connecting…에서 멈추면 BOOT를 누른 채 올린다."],
+ ["첫 업로드",30,"보드, USB 케이블","보드 패키지를 설치하고 장치 관리자에서 보드의 COM 번호를 찾은 뒤, 예제의 Blink를 올립니다(LED 핀은 2).","파란 내장 LED가 1초마다 깜빡인다.","새 COM이 안 생기면 케이블부터, 그다음 드라이버. COM1·COM2는 보드가 아니다. Connecting…에서 멈추면 BOOT를 누른 채 올린다."],
  ["USB 시리얼로 한 줄 주고받기",20,"같음","115200으로 열고, Serial Monitor에서 받은 글자를 줄바꿈까지 모아 그대로 되돌려 보냅니다. 나중에 이 창에 줄을 쳐서 설비 쪽을 흉내 냅니다.","친 줄이 그대로 돌아온다.","글자가 깨지면 속도가 다르다. 아무 반응이 없으면 줄 끝 설정이 New Line이 아니다."],
  ["버튼과 millis",30,"BOOT 버튼(IO0)과 내장 LED. 부품이 있으면 IO33 버튼, IO25 LED + 220Ω","LED는 계속 깜빡이게 두고, 버튼을 짧게 누름과 2초 누름을 구분해 출력합니다.","누르고 있는 동안에도 깜빡임이 멈추지 않는다.","멈추면 delay가 남아 있다. 한 번 눌렀는데 여러 번 찍히면 30ms 떨림 거르기를 넣는다."],
  ["꺼져도 남는 저장",20,"같음","Preferences로 켜진 횟수를 저장하고 켤 때마다 1씩 늘려 출력합니다.","USB를 뽑았다 꽂아도 숫자가 이어진다.","이름표 철자가 다르면 0부터 다시 센다. loop에서 매번 쓰지 않는다."],
  ["줄 검사",30,"같음","받은 줄의 $와 * 사이를 XOR해서 끝의 두 자리와 비교하고 OK / BAD를 출력합니다.","$R{\"n\":42,\"k\":\"DONE\"}*7B 는 OK, 한 글자만 바꾸면 BAD.","문서에서 복사한 따옴표가 둥글다. 직접 친다. 위의 계산기로 값을 대조한다."],
- ["MQTT 첫 연결",40,"+ 2.4GHz Wi-Fi(휴대폰 핫스팟도 됨)","Mac에 mosquitto를 띄우고, ESP32가 2초마다 factory/station/P2/alive 에 메시지를 보냅니다.","mosquitto_sub -t 'factory/#' -v 에 2초마다 줄이 올라온다.","rc=-2면 Mac IP와 설정 두 줄, 방화벽. Wi-Fi가 안 붙으면 5GHz인지 본다."],
- ["줄 ↔ MQTT 다리 (USB로 공정 흉내)",40,"같음","Serial Monitor에 친 줄을 설비 쪽이 보낸 줄로 여기고, 종류 글자로 토픽을 고릅니다(R→report, T→tag, H→alive). cmd를 구독해 받은 JSON을 $C,… 줄로 바꿔 출력합니다. modem.ino를 TEST_MODE 1로 올려도 됩니다.","$R…*7B를 치면 sub 창에 JSON이 뜬다. mosquitto_pub으로 {\"re\":42,\"ok\":1}을 보내면 $C,re=42,ok=1*67 이 찍힌다.","받는 함수가 안 불리면 mqtt.loop()와 구독을 본다. 아무 반응이 없으면 TEST_MODE가 1인지, 줄 끝이 New Line인지 본다."],
- ["뽑았다 꽂기",30,"같음","유언을 link=0(보관)으로 맡기고, 붙자마자 link=1(보관)을 보냅니다. keepalive는 4초. 다시 붙는 코드는 millis로.","USB를 뽑으면 약 6초 뒤 sub 창에 link 0, 꽂으면 1. 그 사이 보관으로 보낸 state가 붙자마자 온다.","0이 안 뜨면 keepalive가 기본값(15초)이다. 1이 안 뜨면 다시 붙는 코드가 setup에만 있다."],
- ["FreeRTOS 두 태스크 + 큐",40,"같음. 선택: IO25 LED + 220Ω","9장의 1단계 뼈대를 올립니다. 설비 태스크(코어 1)는 내장 LED를 0.2초마다, 통신 태스크(코어 0)는 IO25 LED를 1초마다 뒤집습니다. BOOT 버튼을 누르면 설비 태스크가 신고 줄을 큐에 넣고, 통신 태스크가 꺼내 출력한 뒤 $C 답을 돌려줍니다.","두 불빛이 서로 다른 속도로 깜빡인다. 누를 때마다 [N] 받음 $R{\"n\":1,\"k\":\"BTN\"} 처럼 번호가 늘며 찍히고, 내장 LED가 0.5초 켜진다.","리셋이 되풀이되면 스택 부족(6144·8192를 키운다). task_wdt가 찍히면 쉬지 않고 도는 for(;;)가 있다. 글자가 섞이면 Serial을 통신 태스크만 쓰게 한다."]
+ ["RC522로 키태그 읽기",40,"+ RC522 리더기, 키태그나 카드, 점퍼선 7개","rfid.ino 맨 위의 배선대로 잇고(전원은 3.3V), MFRC522 라이브러리를 설치해 올립니다. 태그를 대면 우리 줄 형식으로 찍힙니다.","켤 때 '# RC522 버전 0x92 (정상)' 같은 줄이 나오고, 태그를 대면 $T{\"n\":1,\"k\":\"TAG\",\"uid\":\"…\"}*XX 가 찍힌다. 같은 태그는 2초 안에 한 번만. 찍힌 줄을 5장 계산기에 붙여 넣으면 '맞습니다'.","버전이 0x00이나 0xFF면 배선(특히 SDA→21, 3.3V, GND). 태그가 안 읽히면 리더기 가운데에 1~2cm로 댄다. 5V에 꽂지 않는다."],
+ ["MQTT 첫 연결",40,"+ 2.4GHz Wi-Fi(휴대폰 핫스팟도 됨), PC에 mosquitto","6장대로 PC에 mosquitto를 띄우고, ESP32가 2초마다 factory/station/P2/alive 에 메시지를 보냅니다.","py mqtt_tool.py watch 창에 2초마다 줄이 올라온다.","rc=-2면 PC IP(ipconfig), 설정 두 줄, 방화벽 1883, 같은 Wi-Fi인지. Wi-Fi가 안 붙으면 5GHz인지 본다."],
+ ["줄 ↔ MQTT 다리 (USB로 공정 흉내)",40,"같음","modem.ino를 secrets.h를 채워 그대로 올립니다(TEST_MODE 1). Serial Monitor에 친 줄을 설비 쪽이 보낸 줄로 여기고 종류 글자로 토픽을 고릅니다(R→report, T→tag, H→alive). 실습 5에서 찍힌 $T 줄을 그대로 쳐 봅니다.","$R{\"n\":42,\"k\":\"DONE\"}*7B 를 치면 watch 창에 JSON이 뜬다. py mqtt_tool.py send P2 re=42 ok=1 을 보내면 $C,re=42,ok=1*67 이 찍힌다. reply를 켜 두면 줄을 칠 때마다 답이 저절로 돌아온다.","받는 쪽이 조용하면 구독과 mqtt.loop()를 본다. 아무 반응이 없으면 줄 끝이 New Line인지, 검사값이 맞는지 본다."],
+ ["막히는 시간 재기 (RTOS 근거 숫자)",40,"같음","modem.ino를 MEASURE 1로 올리고(기본값), 0장 기록표의 세 경우를 20번씩 만듭니다: ① 브로커 PC의 Wi-Fi 끄기 ② 핫스팟 끄기 ③ 관리자 PowerShell에서 Stop-Service mosquitto. Serial Monitor의 '# [측정] connect … ms'와 '10초 동안 loop 최대 간격 … ms'를 적습니다.","기록표 세 줄이 채워진다. 결과를 팀에 공유한다(12-01 RTOS 판정의 근거). 짧게 나와도 그대로 적는다.","'# [측정]' 줄이 없으면 MEASURE가 1인지 본다. ②에서 connect 줄이 안 나오는 것은 정상(Wi-Fi가 끊기면 접속을 시도하지 않는다). 다시 켤 때는 Start-Service mosquitto."],
+ ["뽑았다 꽂기",30,"같음","유언을 link=0(보관)으로 맡기고, 붙자마자 link=1(보관)을 보냅니다. keepalive는 4초. 다시 붙는 코드는 millis로.","USB를 뽑으면 약 6초 뒤 watch 창에 link 0 [보관], 꽂으면 1. 그 사이 state P2 WORK 7 로 보낸 상태가 붙자마자 온다.","0이 안 뜨면 keepalive가 기본값(15초)이다. 1이 안 뜨면 다시 붙는 코드가 setup에만 있다."],
+ ["FreeRTOS 두 태스크 + 큐",40,"같음. 선택: IO25 LED + 220Ω","rtos_step1.ino(9장 1단계 뼈대)를 올립니다. 설비 태스크(코어 1)는 내장 LED를 0.2초마다, 통신 태스크(코어 0)는 IO25 LED를 1초마다 뒤집습니다. BOOT 버튼을 누르면 설비 태스크가 신고 줄을 큐에 넣고, 통신 태스크가 꺼내 출력한 뒤 $C 답을 돌려줍니다.","두 불빛이 서로 다른 속도로 깜빡인다. 누를 때마다 [N] 받음 $R{\"n\":1,\"k\":\"BTN\"} 처럼 번호가 늘며 찍히고, 내장 LED가 0.5초 켜진다.","리셋이 되풀이되면 스택 부족(6144·8192를 키운다). task_wdt가 찍히면 쉬지 않고 도는 for(;;)가 있다. 글자가 섞이면 Serial을 통신 태스크만 쓰게 한다."]
 ];
 const ll=$("#lablist"), KEY="esp32book.labs";
 let done={}; try{done=JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){}

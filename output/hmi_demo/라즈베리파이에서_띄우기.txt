@@ -32,7 +32,7 @@
    - 창이 안 뜨고 플랫폼 오류가 나면: QT_QPA_PLATFORM=xcb python3 hmi_demo.py --fullscreen
    - 화면이 모니터가 아니라 리본 케이블 7인치라면, 화면이 먼저 Pi 바탕화면을 띄우는지부터 확인한다.
 
-5. 확인한 조합 (2026-11-18, 라즈베리파이와 같은 ARM64 Debian 컨테이너에서 캡처. 실물 Pi는 아직)
+5. 확인한 조합 (2026-11-23, 라즈베리파이와 같은 ARM64 Debian 컨테이너에서 캡처. 실물 Pi는 아직)
    - Debian 12 bookworm · Python 3.11 · apt PySide2 (Qt 5.15.8) · NanumGothic  -> 정상 (확인_화면/bookworm_pyside2_*)
    - Debian 13 trixie   · Python 3.13 · apt PySide6 (Qt 6.8.2)  · NanumGothic  -> 정상 (확인_화면/trixie_pyside6_*)
      (Qt 6.8에서는 맨 위 상태 칩의 모서리가 둥글지 않고 각지게 나온다. 동작에는 영향 없음)

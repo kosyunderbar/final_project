@@ -2,7 +2,8 @@ import html,sys,os
 here=os.path.dirname(os.path.abspath(__file__)); root=os.path.dirname(here)
 rd=lambda p: open(os.path.join(root,p),encoding="utf-8").read()
 t=rd("src/book.tpl.html")
-for k,f in [("MODEM","code/modem/modem.ino"),("TAG","code/tag/tag.ino"),("CSC","code/cs.c"),("CSPY","code/cs.py")]:
+for k,f in [("MODEM","code/modem/modem.ino"),("TAG","code/tag/tag.ino"),("CSC","code/cs.c"),("CSPY","code/cs.py"),
+            ("RFID","code/rfid/rfid.ino"),("RTOS1","code/rtos_step1/rtos_step1.ino"),("PCTOOL","code/pc/mqtt_tool.py")]:
     assert "{{%s}}"%k in t; t=t.replace("{{%s}}"%k, html.escape(rd(f).rstrip(),quote=False))
 assert "{{" not in t.split("<script>")[0]
 open(os.path.join(root,"src/ESP32_교본.artifact.html"),"w",encoding="utf-8").write(t)

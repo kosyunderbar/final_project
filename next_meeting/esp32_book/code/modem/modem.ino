@@ -10,12 +10,13 @@
 
 // ───── 설정: 공정 ESP32마다 STATION만 바꾼다 ─────
 #define STATION        "P2" 
-#define TEST_MODE      0         // 0 Serial2(16/17) 선으로 줄 받기 | 1 USB 시리얼 모니터가 설비 쪽 흉내 (지금 시험은 이것) | 2 TX2→RX2 점퍼 루프백
+#define TEST_MODE      1         // 1 USB 시리얼 모니터에 줄을 쳐서 설비 쪽 흉내 (기본, 지금 시험은 이것) | 0 Serial2(16/17) 선으로 줄 받기 | 2 TX2→RX2 점퍼 루프백
 #define PIN_RX2        16        // 코어 3.x는 Serial2 기본 핀이 4/25로 바뀌었다 → 반드시 직접 지정
 #define PIN_TX2        17
 #define LINE_CAP       240       // '$'부터 체크섬까지 한 줄 최대 길이
 #define MQTT_BUF       512       // PubSubClient 버퍼 (기본 256은 부족)
 #define LINK_REPEAT_MS 2000      // $L(연결 상태)을 2초마다 설비 쪽에 알린다. 설비 쪽은 5초 동안 못 받으면 끊김으로 본다
+#define MEASURE        1         // 1이면 '# [측정]' 줄을 찍는다: 접속 시도마다 걸린 시간, 10초마다 loop 최대 간격 (실습 8, RTOS 근거 숫자). 0이면 끔
 
 #define BASE "factory/station/" STATION "/"
 #if TEST_MODE == 1
@@ -124,7 +125,12 @@ void serviceMqtt() {
   } else if (WiFi.status() == WL_CONNECTED && millis() - lastTry >= 3000) {
     lastTry = millis();
     // 유언(LWT): 내가 말없이 죽으면 브로커가 link=0(retained)을 대신 발행
-    if (mqtt.connect("modem-" STATION, BASE "link", 0, true, "0")) {
+    uint32_t t0 = millis();
+    bool ok = mqtt.connect("modem-" STATION, BASE "link", 0, true, "0");   // 브로커가 안 보이면 여기서 막힌다
+#if MEASURE
+    DBG("# [측정] connect %s %lums\n", ok ? "성공" : "실패", (unsigned long)(millis() - t0));
+#endif
+    if (ok) {
       mqtt.publish(BASE "link", "1", true);   // retained
       mqtt.subscribe(BASE "cmd");
       mqtt.subscribe(BASE "state");           // retained라 구독 즉시 현재 상태가 온다 → $S가 설비 쪽으로 간다
@@ -155,6 +161,18 @@ void setup() {
 }
 
 void loop() {
+#if MEASURE
+  // loop 한 바퀴 사이의 최대 간격. 이 간격 동안 설비 쪽(버튼·리더기)도 기다리게 된다 → RTOS를 쓰는 근거 숫자
+  static uint32_t prev = millis(), worst = 0, lastRep = millis();
+  uint32_t now = millis();
+  if (now - prev > worst) worst = now - prev;
+  prev = now;
+  if (now - lastRep >= 10000) {
+    lastRep = now;
+    DBG("# [측정] 10초 동안 loop 최대 간격 %lums\n", (unsigned long)worst);
+    worst = 0;
+  }
+#endif
   pollBoard();
   serviceWifi();
   serviceMqtt();
