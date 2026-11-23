@@ -1,18 +1,21 @@
-// modem.ino — 공정 통신 모뎀: 공정보드 UART <-> MQTT
+// modem.ino — 공정 ESP32의 통신 부분 (loop판): USB/시리얼 줄 <-> MQTT
+// 설비 쪽(RFID·서보 등)이 만든 줄을 MQTT로 발행하고, MQTT로 온 메시지를 줄로 바꿔 설비 쪽에 넘긴다.
+// 설비 쪽 코드는 아직 없고, 시험은 TEST_MODE 1(USB 시리얼 모니터에 줄을 직접 침)으로 한다.
+// RTOS판에서는 이 코드가 통신 태스크의 바탕이 되고, 12-01 판정에서 RTOS판이 안정되지 않으면 이 loop판으로 간다.
 // 대상: Arduino-ESP32 3.x / PubSubClient 2.8 / ArduinoJson 7
 #include <WiFi.h>
 #include <PubSubClient.h>
 #include <ArduinoJson.h>
 #include "secrets.h"             // WIFI_SSID, WIFI_PASS, MQTT_HOST, MQTT_PORT
 
-// ───── 설정: 보드마다 STATION만 바꾼다 ─────
+// ───── 설정: 공정 ESP32마다 STATION만 바꾼다 ─────
 #define STATION        "P2" 
-#define TEST_MODE      0         // 0 실사용 | 1 USB 시리얼 모니터가 공정보드 역할 | 2 TX2→RX2 점퍼 루프백
+#define TEST_MODE      0         // 0 Serial2(16/17) 선으로 줄 받기 | 1 USB 시리얼 모니터가 설비 쪽 흉내 (지금 시험은 이것) | 2 TX2→RX2 점퍼 루프백
 #define PIN_RX2        16        // 코어 3.x는 Serial2 기본 핀이 4/25로 바뀌었다 → 반드시 직접 지정
 #define PIN_TX2        17
 #define LINE_CAP       240       // '$'부터 체크섬까지 한 줄 최대 길이
 #define MQTT_BUF       512       // PubSubClient 버퍼 (기본 256은 부족)
-#define LINK_REPEAT_MS 2000      // $L(연결 상태)을 2초마다 보드에 알린다. 보드는 5초 동안 못 받으면 끊김으로 본다
+#define LINK_REPEAT_MS 2000      // $L(연결 상태)을 2초마다 설비 쪽에 알린다. 설비 쪽은 5초 동안 못 받으면 끊김으로 본다
 
 #define BASE "factory/station/" STATION "/"
 #if TEST_MODE == 1
@@ -25,7 +28,7 @@
 WiFiClient   net;
 PubSubClient mqtt(net);
 
-// ───── 체크섬 / 보드로 한 줄 보내기 ─────
+// ───── 체크섬 / 설비 쪽으로 한 줄 보내기 ─────
 uint8_t xorOf(const char *p, size_t n) { uint8_t c = 0; while (n--) c ^= (uint8_t)*p++; return c; }
 
 void sendToBoard(const char *body) {          // body = 종류 글자 + 내용, 예: "C,re=42,ok=1"
@@ -33,7 +36,7 @@ void sendToBoard(const char *body) {          // body = 종류 글자 + 내용, 
   DBG("# ->board $%s\n", body);
 }
 
-// ───── 보드 → MQTT ─────
+// ───── 설비 쪽 → MQTT ─────
 void handleLine(char *line, size_t len) {     // line = "$...*HH" (개행 제거됨)
   if (len < 5 || line[0] != '$' || line[len - 3] != '*') { DBG("# 형식 오류: %s\n", line); return; }
   char *end;
@@ -66,7 +69,7 @@ void pollBoard() {                            // 한 글자씩 모아서 '\n'에
   }
 }
 
-// ───── MQTT → 보드: JSON {"re":42,"ok":1} → "$C,re=42,ok=1*67" ─────
+// ───── MQTT → 설비 쪽: JSON {"re":42,"ok":1} → "$C,re=42,ok=1*67" ─────
 void onMqtt(char *topic, byte *payload, unsigned int len) {
   if (strncmp(topic, BASE, strlen(BASE)) != 0) return;
   const char *leaf = topic + strlen(BASE);
@@ -83,7 +86,7 @@ void onMqtt(char *topic, byte *payload, unsigned int len) {
   body[n++] = type; body[n] = 0;
   for (JsonPair kv : obj) {                   // 보낸 순서 그대로 나온다
     const char *k = kv.key().c_str();
-    if (type == 'S' && !strcmp(k, "body")) continue;      // state의 body는 보드에 안 보낸다
+    if (type == 'S' && !strcmp(k, "body")) continue;      // state의 body는 설비 쪽에 안 보낸다
     char val[48];
     JsonVariant v = kv.value();
     if (v.is<JsonObject>() || v.is<JsonArray>()) { DBG("# 중첩 값 거부: %s\n", k); return; }
@@ -124,7 +127,7 @@ void serviceMqtt() {
     if (mqtt.connect("modem-" STATION, BASE "link", 0, true, "0")) {
       mqtt.publish(BASE "link", "1", true);   // retained
       mqtt.subscribe(BASE "cmd");
-      mqtt.subscribe(BASE "state");           // retained라 구독 즉시 현재 상태가 온다 → $S가 보드로 간다
+      mqtt.subscribe(BASE "state");           // retained라 구독 즉시 현재 상태가 온다 → $S가 설비 쪽으로 간다
       mqtt.subscribe(BASE "test");
       up = true;
       DBG("# MQTT 연결\n");

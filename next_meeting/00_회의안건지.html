@@ -9,10 +9,10 @@ body { margin:0; font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; c
 h1 { font-size:17pt; margin:1mm 0 0 }
 .meta { font-size:8.5pt; color:#5b6675; margin-top:1.2mm }
 .fill { display:inline-block; border-bottom:1px solid #9aa5b1; min-width:28mm; height:4.2mm; vertical-align:-1mm }
-h2 { font-size:10.6pt; margin:4.2mm 0 1.4mm; padding-bottom:.8mm; border-bottom:1.5px solid #1f2a37; display:flex; justify-content:space-between; align-items:baseline }
+h2 { font-size:10.6pt; margin:3.6mm 0 1.2mm; padding-bottom:.8mm; border-bottom:1.5px solid #1f2a37; display:flex; justify-content:space-between; align-items:baseline }
 h2 small { font-size:8pt; font-weight:400; color:#5b6675 }
 table { border-collapse:collapse; width:100% }
-td, th { padding:1.3mm 1.4mm; text-align:left; vertical-align:top; border-bottom:1px solid #e1e6eb; font-size:8.8pt; line-height:1.42 }
+td, th { padding:1.0mm 1.4mm; text-align:left; vertical-align:top; border-bottom:1px solid #e1e6eb; font-size:8.8pt; line-height:1.42 }
 th { font-size:7.8pt; color:#5b6675; font-weight:600 }
 td.n { width:7mm; color:#5b6675; font-weight:700 }
 td.q { width:76mm }
@@ -34,15 +34,15 @@ td.d { width:62mm }
 <div class="page">
  <div class="kick">팀 회의 · 안건지</div>
  <h1>다음 회의 — 정할 것과 담당</h1>
- <div class="meta">작성 2026-11-21 · 회의 날짜 <span class="fill"></span> · 참석 <span class="fill" style="min-width:70mm"></span></div>
- <div class="meta">아래 선택지와 날짜는 모두 <b>제안</b>입니다. 정한 칸에 표시하고 결정 칸을 채우면 회의록이 됩니다.</div>
+ <div class="meta">작성 2026-11-23 · 회의 날짜 <span class="fill"></span> · 참석 <span class="fill" style="min-width:70mm"></span></div>
+ <div class="meta">아래 선택지와 날짜는 <b>제안</b>입니다. <b>사용자 확정</b>이라 적은 것은 팀 확인만 받습니다. 정한 칸에 표시하고 결정 칸을 채우면 회의록이 됩니다.</div>
 
  <h2>가져온 자료 <small>이 폴더(next_meeting)에 있음 · 각 PDF의 HTML 원본도 함께</small></h2>
  <table class="docs">
-  <tr><td style="width:56mm"><b>제공맵_공정배치도_v2.pdf</b></td><td>교육에서 받은 맵 위의 공정 배치. 반시계, 색 칸에서 서서 작업</td></tr>
-  <tr><td><b>제공맵_공정배치도_v3.pdf</b></td><td>로봇팔로 공정마다 내려놓고 다시 집는 버전</td></tr>
-  <tr><td><b>공정보드_STM32_회의자료.pdf</b></td><td>STM32를 왜, 어떻게 쓰나. B / B′ 두 안</td></tr>
-  <tr><td><b>데이터흐름_설명서_v2.pdf</b></td><td>데이터 흐름과 이상(오류) 시나리오. 8쪽에 정할 것 목록</td></tr>
+  <tr><td style="width:56mm"><b>데이터흐름_설명서.pdf</b></td><td>데이터 흐름과 이상(오류) 시나리오. 8쪽에 정할 것 목록</td></tr>
+  <tr><td><b>제공맵_공정배치도_팔없음.pdf</b></td><td>교육에서 받은 맵 위의 공정 배치. 반시계, 색 칸에서 차체를 실은 채 작업</td></tr>
+  <tr><td><b>제공맵_공정배치도_팔있음.pdf</b></td><td>로봇팔로 공정마다 차체를 내려놓고 다시 집는 배치</td></tr>
+  <tr><td><b>RTOS_도입_제안서.pdf</b></td><td>공정 ESP32 펌웨어를 FreeRTOS 두 태스크로 나누는 제안. 12-01 판정</td></tr>
   <tr><td><b>esp32_book/ESP32_교본.html</b></td><td>브라우저로 열기. 3D 보드, 핀 지도, 실습 8개. 코드는 esp32_book/code. 온라인판은 공유 설정이 필요</td></tr>
  </table>
 
@@ -51,22 +51,22 @@ td.d { width:62mm }
   <tr><td class="n">0</td><td class="q"><span class="urgent">GitHub 저장소를 비공개로 바꾼다.</span> 지금 공개 상태이고 SSAFY 교안·키트 자료가 올라가 있다</td><td class="d"><span class="opt">했음</span><span class="opt">회의 중에</span><span class="line"></span></td></tr>
  </table>
 
- <h2>1. 맵과 AGV <small class="ref">배치도 v2 · v3</small></h2>
+ <h2>1. 맵과 AGV <small class="ref">팔 없는 배치 · 팔 있는 배치</small></h2>
  <table>
   <tr><th></th><th>정할 것</th><th>결정</th></tr>
-  <tr><td class="n">1-1</td><td class="q"><b>교육에서 받은 맵을 쓴다.</b> 예전 A안(진입로 + 후진)과 직접 만드는 3m 바닥을 대체한다. 순서: 노랑 출발 → P1 주황 → P2 초록 → P3 보라 → P4 파랑 → 검사 빨강</td><td class="d"><span class="opt">확정</span><span class="opt">보류</span><span class="line"></span></td></tr>
-  <tr><td class="n">1-2</td><td class="q"><b>로봇팔을 쓸지 정하는 기준.</b> 제안: 한 공정에서 놓기·집기 10번 중 9번 이상 성공하면 v3 1단계(검사에서 놓기만)로 간다</td><td class="d">기준 <span class="fill"></span><br>시험 날짜 <span class="fill"></span></td></tr>
+  <tr><td class="n">1-1</td><td class="q"><b>교육에서 받은 맵을 쓴다</b> <span class="sub">(사용자 확정 · 팀 확인)</span>. 반시계 한 바퀴: 노랑 출발 → P1 주황 → P2 초록 → P3 보라 → P4 파랑 → 검사 빨강</td><td class="d"><span class="opt">확인</span><span class="opt">다시 논의</span><span class="line"></span></td></tr>
+  <tr><td class="n">1-2</td><td class="q"><b>로봇팔을 쓸지 정하는 기준.</b> 제안: 한 공정에서 놓기·집기 10번 중 9번 이상 성공하면 팔 있는 배치 1단계(검사에서 놓기만)로 간다</td><td class="d">기준 <span class="fill"></span><br>시험 날짜 <span class="fill"></span></td></tr>
   <tr><td class="n">1-3</td><td class="q"><b>교육장에서 잴 것과 담당.</b> 맵 칸 크기·선 폭, 팔이 닿는 거리·집게 폭·드는 무게, 팔을 움직일 때 카메라 화면, 주행 모델이 반시계로 학습됐는지</td><td class="d">담당 <span class="fill"></span><br>날짜 <span class="fill"></span></td></tr>
  </table>
 
- <h2>2. 공정 보드 <small class="ref">STM32 회의자료</small></h2>
+ <h2>2. 공정 ESP32 · RTOS · 남는 보드 <small class="ref">RTOS 도입 제안서</small></h2>
  <table>
-  <tr><td class="n">2-1</td><td class="q"><b>보드 구성.</b> B: STM32 4대로 통일(권장) / B′: P1·P2만 STM32, P3·P4는 ESP32 혼자 / A: 지금대로 STM32 2 + Renesas 2</td><td class="d"><span class="opt">B</span><span class="opt">B′</span><span class="opt">A</span><span class="line"></span></td></tr>
-  <tr><td class="n">2-2</td><td class="q"><b>Renesas 시험(T1).</b> RFID 판독 + UART 왕복. 11-26까지 안 되면 더 붙잡지 않는다. 팀에 Renesas를 써 본 사람이 있나</td><td class="d">담당 <span class="fill"></span><br>마감 <span class="fill"></span></td></tr>
-  <tr><td class="n">2-3</td><td class="q"><b>NUCLEO-F103RB 2대 구매</b> (B안일 때). 가격은 판매처마다 차이가 크다</td><td class="d"><span class="opt">지금</span><span class="opt">11-26 뒤</span><span class="opt">안 삼</span></td></tr>
-  <tr><td class="n">2-4</td><td class="q"><b>MCU가 맡을 일 4가지</b>(비상정지, 작업 순서, 거부권, 이상 판단)를 채택하나. 채택하면 작업 허가의 최종 판단이 공정 보드로 간다</td><td class="d"><span class="opt">채택</span><span class="opt">일부</span><span class="opt">안 함</span><span class="line"></span></td></tr>
-  <tr><td class="n">2-5</td><td class="q"><b>MCU가 끝내 안 되면</b> RFID를 ESP32로 옮겨도 되나 (지금 결정은 'ESP32는 통신만')</td><td class="d"><span class="opt">허용</span><span class="opt">불허</span></td></tr>
-  <tr><td class="n">2-6</td><td class="q"><b>공정별 센서.</b> 아직 정하지 않았다. 후보: P1 진동, P2 초음파 등. B′를 고르면 먼저 정해야 한다</td><td class="d">P1 <span class="fill" style="min-width:20mm"></span> P2 <span class="fill" style="min-width:20mm"></span><br>P3 <span class="fill" style="min-width:20mm"></span> P4 <span class="fill" style="min-width:20mm"></span></td></tr>
+  <tr><td class="n">2-1</td><td class="q"><b>공정 4곳은 ESP32가 혼자 맡는다</b> <span class="sub">(사용자 확정 · 팀 확인)</span>. 공정마다 ESP32 한 개가 RFID 판독, 설비(서보·모터·상태등·부저·버튼), Wi-Fi·MQTT 통신을 모두 한다</td><td class="d"><span class="opt">확인</span><span class="opt">다시 논의</span><span class="line"></span></td></tr>
+  <tr><td class="n">2-2</td><td class="q"><b>RTOS</b> <span class="sub">(사용자 확정 · 팀 확인)</span>. 공정 ESP32 펌웨어를 FreeRTOS 두 태스크(통신 코어 0 / 설비 코어 1, 큐로만 주고받음)로 짠다. P2에서 먼저 검증, <b>12-01 판정</b>. 안정되지 않으면 지금의 loop판(modem.ino)으로 간다</td><td class="d"><span class="opt">확인</span><span class="opt">다시 논의</span><br>담당 <span class="fill"></span></td></tr>
+  <tr><td class="n">2-3</td><td class="q"><b>공정 ESP32가 어디까지 판단하나.</b> 작업 허가를 거부할 수 있게 할지(거부권), 작업 순서를 혼자 끝까지 진행할지. 채택하면 관제 Pi5의 허가는 '요청'이 된다</td><td class="d"><span class="opt">채택</span><span class="opt">일부</span><span class="opt">안 함</span><span class="line"></span></td></tr>
+  <tr><td class="n">2-4</td><td class="q"><b>공정별 핀표.</b> ESP32 핀이 빠듯하다. 마음 놓고 쓸 출력은 약 15개(추정)이고 RC522가 5개를 쓴다. 공정마다 서보·등·부저·버튼·센서 핀을 표로 정한다</td><td class="d">담당 <span class="fill"></span><br>날짜 <span class="fill"></span></td></tr>
+  <tr><td class="n">2-5</td><td class="q"><b>공정별 센서.</b> 아직 정하지 않았다. 후보: P1 진동, P2 초음파 등. 핀표(2-4)와 함께 정한다</td><td class="d">P1 <span class="fill" style="min-width:20mm"></span> P2 <span class="fill" style="min-width:20mm"></span><br>P3 <span class="fill" style="min-width:20mm"></span> P4 <span class="fill" style="min-width:20mm"></span></td></tr>
+  <tr><td class="n">2-6</td><td class="q"><b>남는 보드(STM32 2, RA6E1 2)를 쓰나.</b> 꼭 필요한 역할은 없다. 쓴다면 관제 Pi5에 USB로 붙는 입출력 담당: 노랑 투입대(STM32) / 관제 조작반·안돈판(RA6E1). <span class="sub">투입대를 쓰면 3-2의 '태그와 차체를 P1에서 묶음'이 '노랑 투입 때 묶음'으로 바뀐다</span></td><td class="d"><span class="opt">투입대</span><span class="opt">조작반·안돈</span><br><span class="opt">안 씀</span><span class="line"></span></td></tr>
  </table>
  <div class="foot">다음 쪽에 계속 · 데이터 흐름, 스마트태그, 담당, 일정</div>
 </div>
@@ -75,9 +75,9 @@ td.d { width:62mm }
 <div class="page">
  <div class="kick">팀 회의 · 안건지 (2/2)</div>
 
- <h2 style="margin-top:2mm">3. 데이터 흐름 <small class="ref">설명서 v2 · 8쪽</small></h2>
+ <h2 style="margin-top:2mm">3. 데이터 흐름 <small class="ref">데이터 흐름 설명서 · 8쪽</small></h2>
  <table>
-  <tr><td class="n">3-1</td><td class="q"><b>작업 허가를 관제 Pi5가 낸다.</b> 설명서 전체의 전제다 (2-4를 채택하면 Pi5 허가는 '요청'이 된다)</td><td class="d"><span class="opt">확정</span><span class="opt">다시 논의</span></td></tr>
+  <tr><td class="n">3-1</td><td class="q"><b>작업 허가를 관제 Pi5가 낸다.</b> 설명서 전체의 전제다 (2-3을 채택하면 Pi5 허가는 '요청'이 된다)</td><td class="d"><span class="opt">확정</span><span class="opt">다시 논의</span></td></tr>
   <tr><td class="n">3-2</td><td class="q"><b>노랑(출발)에서의 시작과 복귀.</b> 제안: 현장 화면의 '투입'·'복귀' 버튼. 태그와 차체는 P1에서 처음 읽힐 때 묶는다</td><td class="d"><span class="opt">제안대로</span><span class="line"></span></td></tr>
   <tr><td class="n">3-3</td><td class="q"><b>AGV 이상은 어느 버튼으로 푸나.</b> AGV에는 버튼이 없다. 제안: 직전 공정의 버튼 / 다른 안: AGV에 버튼 하나 달기</td><td class="d"><span class="opt">직전 공정</span><span class="opt">AGV 버튼</span></td></tr>
   <tr><td class="n">3-4</td><td class="q"><b>버튼 쓰는 법.</b> 제안: 비상정지 버튼은 정지만, 이상 중에는 완료 버튼이 확인(짧게)·해제(길게 2초). 해제 버튼을 따로 달지</td><td class="d"><span class="opt">제안대로</span><span class="opt">버튼 추가</span></td></tr>
@@ -89,10 +89,11 @@ td.d { width:62mm }
 
  <h2>4. 스마트태그</h2>
  <table>
-  <tr><td class="n">4-1</td><td class="q"><b>불빛.</b> 파란 LED 하나(지금 핀 배정) / RGB LED(상태 5가지 표시 가능). 위치는 11-13부터 보류</td><td class="d"><span class="opt">파랑 하나</span><span class="opt">RGB</span><br>위치 <span class="fill"></span></td></tr>
-  <tr><td class="n">4-2</td><td class="q"><b>버튼의 뜻과 태그 ID.</b> ID는 키태그 번호 / ESP32 고유번호(MAC)</td><td class="d">버튼 <span class="fill"></span><br><span class="opt">키태그</span><span class="opt">MAC</span></td></tr>
-  <tr><td class="n">4-3</td><td class="q"><b>예비 태그를 만드나.</b> 만들면 ESP32가 공정 4 + 태그 2 = 6개. 보유 4개라 2개 구매</td><td class="d"><span class="opt">만듦</span><span class="opt">안 만듦</span></td></tr>
-  <tr><td class="n">4-4</td><td class="q"><b>배터리 부품.</b> 3.3V 변환기(S7V8F3, 해외 배송) + 충전 모듈 + 500mAh LiPo. 납땜을 도와줄 사람</td><td class="d">주문 <span class="fill"></span><br>납땜 <span class="fill"></span></td></tr>
+  <tr><td class="n">4-1</td><td class="q"><b>역할 선택지</b> <span class="sub">(제안)</span>. A 지금대로(RFID + LED + 이력 사본) / B MPU6050 + 버튼 추가(충격·기울어짐·정지 감지, 작업자 이상 신고) / C ESP32를 빼고 키태그만</td><td class="d"><span class="opt">A</span><span class="opt">B</span><span class="opt">C</span><span class="line"></span></td></tr>
+  <tr><td class="n">4-2</td><td class="q"><b>불빛.</b> 파란 LED 하나(지금 핀 배정) / RGB LED(상태 5가지 표시 가능). 위치는 아직 보류</td><td class="d"><span class="opt">파랑 하나</span><span class="opt">RGB</span><br>위치 <span class="fill"></span></td></tr>
+  <tr><td class="n">4-3</td><td class="q"><b>버튼의 뜻과 태그 ID.</b> ID는 키태그 번호 / ESP32 고유번호(MAC)</td><td class="d">버튼 <span class="fill"></span><br><span class="opt">키태그</span><span class="opt">MAC</span></td></tr>
+  <tr><td class="n">4-4</td><td class="q"><b>예비 태그를 만드나.</b> 만들면 ESP32가 공정 4 + 태그 2 = 6개. 보유 4개라 2개 구매</td><td class="d"><span class="opt">만듦</span><span class="opt">안 만듦</span></td></tr>
+  <tr><td class="n">4-5</td><td class="q"><b>배터리 부품.</b> 3.3V 변환기(S7V8F3, 해외 배송) + 충전 모듈 + 500mAh LiPo. 납땜을 도와줄 사람</td><td class="d">주문 <span class="fill"></span><br>납땜 <span class="fill"></span></td></tr>
  </table>
 
  <div class="two">
@@ -101,8 +102,8 @@ td.d { width:62mm }
    <table>
     <tr><td>토픽·메시지 이름을 맞출 사람</td><td style="width:26mm"><span class="fill" style="min-width:24mm"></span></td></tr>
     <tr><td>관제 Pi5 기록 프로그램</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
-    <tr><td>ESP32 통신 코드 (4대 공통)</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
-    <tr><td>STM32 공정 코드</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
+    <tr><td>공정 ESP32 펌웨어 (4대 공통, RTOS)</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
+    <tr><td>공정별 설비 동작 (각 공정)</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
     <tr><td>AGV 주행 · 로봇팔</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
     <tr><td>Spring · 언리얼 트윈</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
     <tr><td>GitHub: 저장소 하나 / 언리얼 따로</td><td><span class="opt">하나</span><span class="opt">따로</span></td></tr>
@@ -111,9 +112,10 @@ td.d { width:62mm }
   <div>
    <h2>6. 일정 <small>제안</small></h2>
    <table>
-    <tr><td style="width:15mm">11-24</td><td>ESP32 다리 코드 + PC로 공정 흉내 → Pi5·화면 연동 시작</td></tr>
-    <tr><td>11-26</td><td>Renesas 판정</td></tr>
-    <tr><td>11-28</td><td>P2 한 곳: STM32 + 모뎀 + 기록 + 화면</td></tr>
+    <tr><td style="width:15mm">11-24</td><td>책상 위 ESP32 + RC522 + 버튼 + LED + 서보, connect 막힘 측정, 두 태스크 뼈대</td></tr>
+    <tr><td>11-26</td><td>작업 순서·다시 보내기, Pi5 끄기 시험</td></tr>
+    <tr><td>11-28</td><td>P2 한 곳: 공정 ESP32 + 기록 + 화면</td></tr>
+    <tr><td>12-01</td><td><b>RTOS 판정</b> (안 되면 loop판)</td></tr>
     <tr><td>12-04</td><td>공정 1안 완성 (공정마다 20번 연속 성공)</td></tr>
     <tr><td>12-11</td><td>기능 추가 끝</td></tr>
     <tr><td>12-18</td><td>촬영 마감 · 12-24 제출</td></tr>
@@ -124,6 +126,6 @@ td.d { width:62mm }
 
  <h2>메모 · 다음에 할 일</h2>
  <div class="notes"></div>
- <div class="foot">근거: HANDOFF.md, 배치도 v2·v3, 공정보드 STM32 회의자료, 데이터흐름 설명서 v2(8쪽), 스마트태그 개발 계획(11-21 대화). 회의 뒤 결정 사항은 HANDOFF 22절로 옮긴다.</div>
+ <div class="foot">근거: HANDOFF.md, 팔 없는 배치 · 팔 있는 배치, 데이터 흐름 설명서(8쪽), RTOS 도입 제안서. 회의 뒤 결정 사항은 HANDOFF.md로 옮긴다.</div>
 </div>
 </body></html>

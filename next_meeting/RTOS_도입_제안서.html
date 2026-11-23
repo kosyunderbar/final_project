@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>RTOS 도입 제안서</title>
+<style>
+@page { size: A4 landscape; margin: 0 }
+* { box-sizing: border-box }
+body { margin:0; font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; color:#1f2a37; -webkit-print-color-adjust:exact; print-color-adjust:exact; background:#fff }
+.page { width:297mm; height:210mm; padding:8mm 11mm 7mm; display:flex; flex-direction:column; page-break-after:always; overflow:hidden; background:#fff }
+.kick { font-size:8.5pt; color:#5b6675; letter-spacing:.04em }
+h1 { font-size:17pt; margin:1mm 0 0 }
+.meta { font-size:8.3pt; color:#5b6675; margin-top:1mm }
+.body { flex:1; min-height:0; margin-top:3mm; font-size:9.6pt; line-height:1.5 }
+h2 { font-size:10pt; margin:0 0 1.2mm; padding-bottom:.7mm; border-bottom:1px solid #cfd6de }
+.blk { margin-bottom:3mm }
+table { border-collapse:collapse; width:100% }
+td,th { padding:.7mm 1.4mm; text-align:left; vertical-align:top; border-bottom:1px solid #e6eaef }
+th { color:#5b6675; font-weight:600; font-size:8pt }
+ul,ol { margin:0; padding-left:4.2mm } li { margin-bottom:.6mm }
+.two { display:grid; grid-template-columns:1fr 1fr; gap:7mm }
+.r64 { display:grid; grid-template-columns:6fr 5fr; gap:7mm }
+.note { background:#f3f5f7; border-left:3px solid #1f2a37; padding:1.8mm 2.6mm }
+.warn { background:#fff6e8; border-left:3px solid #c77a12; padding:1.8mm 2.6mm }
+.sub { color:#5b6675 }
+.mono { font-family:Consolas,"D2Coding",monospace; font-size:8.4pt }
+.foot { font-size:7.4pt; color:#5b6675; margin-top:auto; padding-top:1.5mm }
+.cards { display:grid; grid-template-columns:repeat(3,1fr); gap:5mm }
+.card { border:1px solid #cfd6de; border-radius:4px; padding:2.6mm 3mm }
+.card .k { font-size:8pt; color:#5b6675; letter-spacing:.04em }
+.card .v { font-size:12pt; font-weight:700; line-height:1.35; margin-top:.8mm }
+.card .s { font-size:8.8pt; color:#3b4654; margin-top:1mm }
+svg { display:block; width:100% }
+</style></head><body>
+
+<!-- 1쪽 : 한 장 요약 -->
+<div class="page">
+ <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · 사용자 확정, 팀 확인 전 (1/6 한 장 요약)</div>
+ <h1>RTOS 도입 제안 — 직원 한 명이 다 하던 일을 두 명이 나눠 한다</h1>
+ <div class="meta">2026-11-23 · 사용자 확정, 팀 확인 전 · 시간 숫자는 추정이며 11-24에 실제로 잰다</div>
+ <div class="body">
+  <svg viewBox="0 0 1000 330" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+   <defs>
+    <marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#1f2a37"/></marker>
+    <marker id="arR" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#a8321f"/></marker>
+   </defs>
+   <!-- 왼쪽: 지금 -->
+   <rect x="0" y="0" width="480" height="330" rx="8" fill="#fbf4f2" stroke="#e3c4bd"/>
+   <text x="20" y="32" font-size="20" font-weight="700" fill="#a8321f">지금 — loop() 하나 = 직원 1명</text>
+   <circle cx="240" cy="160" r="28" fill="#fff" stroke="#a8321f" stroke-width="2.5"/>
+   <circle cx="240" cy="150" r="9" fill="#a8321f"/><path d="M224,176 q16,-20 32,0" fill="#a8321f"/>
+   <text x="240" y="208" font-size="14" text-anchor="middle" fill="#1f2a37">혼자 차례로 돈다</text>
+   <rect x="40" y="70" width="120" height="40" rx="6" fill="#fff" stroke="#8b96a3"/><text x="100" y="96" font-size="15" text-anchor="middle" fill="#1f2a37">버튼 보기</text>
+   <rect x="320" y="70" width="120" height="40" rx="6" fill="#fff" stroke="#8b96a3"/><text x="380" y="96" font-size="15" text-anchor="middle" fill="#1f2a37">리더기 보기</text>
+   <rect x="320" y="220" width="140" height="40" rx="6" fill="#fff" stroke="#8b96a3"/><text x="390" y="246" font-size="15" text-anchor="middle" fill="#1f2a37">작업 진행</text>
+   <rect x="20" y="220" width="160" height="40" rx="6" fill="#fbe9e5" stroke="#a8321f" stroke-width="2"/><text x="100" y="246" font-size="15" text-anchor="middle" fill="#a8321f" font-weight="700">서버에 전화 연결</text>
+   <path d="M160,90 L318,90" stroke="#1f2a37" stroke-width="1.5" marker-end="url(#ar)"/>
+   <path d="M390,112 L390,218" stroke="#1f2a37" stroke-width="1.5" marker-end="url(#ar)"/>
+   <path d="M318,240 L182,240" stroke="#1f2a37" stroke-width="1.5" marker-end="url(#ar)"/>
+   <path d="M100,218 L100,112" stroke="#1f2a37" stroke-width="1.5" marker-end="url(#ar)"/>
+   <text x="20" y="292" font-size="15" fill="#a8321f" font-weight="700">서버가 안 받으면 전화를 붙든 채 몇 초씩 기다린다</text>
+   <text x="20" y="314" font-size="15" fill="#a8321f">→ 그동안 버튼도, 리더기도, 작업도 못 본다</text>
+
+   <!-- 오른쪽: 제안 -->
+   <rect x="520" y="0" width="480" height="330" rx="8" fill="#eff7f2" stroke="#bfdccb"/>
+   <text x="540" y="32" font-size="20" font-weight="700" fill="#1d6b45">제안 — 태스크 2개 = 직원 2명</text>
+   <circle cx="620" cy="110" r="26" fill="#fff" stroke="#2f8a5b" stroke-width="2.5"/>
+   <circle cx="620" cy="101" r="8.5" fill="#2f8a5b"/><path d="M605,125 q15,-19 30,0" fill="#2f8a5b"/>
+   <text x="620" y="160" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2a37">설비 담당</text>
+   <text x="620" y="182" font-size="13.5" text-anchor="middle" fill="#1f2a37">버튼 · 리더기 · 모터 · 등</text>
+   <text x="620" y="202" font-size="13.5" text-anchor="middle" fill="#1d6b45">0.01초마다 계속 본다</text>
+   <circle cx="900" cy="110" r="26" fill="#fff" stroke="#3a5f9a" stroke-width="2.5"/>
+   <circle cx="900" cy="101" r="8.5" fill="#3a5f9a"/><path d="M885,125 q15,-19 30,0" fill="#3a5f9a"/>
+   <text x="900" y="160" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2a37">통신 담당</text>
+   <text x="900" y="182" font-size="13.5" text-anchor="middle" fill="#1f2a37">Wi-Fi · 서버 연결</text>
+   <text x="900" y="202" font-size="13.5" text-anchor="middle" fill="#a8321f">기다리는 건 이 사람만</text>
+   <rect x="715" y="86" width="90" height="56" rx="5" fill="#fff" stroke="#1f2a37" stroke-width="1.5"/>
+   <line x1="725" y1="102" x2="795" y2="102" stroke="#8b96a3"/><line x1="725" y1="114" x2="795" y2="114" stroke="#8b96a3"/><line x1="725" y1="126" x2="795" y2="126" stroke="#8b96a3"/>
+   <text x="760" y="160" font-size="13.5" text-anchor="middle" fill="#1f2a37">메모 꽂이 (큐)</text>
+   <path d="M650,98 L712,98" stroke="#1f2a37" stroke-width="1.5" marker-end="url(#ar)"/>
+   <path d="M808,98 L870,98" stroke="#1f2a37" stroke-width="1.5" marker-end="url(#ar)"/>
+   <path d="M870,128 L808,128" stroke="#1f2a37" stroke-width="1.5" marker-end="url(#ar)"/>
+   <path d="M712,128 L650,128" stroke="#1f2a37" stroke-width="1.5" marker-end="url(#ar)"/>
+   <text x="540" y="252" font-size="15" fill="#1d6b45" font-weight="700">서로 말을 걸지 않고 메모로만 주고받는다</text>
+   <text x="540" y="292" font-size="15" fill="#1d6b45" font-weight="700">통신 담당이 전화를 붙들고 있어도</text>
+   <text x="540" y="314" font-size="15" fill="#1d6b45">→ 설비 담당은 버튼·비상정지에 바로 반응한다</text>
+  </svg>
+  <div class="cards" style="margin-top:4mm">
+   <div class="card"><div class="k">무엇을</div><div class="v">공정 ESP32 펌웨어를<br>FreeRTOS 태스크 2개로</div><div class="s">P1~P4 같은 펌웨어 한 벌. 공정은 ESP32가 혼자 맡으므로 펌웨어를 어차피 새로 짠다</div></div>
+   <div class="card"><div class="k">보여 줄 장면</div><div class="v">관제 Pi5를 꺼도<br>공정 버튼이 바로 반응</div><div class="s">하던 작업은 끝내고, Pi5가 돌아오면 밀린 기록이 한 번만 들어간다</div></div>
+   <div class="card"><div class="k">되돌아갈 길</div><div class="v">12-01까지 안정 안 되면<br>지금 loop판으로</div><div class="s">loop판(modem.ino)은 이미 있다. 잃는 것 없이 시도할 수 있다</div></div>
+  </div>
+ </div>
+ <div class="foot">‘직원’ 비유: 태스크 = 칩 안에서 동시에 도는 작은 프로그램, 메모 꽂이 = 큐(태스크끼리 메시지를 넣고 꺼내는 통). 1/6</div>
+</div>
+
+<!-- 2쪽 : 시간 그래프 -->
+<div class="page">
+ <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · 사용자 확정, 팀 확인 전 (2/6 무엇이 달라지나)</div>
+ <h1>같은 상황, 두 펌웨어 — 버튼을 누르면 언제 반응하나</h1>
+ <div class="meta">상황: 관제 Pi5(브로커)가 꺼져 ESP32가 서버에 다시 접속을 시도하는 동안, 작업자가 버튼을 두 번 누른다 · 막대 길이는 modem.ino 설정(접속 대기 약 3초, 3초마다 재시도)으로 그린 <b>추정</b></div>
+ <div class="body">
+  <svg viewBox="0 0 1000 400" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+   <defs>
+    <pattern id="tk" width="12" height="40" patternUnits="userSpaceOnUse"><rect width="12" height="40" fill="#e3f1e8"/><line x1="0" y1="0" x2="0" y2="40" stroke="#2f8a5b" stroke-width="2"/></pattern>
+    <marker id="rr" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#a8321f"/></marker>
+   </defs>
+   <!-- 시간축: x = 150 + t*100, t = 0..8초 -->
+   <line x1="150" y1="40" x2="150" y2="345" stroke="#1f2a37" stroke-dasharray="5 4"/>
+   <text x="160" y="332" font-size="14" fill="#1f2a37" font-weight="700">↑ 0초 = 서버가 사라진 걸 알아챈 순간 (재접속 시작)</text>
+
+   <!-- A: 지금 -->
+   <text x="0" y="78" font-size="16" font-weight="700" fill="#a8321f">지금</text>
+   <text x="0" y="98" font-size="13" fill="#5b6675">loop 하나</text>
+   <rect x="150" y="62" width="300" height="40" rx="3" fill="#f4c9c0" stroke="#a8321f"/>
+   <text x="300" y="87" font-size="14" text-anchor="middle" fill="#7d2416" font-weight="700">접속 대기 (아무것도 못 함)</text>
+   <rect x="455" y="62" width="300" height="40" rx="3" fill="#f4c9c0" stroke="#a8321f"/>
+   <text x="605" y="87" font-size="14" text-anchor="middle" fill="#7d2416" font-weight="700">또 접속 대기</text>
+   <rect x="760" y="62" width="190" height="40" rx="3" fill="#f4c9c0" stroke="#a8321f"/>
+   <text x="855" y="87" font-size="14" text-anchor="middle" fill="#7d2416">… 서버가 올 때까지 반복</text>
+   <!-- 버튼 1: t=0.8 → 반응 t=3.0 -->
+   <path d="M230,44 l-8,-14 h16 z" fill="#1f2a37"/><text x="230" y="20" font-size="13" text-anchor="middle" fill="#1f2a37">버튼 ①</text>
+   <path d="M230,118 L448,118" stroke="#a8321f" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#rr)"/>
+   <text x="340" y="138" font-size="14" text-anchor="middle" fill="#a8321f" font-weight="700">약 2.2초 뒤에야 반응</text>
+   <!-- 버튼 2: t=4.6 → 반응 t=6.05 -->
+   <path d="M610,44 l-8,-14 h16 z" fill="#1f2a37"/><text x="610" y="20" font-size="13" text-anchor="middle" fill="#1f2a37">버튼 ②</text>
+   <path d="M610,118 L753,118" stroke="#a8321f" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#rr)"/>
+   <text x="682" y="138" font-size="14" text-anchor="middle" fill="#a8321f" font-weight="700">약 1.5초 뒤</text>
+
+   <!-- B: 제안 -->
+   <text x="0" y="200" font-size="16" font-weight="700" fill="#1d6b45">제안</text>
+   <text x="0" y="220" font-size="13" fill="#5b6675">태스크 2개</text>
+   <text x="140" y="196" font-size="13" text-anchor="end" fill="#3a5f9a">통신</text>
+   <rect x="150" y="176" width="300" height="34" rx="3" fill="#dfe6f2" stroke="#3a5f9a"/>
+   <text x="300" y="198" font-size="13.5" text-anchor="middle" fill="#27416b">접속 대기 (통신만)</text>
+   <rect x="455" y="176" width="300" height="34" rx="3" fill="#dfe6f2" stroke="#3a5f9a"/>
+   <text x="605" y="198" font-size="13.5" text-anchor="middle" fill="#27416b">또 접속 대기 (통신만)</text>
+   <rect x="760" y="176" width="190" height="34" rx="3" fill="#dfe6f2" stroke="#3a5f9a"/>
+   <text x="140" y="246" font-size="13" text-anchor="end" fill="#1d6b45">설비</text>
+   <rect x="150" y="226" width="800" height="40" rx="3" fill="url(#tk)" stroke="#2f8a5b"/>
+   <rect x="380" y="234" width="340" height="24" rx="3" fill="#fff" opacity=".9"/>
+   <text x="550" y="251" font-size="14" text-anchor="middle" fill="#1d6b45" font-weight="700">0.01초마다 계속 돈다 (버튼·리더기·작업)</text>
+   <path d="M230,170 l-8,-14 h16 z" fill="#1f2a37"/>
+   <path d="M610,170 l-8,-14 h16 z" fill="#1f2a37"/>
+   <circle cx="230" cy="290" r="11" fill="#2f8a5b"/><path d="M224,290 l4,4 l8,-8" stroke="#fff" stroke-width="2.5" fill="none"/>
+   <text x="248" y="295" font-size="14" fill="#1d6b45" font-weight="700">바로 반응 (0.01초 안)</text>
+   <circle cx="610" cy="290" r="11" fill="#2f8a5b"/><path d="M604,290 l4,4 l8,-8" stroke="#fff" stroke-width="2.5" fill="none"/>
+   <text x="628" y="295" font-size="14" fill="#1d6b45" font-weight="700">바로 반응</text>
+
+   <!-- 축 -->
+   <line x1="150" y1="345" x2="950" y2="345" stroke="#1f2a37"/>
+   <g font-size="13" fill="#5b6675" text-anchor="middle">
+    <line x1="150" y1="345" x2="150" y2="352" stroke="#1f2a37"/><text x="150" y="368">0초</text>
+    <line x1="250" y1="345" x2="250" y2="352" stroke="#1f2a37"/><text x="250" y="368">1</text>
+    <line x1="350" y1="345" x2="350" y2="352" stroke="#1f2a37"/><text x="350" y="368">2</text>
+    <line x1="450" y1="345" x2="450" y2="352" stroke="#1f2a37"/><text x="450" y="368">3</text>
+    <line x1="550" y1="345" x2="550" y2="352" stroke="#1f2a37"/><text x="550" y="368">4</text>
+    <line x1="650" y1="345" x2="650" y2="352" stroke="#1f2a37"/><text x="650" y="368">5</text>
+    <line x1="750" y1="345" x2="750" y2="352" stroke="#1f2a37"/><text x="750" y="368">6</text>
+    <line x1="850" y1="345" x2="850" y2="352" stroke="#1f2a37"/><text x="850" y="368">7</text>
+    <line x1="950" y1="345" x2="950" y2="352" stroke="#1f2a37"/><text x="950" y="368">8초</text>
+   </g>
+   <text x="550" y="394" font-size="13" text-anchor="middle" fill="#5b6675">서보 신호 자체는 하드웨어(LEDC)가 내므로 두 경우 모두 끊기지 않는다. 늦어지는 것은 ‘읽고 판단하는 일’이다.</text>
+  </svg>
+  <div class="two" style="margin-top:3mm">
+   <div class="note"><b>정말 이만큼 막히는지는 아직 모른다.</b> 11-24에 지금 loop판으로 ① 관제 Pi5를 끈 경우 ② 공유기를 끈 경우 각각 20번 잰다. 공유기를 끄면 Wi-Fi 자체가 끊겨 재접속 함수를 덜 부르므로, <b>가장 크게 막히는 건 ①로 예상</b>한다. 짧게 나오면 그대로 보고하고 이 제안의 이유가 약해진다.</div>
+   <div class="warn"><b>이렇게 말하지 않는다.</b> ‘고장 분리’가 아니다 — 칩이 통째로 리셋되면 둘 다 멈춘다(그건 워치독과 전원 차단 배선이 맡는다). ‘RTOS라서만 된다’도 아니다 — 잘 짠 loop로도 가능하다. RTOS는 그걸 <b>구조로 보장</b>하는 방법이다.</div>
+  </div>
+ </div>
+ <div class="foot">근거: modem.ino — mqtt.connect() 앞에서 lastTry 기록 후 3초마다 재시도, setSocketTimeout(3). 접속 대상 주소에 아무도 없으면 TCP 접속 대기가 생긴다(추정). 2/6</div>
+</div>
+
+<!-- 3쪽 : 구조 + 장면 -->
+<div class="page">
+ <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · 사용자 확정, 팀 확인 전 (3/6 어떻게 생겼나)</div>
+ <h1>구조 한 장, 영상 장면 네 컷</h1>
+ <div class="meta">P1~P4 모두 같은 구조. 공정마다 다른 것은 ‘작업 동작’ 칸(P1 누름판, P2 용접 팔, P3 팬·조명, P4 회전대)뿐</div>
+ <div class="body">
+  <svg viewBox="0 0 1000 250" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+   <defs><marker id="a3" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#1f2a37"/></marker></defs>
+   <!-- 부품 -->
+   <g font-size="14" fill="#1f2a37" text-anchor="middle">
+    <rect x="0" y="20" width="120" height="36" rx="5" fill="#fff" stroke="#8b96a3"/><text x="60" y="43">RFID 리더기</text>
+    <rect x="0" y="66" width="120" height="36" rx="5" fill="#fff" stroke="#8b96a3"/><text x="60" y="89">버튼 2개</text>
+    <rect x="0" y="112" width="120" height="36" rx="5" fill="#fbe9e5" stroke="#a8321f"/><text x="60" y="135">비상정지</text>
+    <rect x="0" y="158" width="120" height="36" rx="5" fill="#fff" stroke="#8b96a3"/><text x="60" y="181">모터</text>
+    <rect x="0" y="204" width="120" height="36" rx="5" fill="#fff" stroke="#8b96a3"/><text x="60" y="227">상태등 · 부저</text>
+   </g>
+   <path d="M122,38 L198,100" stroke="#8b96a3" stroke-width="1.3"/><path d="M122,84 L198,110" stroke="#8b96a3" stroke-width="1.3"/>
+   <path d="M122,130 L198,125" stroke="#a8321f" stroke-width="2"/><text x="160" y="150" font-size="11.5" fill="#a8321f" text-anchor="middle">인터럽트</text>
+   <path d="M198,140 L122,176" stroke="#8b96a3" stroke-width="1.3"/><path d="M198,150 L122,222" stroke="#8b96a3" stroke-width="1.3"/>
+   <!-- ESP32 칩 -->
+   <rect x="200" y="6" width="560" height="238" rx="10" fill="#fafbfc" stroke="#1f2a37" stroke-width="1.6" stroke-dasharray="7 4"/>
+   <text x="480" y="28" font-size="14" text-anchor="middle" fill="#5b6675">ESP32 한 칩 (공정 하나)</text>
+   <rect x="222" y="44" width="220" height="186" rx="8" fill="#e9f4ee" stroke="#2f8a5b" stroke-width="2"/>
+   <text x="332" y="72" font-size="17" font-weight="700" text-anchor="middle" fill="#1f2a37">설비 태스크</text>
+   <text x="332" y="94" font-size="13" text-anchor="middle" fill="#1d6b45">우선순위 높음 · 0.01초 박자</text>
+   <text x="238" y="124" font-size="13.5" fill="#1f2a37">· 버튼, 리더기 읽기</text>
+   <text x="238" y="148" font-size="13.5" fill="#1f2a37">· 작업 순서(상태 기계)</text>
+   <text x="238" y="172" font-size="13.5" fill="#1f2a37">· 모터, 등, 부저</text>
+   <text x="238" y="196" font-size="13.5" fill="#1f2a37">· 신고 번호, 다시 보내기</text>
+   <text x="238" y="220" font-size="13.5" fill="#a8321f">· 비상정지 즉시 잠금</text>
+   <rect x="458" y="78" width="80" height="30" rx="4" fill="#fff" stroke="#1f2a37"/><text x="498" y="98" font-size="13" text-anchor="middle" fill="#1f2a37">신고 큐</text>
+   <rect x="458" y="160" width="80" height="30" rx="4" fill="#fff" stroke="#1f2a37"/><text x="498" y="180" font-size="13" text-anchor="middle" fill="#1f2a37">명령 큐</text>
+   <path d="M444,93 L456,93" stroke="#1f2a37" stroke-width="1.5" marker-end="url(#a3)"/><path d="M540,93 L552,93" stroke="#1f2a37" stroke-width="1.5" marker-end="url(#a3)"/>
+   <path d="M552,175 L540,175" stroke="#1f2a37" stroke-width="1.5" marker-end="url(#a3)"/><path d="M456,175 L444,175" stroke="#1f2a37" stroke-width="1.5" marker-end="url(#a3)"/>
+   <rect x="556" y="44" width="186" height="186" rx="8" fill="#e8eef8" stroke="#3a5f9a" stroke-width="2"/>
+   <text x="649" y="72" font-size="17" font-weight="700" text-anchor="middle" fill="#1f2a37">통신 태스크</text>
+   <text x="649" y="94" font-size="13" text-anchor="middle" fill="#27416b">우선순위 보통</text>
+   <text x="570" y="124" font-size="13.5" fill="#1f2a37">· Wi-Fi 유지</text>
+   <text x="570" y="148" font-size="13.5" fill="#1f2a37">· MQTT 접속·주고받기</text>
+   <text x="570" y="172" font-size="13.5" fill="#1f2a37">· 막혀도 여기서만</text>
+   <text x="570" y="196" font-size="13.5" fill="#5b6675">· 지금 modem.ino</text>
+   <text x="570" y="216" font-size="13.5" fill="#5b6675">  코드를 거의 그대로</text>
+   <!-- 바깥 -->
+   <path d="M762,125 L838,125" stroke="#1f2a37" stroke-width="1.5" marker-end="url(#a3)"/>
+   <text x="800" y="115" font-size="12" text-anchor="middle" fill="#5b6675">Wi-Fi</text>
+   <rect x="840" y="86" width="160" height="80" rx="8" fill="#f6efe6" stroke="#8a5a2f" stroke-width="1.6"/>
+   <text x="920" y="118" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2a37">관제 Pi5</text>
+   <text x="920" y="142" font-size="13" text-anchor="middle" fill="#5b6675">브로커 · 기록</text>
+  </svg>
+  <h2 style="margin-top:3mm">영상 장면 — 관제 Pi5 전원을 뽑았다가 다시 꽂는다</h2>
+  <svg viewBox="0 0 1000 205" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+   <g>
+    <rect x="0" y="0" width="235" height="200" rx="8" fill="#fff" stroke="#cfd6de"/>
+    <text x="14" y="26" font-size="15" font-weight="700" fill="#1f2a37">① 작업 중</text>
+    <rect x="30" y="50" width="95" height="60" rx="5" fill="#f3f5f7" stroke="#8b96a3"/><text x="77" y="86" font-size="14" text-anchor="middle" fill="#1f2a37">P2 공정</text>
+    <circle cx="180" cy="66" r="10" fill="#e6b422"/><text x="180" y="96" font-size="12" text-anchor="middle" fill="#5b6675">노랑 깜빡</text>
+    <text x="14" y="140" font-size="13.5" fill="#1f2a37">용접 팔이 움직이는 중</text>
+    <text x="14" y="162" font-size="13.5" fill="#1f2a37">Pi5와 정상 연결</text>
+   </g>
+   <g transform="translate(255,0)">
+    <rect x="0" y="0" width="235" height="200" rx="8" fill="#fff" stroke="#cfd6de"/>
+    <text x="14" y="26" font-size="15" font-weight="700" fill="#a8321f">② Pi5 전원을 뽑는다</text>
+    <rect x="30" y="50" width="95" height="60" rx="5" fill="#f3f5f7" stroke="#8b96a3"/><text x="77" y="86" font-size="14" text-anchor="middle" fill="#1f2a37">P2 공정</text>
+    <circle cx="180" cy="66" r="10" fill="#a8321f"/><text x="180" y="96" font-size="12" text-anchor="middle" fill="#5b6675">‘끊김’ 표시</text>
+    <text x="14" y="140" font-size="13.5" fill="#1f2a37">하던 동작은 끝까지 한다</text>
+    <text x="14" y="162" font-size="13.5" fill="#1f2a37">새 작업은 시작하지 않는다</text>
+    <text x="14" y="184" font-size="13.5" fill="#1f2a37">‘작업 끝’ 신고는 쥐고 있다</text>
+   </g>
+   <g transform="translate(510,0)">
+    <rect x="0" y="0" width="235" height="200" rx="8" fill="#eff7f2" stroke="#2f8a5b" stroke-width="1.6"/>
+    <text x="14" y="26" font-size="15" font-weight="700" fill="#1d6b45">③ 그래도 버튼이 반응</text>
+    <circle cx="117" cy="72" r="24" fill="#a8321f"/><text x="117" y="77" font-size="12" text-anchor="middle" fill="#fff" font-weight="700">비상정지</text>
+    <text x="14" y="128" font-size="13.5" fill="#1f2a37">버튼·비상정지를 누르면</text>
+    <text x="14" y="150" font-size="13.5" fill="#1f2a37">0.01초 안에 등·부저 반응</text>
+    <text x="14" y="176" font-size="13.5" fill="#1d6b45" font-weight="700">← loop판과 다른 장면</text>
+   </g>
+   <g transform="translate(765,0)">
+    <rect x="0" y="0" width="235" height="200" rx="8" fill="#fff" stroke="#cfd6de"/>
+    <text x="14" y="26" font-size="15" font-weight="700" fill="#1f2a37">④ Pi5를 다시 켠다</text>
+    <rect x="22" y="48" width="190" height="64" rx="5" fill="#f6efe6" stroke="#8a5a2f"/>
+    <text x="117" y="74" font-size="13" text-anchor="middle" fill="#1f2a37">현장 화면</text>
+    <text x="117" y="98" font-size="13" text-anchor="middle" fill="#1f2a37">P2 작업 끝 · 1건</text>
+    <text x="14" y="140" font-size="13.5" fill="#1f2a37">다시 붙으면 쥐고 있던</text>
+    <text x="14" y="162" font-size="13.5" fill="#1f2a37">‘작업 끝’이 같은 번호로 감</text>
+    <text x="14" y="184" font-size="13.5" fill="#1f2a37">→ 기록은 한 번만</text>
+   </g>
+  </svg>
+ </div>
+ <div class="foot">②④의 규칙(하던 동작만 끝냄, 같은 번호로 다시 보냄, 한 번만 기록)은 데이터 흐름 설명서의 시간 순서 C(연결 끊김)·부록 C 그대로. 비상정지의 진짜 차단은 평소 닫힘 접점이 모터 전원을 끊는 배선(합의됨). 3/6</div>
+</div>
+
+<!-- 4쪽 : 할 만한가 -->
+<div class="page">
+ <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · 사용자 확정, 팀 확인 전 (4/6 할 만한가)</div>
+ <h1>할 만한가 — 새로 까는 게 아니라, 태스크를 하나 더 만드는 일</h1>
+ <div class="meta">새로 배울 함수 약 5개 · RTOS 때문에 늘어나는 일 1~3일(추정) · 안 되면 12-01에 loop판으로</div>
+ <div class="body" style="display:grid; grid-template-columns:47fr 53fr; gap:6mm">
+  <div style="display:flex; flex-direction:column; min-height:0">
+   <h2>ESP32는 이미 FreeRTOS 위에서 돈다</h2>
+   <svg viewBox="0 0 560 128" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+    <defs><marker id="a5" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#1f2a37"/></marker></defs>
+    <text x="4" y="16" font-size="14" font-weight="700" fill="#a8321f">지금</text>
+    <rect x="4" y="26" width="128" height="44" rx="5" fill="#fbe9e5" stroke="#a8321f"/>
+    <text x="68" y="45" font-size="13" text-anchor="middle" fill="#1f2a37" font-weight="700">loop() 태스크</text>
+    <text x="68" y="62" font-size="11.5" text-anchor="middle" fill="#5b6675">= 지금 우리 코드</text>
+    <rect x="138" y="26" width="112" height="44" rx="5" fill="#f3f5f7" stroke="#8b96a3"/>
+    <text x="194" y="45" font-size="12.5" text-anchor="middle" fill="#1f2a37">Wi-Fi · 시스템</text>
+    <text x="194" y="62" font-size="11.5" text-anchor="middle" fill="#5b6675">원래 있는 태스크</text>
+    <rect x="4" y="76" width="246" height="26" rx="4" fill="#1f2a37"/>
+    <text x="127" y="94" font-size="13" text-anchor="middle" fill="#fff" font-weight="700">FreeRTOS</text>
+    <path d="M262,62 L298,62" stroke="#1f2a37" stroke-width="2" marker-end="url(#a5)"/>
+    <text x="310" y="16" font-size="14" font-weight="700" fill="#1d6b45">제안</text>
+    <rect x="310" y="26" width="76" height="44" rx="5" fill="#e9f4ee" stroke="#2f8a5b" stroke-width="1.8"/>
+    <text x="348" y="45" font-size="13" text-anchor="middle" fill="#1f2a37" font-weight="700">설비</text>
+    <text x="348" y="62" font-size="11.5" text-anchor="middle" fill="#1d6b45">새로 1개</text>
+    <rect x="392" y="26" width="76" height="44" rx="5" fill="#e8eef8" stroke="#3a5f9a" stroke-width="1.8"/>
+    <text x="430" y="45" font-size="13" text-anchor="middle" fill="#1f2a37" font-weight="700">통신</text>
+    <text x="430" y="62" font-size="11.5" text-anchor="middle" fill="#27416b">새로 1개</text>
+    <rect x="474" y="26" width="82" height="44" rx="5" fill="#f3f5f7" stroke="#8b96a3"/>
+    <text x="515" y="45" font-size="12.5" text-anchor="middle" fill="#1f2a37">Wi-Fi ·</text>
+    <text x="515" y="62" font-size="12.5" text-anchor="middle" fill="#1f2a37">시스템</text>
+    <rect x="310" y="76" width="246" height="26" rx="4" fill="#1f2a37"/>
+    <text x="433" y="94" font-size="13" text-anchor="middle" fill="#fff" font-weight="700">FreeRTOS (그대로)</text>
+    <text x="4" y="122" font-size="12.5" fill="#1f2a37">Arduino의 <tspan font-family="Consolas, monospace">loop()</tspan>도 FreeRTOS 태스크 하나다. 바닥은 그대로, 태스크만 더 만든다.</text>
+   </svg>
+   <h2 style="margin-top:2.5mm">뼈대 코드 — 전체 모양은 이 정도 <span class="sub" style="font-weight:400; font-size:8pt">(약 30줄 · 컴파일 확인 전 · 단순화 예시)</span></h2>
+   <pre style="margin:0; flex:1; min-height:0; background:#f7f8fa; border:1px solid #e1e6ec; border-radius:4px; padding:2mm 2.6mm; font-family:Consolas,'Malgun Gothic',monospace; font-size:7.6pt; line-height:1.52; color:#1f2a37; overflow:hidden; white-space:pre">QueueHandle_t toComm, toCtrl;          <span style="color:#8a5a2f">// 메모 꽂이 두 개</span>
+struct Msg { char line[160]; };
+void ctrlTask(void*) {                  <span style="color:#8a5a2f">// 설비 담당</span>
+  TickType_t t = xTaskGetTickCount();
+  for (;;) {
+    if (digitalRead(BTN) == LOW) {      <span style="color:#8a5a2f">// 버튼을 보고</span>
+      Msg m; snprintf(m.line, sizeof m.line, "$R{\"k\":\"BTN\"}");
+      <b style="color:#1d6b45">xQueueSend</b>(toComm, &amp;m, 0);        <span style="color:#8a5a2f">// 메모를 꽂는다 (기다리지 않음)</span>
+    }
+    Msg in;
+    while (<b style="color:#1d6b45">xQueueReceive</b>(toCtrl, &amp;in, 0)) { <span style="color:#8a5a2f">/* 받은 명령 처리 */</span> }
+    <b style="color:#1d6b45">vTaskDelayUntil</b>(&amp;t, pdMS_TO_TICKS(10));   <span style="color:#8a5a2f">// 0.01초 박자</span>
+  }
+}
+void commTask(void*) {                  <span style="color:#8a5a2f">// 통신 담당</span>
+  for (;;) {
+    serviceWifi(); serviceMqtt();       <span style="color:#8a5a2f">// 지금 modem.ino 그대로 (여기서 막혀도 됨)</span>
+    Msg out;
+    while (<b style="color:#1d6b45">xQueueReceive</b>(toComm, &amp;out, 0)) publishLine(out.line);
+    vTaskDelay(pdMS_TO_TICKS(5));
+  }
+}
+void setup() {
+  toComm = <b style="color:#1d6b45">xQueueCreate</b>(8, sizeof(Msg));
+  toCtrl = <b style="color:#1d6b45">xQueueCreate</b>(8, sizeof(Msg));
+  <b style="color:#1d6b45">xTaskCreatePinnedToCore</b>(ctrlTask, "ctrl", 6144, nullptr, 3, nullptr, 1);
+  <b style="color:#1d6b45">xTaskCreatePinnedToCore</b>(commTask, "comm", 8192, nullptr, 2, nullptr, 0);
+}
+void loop() { vTaskDelete(nullptr); }</pre>
+  </div>
+  <div style="display:flex; flex-direction:column; min-height:0">
+   <h2>새로 배울 함수 — 약 다섯 개</h2>
+   <div style="display:grid; grid-template-columns:repeat(5,1fr); gap:2mm">
+    <div class="card" style="padding:1.6mm 1.8mm"><div style="font-weight:700; font-size:9.4pt">태스크 만들기</div><div class="mono" style="font-size:6.6pt; color:#1d6b45; line-height:1.25">xTaskCreate<br>PinnedToCore</div></div>
+    <div class="card" style="padding:1.6mm 1.8mm"><div style="font-weight:700; font-size:9.4pt">큐 만들기</div><div class="mono" style="font-size:6.6pt; color:#1d6b45; line-height:1.25">xQueueCreate</div></div>
+    <div class="card" style="padding:1.6mm 1.8mm"><div style="font-weight:700; font-size:9.4pt">넣기</div><div class="mono" style="font-size:6.6pt; color:#1d6b45; line-height:1.25">xQueueSend</div></div>
+    <div class="card" style="padding:1.6mm 1.8mm"><div style="font-weight:700; font-size:9.4pt">꺼내기</div><div class="mono" style="font-size:6.6pt; color:#1d6b45; line-height:1.25">xQueueReceive</div></div>
+    <div class="card" style="padding:1.6mm 1.8mm"><div style="font-weight:700; font-size:9.4pt">박자 맞춰 쉬기</div><div class="mono" style="font-size:6.6pt; color:#1d6b45; line-height:1.25">vTaskDelayUntil</div></div>
+   </div>
+   <h2 style="margin-top:2.6mm">늘어나는 일은 얼마나</h2>
+   <svg viewBox="0 0 600 62" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+    <rect x="0" y="4" width="492" height="34" rx="4" fill="#eef1f4" stroke="#8b96a3"/>
+    <text x="246" y="26" font-size="13.5" text-anchor="middle" fill="#1f2a37">상태 기계 · RFID · MQTT — RTOS가 없어도 어차피 짜는 코드</text>
+    <rect x="496" y="4" width="104" height="34" rx="4" fill="#e9f4ee" stroke="#2f8a5b" stroke-width="2"/>
+    <text x="548" y="26" font-size="13.5" text-anchor="middle" fill="#1d6b45" font-weight="700">RTOS 몫</text>
+    <text x="0" y="57" font-size="12.5" fill="#5b6675">일의 대부분은 어느 쪽이든 같다. RTOS 때문에 늘어나는 일은 <tspan fill="#1d6b45" font-weight="700">1~3일(추정)</tspan>. 막대 길이는 대략의 느낌.</text>
+   </svg>
+   <h2 style="margin-top:2.2mm">걸릴 수 있는 곳 — 네 가지</h2>
+   <table style="font-size:8.8pt">
+    <tr><th style="width:24mm">무엇</th><th>어떻게 보이나</th><th>막는 법</th></tr>
+    <tr><td><b>스택 부족</b></td><td>칩이 리셋되고 시리얼에 오류가 찍힌다</td><td>그 태스크의 스택 숫자를 키운다</td></tr>
+    <tr style="background:#fff6e8"><td><b style="color:#a8321f">공유 변수</b><br><span style="font-size:7.6pt; color:#a8321f">가장 중요</span></td><td>가끔 값이 이상해진다. 찾기 어렵다</td><td><b>공유 변수 0개</b> 규칙으로 처음부터 막는다 (주고받는 것은 모두 큐로)</td></tr>
+    <tr><td><b>로그 섞임</b></td><td>시리얼 글자가 뒤섞인다 — 불편할 뿐</td><td>한 줄씩, [C]/[N] 표시를 붙여 찍는다</td></tr>
+    <tr><td><b>워치독 리셋</b></td><td>접속을 기다리는 동안 칩이 재시작된다</td><td>제한 시간을 접속 대기보다 길게 잡는다</td></tr>
+   </table>
+   <h2 style="margin-top:2.6mm">무섭지 않게 하는 순서</h2>
+   <svg viewBox="0 0 600 80" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+    <defs><marker id="a6" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#1f2a37"/></marker></defs>
+    <g font-size="12" fill="#1f2a37">
+     <rect x="0" y="0" width="138" height="78" rx="6" fill="#e9f4ee" stroke="#2f8a5b" stroke-width="1.6"/>
+     <text x="10" y="20" font-size="13" font-weight="700" fill="#1d6b45">1단계 · 첫 1시간</text>
+     <text x="10" y="39">태스크 2개가 LED를</text><text x="10" y="55">다른 속도로 깜빡</text><text x="10" y="71">버튼 → 큐 → 메시지</text>
+     <path d="M140,39 L152,39" stroke="#1f2a37" stroke-width="1.6" marker-end="url(#a6)"/>
+     <rect x="154" y="0" width="138" height="78" rx="6" fill="#fff" stroke="#cfd6de"/>
+     <text x="164" y="20" font-size="13" font-weight="700">2단계</text>
+     <text x="164" y="39">통신 태스크에</text><text x="164" y="55">modem.ino를 옮긴다</text>
+     <path d="M294,39 L306,39" stroke="#1f2a37" stroke-width="1.6" marker-end="url(#a6)"/>
+     <rect x="308" y="0" width="138" height="78" rx="6" fill="#fff" stroke="#cfd6de"/>
+     <text x="318" y="20" font-size="13" font-weight="700">3단계</text>
+     <text x="318" y="39">버튼 · RFID · 서보를</text><text x="318" y="55">하나씩 붙인다</text>
+     <path d="M448,39 L460,39" stroke="#1f2a37" stroke-width="1.6" marker-end="url(#a6)"/>
+     <rect x="462" y="0" width="138" height="78" rx="6" fill="#fff6e8" stroke="#c77a12" stroke-width="1.6"/>
+     <text x="472" y="20" font-size="13" font-weight="700" fill="#c77a12">4단계</text>
+     <text x="472" y="39">Pi5 끄기 시험</text><text x="472" y="55">(3쪽의 장면)</text>
+    </g>
+   </svg>
+   <div class="note" style="margin-top:2.6mm; font-size:9pt"><b>안 되더라도</b> — loop판(modem.ino)이 이미 있고, 12-01에 판정한다. 최악이어도 잃는 것은 며칠이며 공정 1안(12-04)은 지킨다. 프로젝트 전체에서 더 큰 위험은 이쪽이 아니라 <b>AGV 주행·정차</b> 쪽이다.</div>
+  </div>
+ </div>
+ <div class="foot">‘첫 1시간’, ‘1~3일’은 추정. 코드는 뼈대만 보인 예시이며, 실제 펌웨어는 6쪽 부록의 규칙(비상정지 알림, 다시 보내기, 워치독)을 더한다. 4/6</div>
+</div>
+
+<!-- 5쪽 : 일정 · 정할 것 -->
+<div class="page">
+ <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · 사용자 확정, 팀 확인 전 (5/6 언제, 무엇을 정하나)</div>
+ <h1>일정 — 12-01에 한 번 판정한다</h1>
+ <div class="meta">일정 제안(11-24 책상 위 조립, 11-28 P2 한 곳, 12-04 공정 1안)에 맞춘다 · 12-01 판정은 사용자 확정, 팀 확인 전 · 나머지 날짜는 제안</div>
+ <div class="body">
+  <svg viewBox="0 0 1000 250" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+   <defs><marker id="a4" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#1f2a37"/></marker></defs>
+   <line x1="20" y1="90" x2="640" y2="90" stroke="#1f2a37" stroke-width="3"/>
+   <g font-size="14" fill="#1f2a37">
+    <circle cx="60" cy="90" r="11" fill="#1f2a37"/><text x="60" y="62" text-anchor="middle" font-weight="700">11-24</text>
+    <text x="60" y="122" text-anchor="middle">책상 위 조립</text><text x="60" y="142" text-anchor="middle" fill="#a8321f" font-weight="700">막히는 시간 측정</text><text x="60" y="162" text-anchor="middle">태스크 뼈대</text>
+    <circle cx="230" cy="90" r="11" fill="#1f2a37"/><text x="230" y="62" text-anchor="middle" font-weight="700">11-26</text>
+    <text x="230" y="122" text-anchor="middle">작업 순서·다시 보내기</text><text x="230" y="142" text-anchor="middle">Pi5 끄기 10번 시험</text>
+    <circle cx="410" cy="90" r="11" fill="#1f2a37"/><text x="410" y="62" text-anchor="middle" font-weight="700">11-28</text>
+    <text x="410" y="122" text-anchor="middle">P2 한 곳 연동</text><text x="410" y="142" text-anchor="middle">기록·현장 화면까지</text>
+   </g>
+   <path d="M600,90 L640,60 L680,90 L640,120 z" fill="#fff6e8" stroke="#c77a12" stroke-width="2.5"/>
+   <text x="640" y="40" font-size="16" text-anchor="middle" font-weight="700" fill="#c77a12">12-01 판정</text>
+   <text x="640" y="150" font-size="13" text-anchor="middle" fill="#1f2a37">30분 연속 + Pi5 끄기 10번</text>
+   <text x="640" y="170" font-size="13" text-anchor="middle" fill="#1f2a37">+ 비상정지 10번</text>
+   <path d="M682,84 L760,40" stroke="#2f8a5b" stroke-width="2.5" marker-end="url(#a4)"/>
+   <path d="M682,96 L760,170" stroke="#a8321f" stroke-width="2.5" marker-end="url(#a4)"/>
+   <rect x="765" y="12" width="235" height="60" rx="8" fill="#eff7f2" stroke="#2f8a5b" stroke-width="2"/>
+   <text x="882" y="38" font-size="15" text-anchor="middle" font-weight="700" fill="#1d6b45">통과 → 태스크판으로</text>
+   <text x="882" y="60" font-size="13" text-anchor="middle" fill="#1f2a37">12-04까지 P1~P4에 복사</text>
+   <rect x="765" y="142" width="235" height="60" rx="8" fill="#fbf4f2" stroke="#a8321f" stroke-width="2"/>
+   <text x="882" y="168" font-size="15" text-anchor="middle" font-weight="700" fill="#a8321f">못 넘음 → loop판으로</text>
+   <text x="882" y="190" font-size="13" text-anchor="middle" fill="#1f2a37">이미 있는 modem.ino 바탕</text>
+   <text x="20" y="232" font-size="13" fill="#5b6675">11-24 측정에서 막히는 시간이 아주 짧게 나오면, 그 자리에서 ‘태스크판을 할지’를 다시 묻는다.</text>
+  </svg>
+  <div class="two" style="margin-top:2mm">
+   <div>
+    <h2>회의에서 확인하고 정할 것 — 네 가지</h2>
+    <table>
+     <tr><td style="width:7mm">☐</td><td><b>이 구조와 12-01 판정 확인</b> (사용자 확정, 팀 확인 전)</td></tr>
+     <tr><td>☐</td><td><b>담당</b>: 공정 공통 펌웨어 1명 + 공정별 ‘작업 동작’은 각 공정 담당</td></tr>
+     <tr><td>☐</td><td><b>메모(큐)에 담는 모양</b>: 지금 쓰는 줄 형식 그대로(권장) / C 구조체</td></tr>
+     <tr><td>☐</td><td><b>‘끊김’ 상태등 모양</b> (데이터 흐름 설명서의 열린 안건)</td></tr>
+    </table>
+   </div>
+   <div>
+    <h2>발표에서 한 문장</h2>
+    <div class="note" style="font-size:10pt">“공정 ESP32는 FreeRTOS로 통신과 설비 제어를 나눴습니다. 서버 접속이 몇 초 걸려도 설비는 0.01초 박자를 지켜, 관제 서버가 꺼져도 버튼과 비상정지가 그대로 반응합니다.”<br><span class="sub">+ 측정 숫자(“loop판 최대 ○초 → 태스크판 ○ms”) + 전원 뽑기 영상</span></div>
+    <div class="sub" style="margin-top:2mm">명세서에 RTOS라는 말은 없다(필수는 AGV 쪽 Python Threading, F1302). 점수 근거가 아니라 완성도와 학습을 위한 선택이다. ‘동시에 여러 일 하기’라는 같은 주제로 F1302와 한 줄로 이을 수 있다.</div>
+   </div>
+  </div>
+ </div>
+ <div class="foot">판정 기준과 날짜: 사용자 확정, 팀 확인 전. 5/6</div>
+</div>
+
+<!-- 6쪽 : 부록 -->
+<div class="page">
+ <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · 사용자 확정, 팀 확인 전 (6/6 부록 — 만드는 사람용)</div>
+ <h1>부록 — 태스크 표, 규칙, 처음 숫자</h1>
+ <div class="meta">Arduino-ESP32 코어 3.3.x 고정(교본과 같음) · 숫자는 시작값, 실측 후 조정</div>
+ <div class="body r64">
+  <div>
+   <div class="blk">
+    <h2>태스크와 맡는 것</h2>
+    <table>
+     <tr><th style="width:24mm">이름</th><th style="width:18mm">코어·우선</th><th>한 바퀴에 하는 일</th><th style="width:30mm">혼자 만지는 것</th></tr>
+     <tr><td><b>설비</b> ctrl</td><td>1 · 높음(3)</td><td>10ms마다: 비상정지 알림 확인 → 버튼(떨림 거름, 짧게/길게 2초) → 리더기(50ms마다) → 상태 기계 한 칸 → 모터·등·부저 → 명령 큐 처리 → 다시 보낼 신고 확인</td><td>SPI(RC522), 공정 핀, 신고 번호 n, 작업 번호 job</td></tr>
+     <tr><td><b>통신</b> comm</td><td>0 · 보통(2)</td><td>Wi-Fi 유지(15초 재시도), MQTT 접속(3초)·수신·발행, 유언 link=0. 신고 큐 → 토픽 발행, 받은 cmd/state/test → 명령 큐, 2초마다 <span class="mono">$L,up=1/0</span></td><td>WiFi, mqtt 객체</td></tr>
+     <tr><td><b>비상정지</b> ISR</td><td>—</td><td>핀이 바뀌는 순간 설비 태스크에 알림만(<span class="mono">vTaskNotifyGiveFromISR</span>). 출력·로그 금지. 함수에 IRAM_ATTR</td><td>—</td></tr>
+    </table>
+   </div>
+   <div class="blk">
+    <h2>큐 두 개 (권장: 지금 줄 형식 그대로)</h2>
+    <table>
+     <tr><td style="width:24mm"><b>신고 큐</b></td><td>설비 → 통신</td><td class="mono">$T{"n":41,"k":"TAG","uid":"04A1B2C3"} · $R{...} · $H{...}</td><td>8칸 × 160B</td></tr>
+     <tr><td><b>명령 큐</b></td><td>통신 → 설비</td><td class="mono">$C,re=42,ok=1 · $S,st=WORK,job=7,... · $L,up=1 · $X,...</td><td>8칸 × 160B</td></tr>
+    </table>
+    <div class="sub" style="margin-top:1mm">이유: 시험이 끝난 modem.ino의 줄 처리 코드를 통신 태스크로 거의 그대로 옮기고, USB로 줄을 쳐서 시험하던 방법(TEST_MODE 1)과 cs.py를 그대로 쓴다. 칩 안이라 검사값은 생략 가능.</div>
+   </div>
+   <div class="blk">
+    <h2>상태 기계 (공정 공통 뼈대)</h2>
+    <div class="mono" style="font-size:9pt">BOOT → IDLE(대기) → WAIT(태그 읽음, 허가 대기) → WORK(작업, 공정별 동작 표) → DONE(작업 끝 신고, 답 대기) → IDLE<br>어디서든 → FAULT(비상정지·센서 이상·Pi5가 보낸 이상) → 현장 길게 누름 + 원인 없음 → 처음부터<br>‘끊김’은 상태가 아니라 덧씌우는 표시: 하던 동작은 끝내고 새 작업만 막는다</div>
+   </div>
+  </div>
+  <div>
+   <div class="blk">
+    <h2>지킬 규칙 다섯</h2>
+    <ol>
+     <li><b>함께 쓰는 변수 0개.</b> 주고받는 것은 모두 큐로.</li>
+     <li><b>한 장치는 한 태스크만.</b> MQTT·Wi-Fi는 통신, SPI·핀은 설비. (PubSubClient는 여러 태스크가 같이 부르면 안 된다)</li>
+     <li><b>설비는 기다리지 않는다.</b> 큐는 기다림 0으로 꺼내고, delay() 대신 vTaskDelayUntil로 10ms 박자.</li>
+     <li><b>큐가 차면</b> 신고는 버리지 않고 설비의 ‘다시 보낼 목록’에 남긴다. 연결 상태 줄은 오래된 것을 버린다.</li>
+     <li><b>로그는 한 줄씩</b> [C]/[N] 표시. 두 태스크가 Serial에 동시에 쓰면 섞인다.</li>
+    </ol>
+   </div>
+   <div class="blk">
+    <h2>워치독 · 부팅</h2>
+    <ul>
+     <li>두 태스크를 태스크 워치독에 등록. 전체 제한 시간 약 8초로 시작(접속 대기보다 길게, 측정 후 확정). 코어 3.x는 IDF 5 함수 이름(확인 필요).</li>
+     <li>워치독이 터지면 재시작 → 안전 자세(서보 원위치, 등 꺼짐) → <span class="mono">BOOT</span> 신고 → 작업 중이었다면 Pi5가 ‘작업 중 재시작(F04)’으로 적고 현장 버튼으로 푼다.</li>
+    </ul>
+   </div>
+   <div class="blk">
+    <h2>처음 숫자</h2>
+    <table>
+     <tr><td>설비 박자 10ms · 리더기 50ms</td><td>스택 통신 8KB · 설비 6KB (남은 양 보고 줄임)</td></tr>
+     <tr><td>재접속 Wi-Fi 15초 · MQTT 3초</td><td>다시 보내기 1초×5번, 그 뒤 5초마다</td></tr>
+     <tr><td>연결 상태 2초 · 5초 없으면 끊김</td><td>해제 길게 2초 · 해제 뒤 1초 버튼 무시</td></tr>
+    </table>
+   </div>
+   <div class="blk warn" style="font-size:9pt">P4 스텝모터를 소프트웨어 펄스로 돌리면 10ms 박자로는 느리다 → 하드웨어(RMT) 또는 별도 짧은 타이머. Pi5를 다시 켰을 때 공정이 ‘지금 상태’를 다시 받으려면 기록 프로그램이 시작할 때 상태를 다시 보내거나 mosquitto 보관 설정을 켠다.</div>
+  </div>
+ </div>
+ <div class="foot">FreeRTOS 함수: xTaskCreatePinnedToCore, xQueueCreate/Send/Receive, vTaskDelayUntil, vTaskNotifyGiveFromISR/ulTaskNotifyTake, esp_task_wdt_*. 6/6</div>
+</div>
+
+</body></html>
