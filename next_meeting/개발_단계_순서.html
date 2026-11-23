@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><title>개발 단계 순서</title>
+<style>
+@page { size: A4 landscape; margin: 0 }
+* { box-sizing: border-box }
+body { margin:0; font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; color:#1f2a37; -webkit-print-color-adjust:exact; print-color-adjust:exact; background:#fff }
+.page { width:297mm; height:210mm; padding:8mm 11mm 7mm; display:flex; flex-direction:column; page-break-after:always; overflow:hidden; background:#fff }
+.kick { font-size:8.5pt; color:#5b6675; letter-spacing:.04em }
+h1 { font-size:17pt; margin:1mm 0 0 }
+.meta { font-size:8.3pt; color:#5b6675; margin-top:1mm }
+.body { flex:1; min-height:0; margin-top:3mm; font-size:9.4pt; line-height:1.48 }
+h2 { font-size:10pt; margin:0 0 1.2mm; padding-bottom:.7mm; border-bottom:1px solid #cfd6de }
+.blk { margin-bottom:3mm }
+table { border-collapse:collapse; width:100%; table-layout:fixed }
+td,th { padding:.8mm 1.4mm; text-align:left; vertical-align:top; border-bottom:1px solid #e6eaef; overflow-wrap:anywhere }
+th { color:#5b6675; font-weight:600; font-size:8pt }
+ul,ol { margin:0; padding-left:4.2mm } li { margin-bottom:.6mm }
+.two { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:7mm }
+.three { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:5mm }
+.note { background:#f3f5f7; border-left:3px solid #1f2a37; padding:1.8mm 2.6mm }
+.warn { background:#fff6e8; border-left:3px solid #c77a12; padding:1.8mm 2.6mm }
+.sub { color:#5b6675 }
+.foot { font-size:7.4pt; color:#5b6675; margin-top:auto; padding-top:1.5mm }
+.card { border:1px solid #cfd6de; border-radius:4px; padding:2.4mm 3mm }
+.card .k { font-size:8pt; color:#5b6675; letter-spacing:.04em }
+.card .v { font-size:11.5pt; font-weight:700; line-height:1.35; margin-top:.6mm }
+.card .s { font-size:8.8pt; color:#3b4654; margin-top:1mm }
+.n { display:inline-block; min-width:5.2mm; text-align:center; font-weight:700; color:#fff; background:#1f2a37; border-radius:3px; padding:0 1mm; margin-right:1mm; font-size:8.6pt }
+.hw { display:inline-block; font-size:7.4pt; font-weight:700; border-radius:2px; padding:0 1.2mm; white-space:nowrap; color:#9a4a0b; background:#fdebd3 }
+.pc { display:inline-block; font-size:7.4pt; font-weight:700; border-radius:2px; padding:0 1.2mm; white-space:nowrap; color:#1d4f8f; background:#e3eefb }
+svg { display:block; width:100% }
+</style></head><body>
+
+<!-- 1쪽 : 큰 그림 -->
+<div class="page">
+ <div class="kick">팀 회의 자료 · 개발 순서 (1/4 큰 그림)</div>
+ <h1>개발 단계 순서 — 얇게 한 줄을 먼저 잇고, 그 줄을 굵게 만든다</h1>
+ <div class="meta">2026-11-24 · 에이전트 회의(스마트팩토리 시니어 개발자 + 프로젝트 매니저) 결과를 Claude가 합침 · 범위: 현장 장치 → 엣지 서버 Pi5 → Spring/DB → 웹 관제 화면까지 (언리얼 트윈 제외) · 날짜와 통과 숫자는 모두 제안, 팀 확정 전</div>
+ <div class="body">
+  <svg viewBox="0 0 1000 322" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+   <defs><marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#1f2a37"/></marker></defs>
+   <!-- 온라인 위크 띠 -->
+   <rect x="296" y="0" width="188" height="232" rx="6" fill="#f3f7fc" stroke="#c9d9ee" stroke-dasharray="4 3"/>
+   <text x="390" y="16" font-size="12" text-anchor="middle" fill="#1d4f8f" font-weight="700">동시에 진행 (온라인 위크)</text>
+   <!-- 0 -->
+   <rect x="6" y="100" width="112" height="56" rx="6" fill="#e3eefb" stroke="#1d4f8f"/>
+   <text x="62" y="123" font-size="14" text-anchor="middle" font-weight="700">0 규격 한 장</text>
+   <text x="62" y="142" font-size="11.5" text-anchor="middle" fill="#3b4654">토픽·메시지 고정</text>
+   <!-- 2 -->
+   <rect x="150" y="100" width="116" height="56" rx="6" fill="#e3eefb" stroke="#1d4f8f" stroke-width="2.5"/>
+   <text x="208" y="123" font-size="14" text-anchor="middle" font-weight="700">2 한 줄 관통</text>
+   <text x="208" y="142" font-size="11.5" text-anchor="middle" fill="#3b4654">흉내 → 웹 한 칸</text>
+   <path d="M118,128 L148,128" stroke="#1f2a37" stroke-width="1.6" marker-end="url(#ar)"/>
+   <!-- 갈래 -->
+   <g font-size="13.5" font-weight="700">
+    <rect x="308" y="26" width="164" height="40" rx="6" fill="#e3eefb" stroke="#1d4f8f"/><text x="390" y="51" text-anchor="middle">3 엣지 기록 프로그램</text>
+    <rect x="308" y="76" width="164" height="40" rx="6" fill="#e3eefb" stroke="#1d4f8f"/><text x="390" y="101" text-anchor="middle">4 Spring · 웹 관제</text>
+    <rect x="308" y="126" width="164" height="40" rx="6" fill="#e3eefb" stroke="#1d4f8f"/><text x="390" y="151" text-anchor="middle">5 Qt HMI</text>
+    <rect x="308" y="176" width="164" height="40" rx="6" fill="#fdebd3" stroke="#c77a12"/><text x="390" y="201" text-anchor="middle">6 공정 펌웨어 책상판</text>
+   </g>
+   <path d="M266,128 L286,128 L286,46 L306,46" fill="none" stroke="#1f2a37" stroke-width="1.6" marker-end="url(#ar)"/>
+   <path d="M286,96 L306,96" stroke="#1f2a37" stroke-width="1.6" marker-end="url(#ar)"/>
+   <path d="M286,128 L286,146 L306,146" fill="none" stroke="#1f2a37" stroke-width="1.6" marker-end="url(#ar)"/>
+   <path d="M286,146 L286,196 L306,196" fill="none" stroke="#1f2a37" stroke-width="1.6" marker-end="url(#ar)"/>
+   <!-- 7 -->
+   <rect x="524" y="94" width="126" height="68" rx="6" fill="#fdebd3" stroke="#c77a12" stroke-width="2.5"/>
+   <text x="587" y="118" font-size="14" text-anchor="middle" font-weight="700">7 실물 P2 한 곳</text>
+   <text x="587" y="136" font-size="11.5" text-anchor="middle" fill="#3b4654">태그 읽음 → AGV 정지</text>
+   <text x="587" y="152" font-size="11.5" text-anchor="middle" fill="#3b4654">→ 작업 → 기록 → 출발</text>
+   <path d="M472,46 L498,46 L498,128" fill="none" stroke="#1f2a37" stroke-width="1.6"/>
+   <path d="M472,96 L498,96 M472,146 L498,146" stroke="#1f2a37" stroke-width="1.6"/>
+   <path d="M472,196 L498,196 L498,128 L522,128" fill="none" stroke="#1f2a37" stroke-width="1.6" marker-end="url(#ar)"/>
+   <!-- 8 9 10 -->
+   <rect x="676" y="100" width="104" height="56" rx="6" fill="#fdebd3" stroke="#c77a12"/>
+   <text x="728" y="123" font-size="14" text-anchor="middle" font-weight="700">8 한 바퀴</text>
+   <text x="728" y="142" font-size="11.5" text-anchor="middle" fill="#3b4654">P1~P4 + 검사</text>
+   <rect x="800" y="100" width="92" height="56" rx="6" fill="#fdebd3" stroke="#c77a12"/>
+   <text x="846" y="123" font-size="14" text-anchor="middle" font-weight="700">9 이상 장면</text>
+   <text x="846" y="142" font-size="11.5" text-anchor="middle" fill="#3b4654">비상정지 먼저</text>
+   <rect x="910" y="100" width="86" height="56" rx="6" fill="#fdebd3" stroke="#c77a12"/>
+   <text x="953" y="123" font-size="14" text-anchor="middle" font-weight="700">10 촬영</text>
+   <text x="953" y="142" font-size="11.5" text-anchor="middle" fill="#3b4654">· 제출</text>
+   <path d="M650,128 L674,128 M780,128 L798,128 M892,128 L908,128" stroke="#1f2a37" stroke-width="1.6" marker-end="url(#ar)"/>
+   <!-- 1 AGV 갈래 -->
+   <rect x="6" y="248" width="260" height="46" rx="6" fill="#fdebd3" stroke="#c77a12" stroke-width="2.5"/>
+   <text x="136" y="268" font-size="14" text-anchor="middle" font-weight="700">1 AGV 기본기와 실측</text>
+   <text x="136" y="285" font-size="11.5" text-anchor="middle" fill="#3b4654">교육장 사흘 (11-25~27) · 논리 순서보다 먼저</text>
+   <rect x="296" y="248" width="188" height="46" rx="6" fill="#e3eefb" stroke="#1d4f8f"/>
+   <text x="390" y="268" font-size="13" text-anchor="middle" font-weight="700">AGV 코드를 영상·흉내로</text>
+   <text x="390" y="285" font-size="11.5" text-anchor="middle" fill="#3b4654">색 인식 조정, 정지·감시 스레드</text>
+   <path d="M266,271 L294,271" stroke="#1f2a37" stroke-width="1.6" marker-end="url(#ar)"/>
+   <path d="M484,271 L587,271 L587,164" fill="none" stroke="#1f2a37" stroke-width="1.6" marker-end="url(#ar)"/>
+   <!-- 날짜 -->
+   <g font-size="11.5" fill="#5b6675" text-anchor="middle">
+    <text x="62" y="174">~11-27</text><text x="208" y="174">~12-01</text><text x="390" y="230" fill="#1d4f8f">11-30 ~ 12-04</text>
+    <text x="587" y="88">12-07~09</text><text x="728" y="174">12-09~11</text><text x="846" y="174">12-14~15</text><text x="953" y="174">12-18 · 12-24</text>
+   </g>
+   <!-- 범례 -->
+   <rect x="676" y="252" width="16" height="12" rx="2" fill="#e3eefb" stroke="#1d4f8f"/><text x="698" y="263" font-size="12">노트북만으로 된다</text>
+   <rect x="676" y="274" width="16" height="12" rx="2" fill="#fdebd3" stroke="#c77a12"/><text x="698" y="285" font-size="12">실물(보드 · AGV · 맵)이 있어야 한다</text>
+   <text x="676" y="307" font-size="12" fill="#5b6675">굵은 테두리 = 이 계획의 고비 세 곳 (1 · 2 · 7)</text>
+  </svg>
+
+  <div class="three" style="margin-top:3mm">
+   <div class="card"><div class="k">원칙 ①</div><div class="v">규격을 먼저 못 박는다</div><div class="s">토픽과 메시지 이름이 정해지면 펌웨어·서버·화면 담당이 실물 없이 따로 일해도 나중에 맞는다. 맞출 사람은 한 명.</div></div>
+   <div class="card"><div class="k">원칙 ②</div><div class="v">세로로 얇게 한 줄부터</div><div class="s">흉내 프로그램 → 브로커 → 기록 → Spring → 웹 한 칸. 합칠 때 생기는 사고가 첫 주에 터지고, 마감 주에는 터지지 않는다.</div></div>
+   <div class="card"><div class="k">원칙 ③</div><div class="v">실물은 '바꿔 끼우기'만</div><div class="s">흉내로 전 구간을 끝내 두고, 교육장에서는 흉내 P2를 진짜 ESP32로, 흉내 AGV를 진짜 AGV로 바꾼다.</div></div>
+  </div>
+
+  <div class="warn" style="margin-top:3mm"><b>초보 팀이 흔히 가는 잘못된 순서:</b> 공정 모형을 다 만든 뒤 통신을 붙인다(규격이 바뀌어 4대를 다시 짠다) · 각자 완성한 뒤 마지막 주에 합친다(이름·번호가 안 맞는다) · 화면 디자인부터 한다(가짜 값에 맞춘 화면이 된다) · 이상 처리를 정상 흐름보다 먼저 만든다 · 명세 필수(Jupyter, 색 인식, Qt)를 "쉬우니 나중에"로 미룬다.</div>
+ </div>
+ <div class="foot">근거: HANDOFF.md, 데이터흐름 설명서, RTOS 도입 제안서, 회의 안건지. 이 문서의 '엣지 서버 Pi5'는 다른 문서의 '관제 Pi5'(Pi5 #1)와 같은 장치다.</div>
+</div>
+
+<!-- 2쪽 : 단계 표 -->
+<div class="page">
+ <div class="kick">팀 회의 자료 · 개발 순서 (2/4 단계별 내용)</div>
+ <h1>단계 0~10 — 무엇을 만들고, 언제 끝났다고 하나</h1>
+ <div class="meta">'끝 기준'은 눈으로 확인할 수 있는 것만 적었다 · <span class="pc">노트북</span> 하드웨어 없이 가능 · <span class="hw">실물</span> 보드·AGV·맵 필요 · 숫자(20번, 30초 등)는 제안</div>
+ <div class="body" style="font-size:8.7pt;line-height:1.42">
+  <table>
+   <tr><th style="width:40mm">단계</th><th style="width:15mm">장소</th><th style="width:82mm">만드는 것</th><th style="width:76mm">끝 기준</th><th>흔한 함정</th></tr>
+   <tr><td><span class="n">0</span><b>규격 한 장</b><br><span class="sub">~11-27</span></td><td><span class="pc">노트북</span></td><td>토픽·메시지·사건 종류·기록장 표·업로드 모양을 한 장으로(설명서 부록을 확정본으로). 맞출 담당 1명, 전용 2.4GHz 공유기</td><td>팀원 누구나 자기 노트북에서 같은 토픽의 메시지를 본다</td><td>각자 이름을 짓고 나중에 맞추기. 교내 Wi-Fi가 기기끼리 통신을 막음</td></tr>
+   <tr><td><span class="n">1</span><b>AGV 기본기와 실측</b><br><span class="sub">11-25~27</span></td><td><span class="hw">실물</span></td><td>Jupyter 수동 제어, 반시계 Road Following, 색 칸 영상·사진 수집, 맵·AGV·팔 실측, ESP32 + 리더기 하나로 'AGV 한 번 세우기', 키트 검수와 주문</td><td>사람 손 없이 한 바퀴 도는 영상, 실측표, 색 칸 6곳 사진, 태그를 대면 바퀴가 선다</td><td>사흘을 서버 코딩에 쓰는 것. 조명별 색 사진을 안 찍어 오는 것</td></tr>
+   <tr><td><span class="n">2</span><b>한 줄 관통 (흉내)</b><br><span class="sub">~12-01</span></td><td><span class="pc">노트북</span></td><td>흉내 프로그램(Python 하나)이 P2의 '태그 읽음'·'작업 끝'을 보냄 → 브로커 → 기록 프로그램이 SQLite에 적고 답함 → Spring에 올림 → 웹에 "P2 완료" 한 칸</td><td>키 한 번에 웹이 바뀐다. Spring을 2분 껐다 켜도 양쪽 줄 수가 같다</td><td>적기 전에 답하기. 흉내 기록이 진짜 기록장에 섞이는 것</td></tr>
+   <tr><td><span class="n">3</span><b>엣지 기록 프로그램</b><br><span class="sub">11-30~12-04</span></td><td><span class="pc">노트북</span></td><td>공정 순서 확인, 작업 허가·출발 허가, 같은 신고 거르기, 지금 상태 계산, 못 올린 줄 다시 올리기. 흉내로 여섯 칸 한 바퀴. 이상 판단(순서 위반·시간 초과)도 흉내로 미리</td><td>흉내 한 바퀴가 HMI와 웹에 같은 줄 수로 남는다. 같은 신고를 두 번 보내도 한 줄만 적힌다</td><td>Spring이나 HMI가 상태를 따로 계산하는 것. 기록장에 쓰는 곳이 둘이 되는 것</td></tr>
+   <tr><td><span class="n">4</span><b>Spring · DB · 웹 관제</b><br><span class="sub">11-30~12-04</span></td><td><span class="pc">노트북</span></td><td>받은 줄 저장(같은 줄은 한 번만), 지금 상태 조회, 웹 화면(공정 여섯 칸·차체·이상 띠). 처음엔 1초마다 다시 읽기로 시작해도 된다</td><td>웹에서 흉내 한 바퀴가 보인다. Spring을 껐다 켜면 30초 안에 밀린 줄이 0</td><td>웹이 브로커에 직접 붙는 것. PJT09 웹·배포 요구를 확인 안 한 채 두는 것</td></tr>
+   <tr><td><span class="n">5</span><b>Qt HMI</b><br><span class="sub">11-30~12-04</span></td><td><span class="pc">노트북</span> → Pi5</td><td>기록장을 읽기만 하는 현장 화면, 투입·복귀 버튼, 수동/자동 전환과 수동 조작(commandData), AGV 값 표시(sensingData). Pi5 7인치 화면으로 옮기기</td><td>Pi5 화면의 버튼으로 (흉내) AGV가 움직이고 값이 바뀐다</td><td>HMI가 기록장에 직접 쓰는 것. Pi5에서 PySide 설치 방법</td></tr>
+   <tr><td><span class="n">6</span><b>공정 펌웨어 책상판</b><br><span class="sub">11-30~12-02<br>(반출 불가면 12-07~08)</span></td><td><span class="hw">실물</span><br><span class="sub">보드만</span></td><td>ESP32 + 리더기 + 버튼 + LED + 서보. loop판 연결 막힘 측정, 두 태스크 펌웨어, 다시 보내기. 흉내 P2를 이 보드로 바꿔 끼운다</td><td>키태그를 대면 서보가 움직이고 웹에 'P2 완료'. RTOS 판정: 30분 연속 + Pi5 끄기 10번 + 비상정지 10번</td><td>리더기에 5V 연결. 두 태스크가 변수를 같이 쓰는 것</td></tr>
+   <tr><td><span class="n">7</span><b>실물 P2 한 곳 + AGV</b><br><span class="sub">12-07~09</span></td><td><span class="hw">실물</span></td><td>AGV가 목적지 공정의 '태그 읽음'에 정지 → '멈춤 완료' → 작업 → '출발 허가'. 자동·수동 전환(Threading), 2초 끊김 자체 정지</td><td>P2 앞에서 20번 중 18번 이상 끝까지 간다</td><td>JETANK는 Python 3.6이라 paho 1.6 계열. 카메라는 한 프로그램만 쓴다</td></tr>
+   <tr><td><span class="n">8</span><b>P1~P4 + 검사, 한 바퀴</b><br><span class="sub">12-09~11</span></td><td><span class="hw">실물</span></td><td>같은 펌웨어에 공정별 동작만 바꿔 4대로. 공정별 핀표. 검사 Pi5의 카메라 합격·불합격. 노랑 → 검사 연결. 명세 필수 기능 점검</td><td>노랑 → 검사 연속 3번. 웹과 HMI의 줄 수가 같다. 필수 기능마다 영상 장면이 있다</td><td>핀 부족. 모터를 보드 5V 핀에서 돌리는 것. 통합을 촬영 주에 처음 하는 것</td></tr>
+   <tr><td><span class="n">9</span><b>이상 장면 + 기능 동결</b><br><span class="sub">12-14~15</span></td><td><span class="hw">실물</span></td><td>비상정지 → 순서 위반 → 끊김과 복구 순으로. 이 뒤로는 기능을 더하지 않는다</td><td>장면마다 2번 연속 재현. 화면 버튼으로는 안 풀리고 현장 버튼으로 풀리는 것이 찍힌다</td><td>서버가 이상을 내려보내는 구조로 바꾸는 것</td></tr>
+   <tr><td><span class="n">10</span><b>마무리 · 촬영 · 제출</b><br><span class="sub">12-16~24</span></td><td><span class="hw">실물</span> → <span class="pc">노트북</span></td><td>스마트태그 이력 사본, Pi5 자동 시작, 촬영 연습과 촬영(12-18까지), 편집·PPT</td><td>12-18에 원본 영상이 다 있다. 12-23에 제출물 완성</td><td>태그 역할(A/B/C)을 안 정한 채 먼저 손대는 것</td></tr>
+  </table>
+ </div>
+ <div class="foot">단계 3·4·5·6은 서로 기다리지 않는다(2가 끝나면 동시에). 단계 1은 0·2와 동시에 간다. 명세 필수: Jupyter 수동 제어, Threading 전환, Road Following, 색 구역 인식과 목적지 이동, Pi5 브로커 + Qt + sensingData/commandData.</div>
+</div>
+
+<!-- 3쪽 : 달력 -->
+<div class="page">
+ <div class="kick">팀 회의 자료 · 개발 순서 (3/4 달력)</div>
+ <h1>주 단위 달력 — 자리마다 그 주에 하는 일</h1>
+ <div class="meta">팀 인원과 담당은 아직 정해지지 않아 '자리' 기준으로 적었다(한 사람이 여러 자리 가능) · 12-07부터 다시 교육장에 간다는 것은 추정</div>
+ <div class="body" style="font-size:8.8pt;line-height:1.42">
+  <table>
+   <tr><th style="width:27mm">자리</th><th style="width:60mm">11-25 주 · 교육장 3일<br>단계 0 · 1</th><th style="width:62mm">11-30 주 · 온라인 위크<br>단계 2~6</th><th style="width:62mm">12-07 주 · 교육장(추정)<br>단계 7 · 8</th><th>12-14 주<br>단계 9 · 10</th></tr>
+   <tr><td><b>AGV</b></td><td>부팅·수동 주행, 반시계 Road Following, 실측, 색 칸 영상, Python·paho 버전 기록, 태그로 한 번 세우기</td><td>영상으로 색 인식 조정, 정지·감시 스레드와 목적지 이동 코드를 흉내로 시험</td><td>정차 조정, P2 20번, 한 바퀴, Jupyter 화면</td><td>촬영 주행</td></tr>
+   <tr><td><b>공정 ESP32 펌웨어</b></td><td>보드 검수, 첫 업로드, 리더기 판독 거리, 연결 막힘 측정</td><td>두 태스크 책상판, RTOS 판정, 공정별 핀표<br><span class="sub">반출 불가면 컴파일과 가짜 부품 시험까지</span></td><td>P2 → 4대로 복사, 공정마다 20번</td><td>이상 장면, 동결</td></tr>
+   <tr><td><b>엣지 서버 Pi5</b><br><span class="sub">기록 · HMI</span></td><td>실물 Pi5에서 브로커와 HMI 시안 실행, 공유기 확인</td><td>기록 프로그램, SQLite, HMI 연결, Spring으로 올리기</td><td>실물 연결, 수동 조작, 자동 시작</td><td>밀린 기록 장면</td></tr>
+   <tr><td><b>Spring · 웹</b></td><td>DB 종류와 실행 위치 결정, 강사 질문(웹·배포 범위)</td><td>수신 API, 관제 화면</td><td>실물 기록 표시, 배포</td><td>화면 다듬기, 녹화</td></tr>
+   <tr><td><b>검사</b></td><td>카메라와 리더기 확인</td><td>합격·불합격 판정을 책상에서</td><td>맵에 설치</td><td>보류 장면</td></tr>
+   <tr><td><b>스마트태그 · 기구</b></td><td>팟 2차 출력 확인, 차체 고정 방법, 치수</td><td>공정 틀과 이름판, 태그 코드</td><td>설치</td><td>촬영 소품</td></tr>
+  </table>
+
+  <div class="two" style="margin-top:4mm">
+   <div>
+    <h2>온라인 위크는 두 경우로 준비한다</h2>
+    <table>
+     <tr><th style="width:26mm"></th><th>키트를 집에 가져갈 수 있다</th><th>가져갈 수 없다</th></tr>
+     <tr><td><b>하는 일</b></td><td>단계 2~5 + 6(책상판, 12-02 RTOS 판정)</td><td>단계 2~5만. 전부 노트북에서</td></tr>
+     <tr><td><b>12-07 주</b></td><td>실물 바꿔 끼우기부터 시작</td><td>책상판과 RTOS 판정(12-08)부터. 여유 0일</td></tr>
+     <tr><td><b>미리 버릴 것</b></td><td>없음</td><td>공정 2안, 스마트태그 입력 추가(B)</td></tr>
+    </table>
+    <div class="note" style="margin-top:2mm"><b>11-25에 가장 먼저 물어볼 것:</b> 키트(ESP32·리더기·Pi5)를 집에 가져갈 수 있나. 답에 따라 위 표의 어느 쪽인지 정해진다.</div>
+   </div>
+   <div>
+    <h2>지금 일정과 달력이 부딪히는 곳 → 조정 제안</h2>
+    <table>
+     <tr><th style="width:38mm">지금 일정 (HANDOFF 12절)</th><th style="width:44mm">부딪히는 이유</th><th>조정</th></tr>
+     <tr><td>11-28 P2 한 곳 연동</td><td>토요일. 교육장은 11-27까지</td><td>12-07~09</td></tr>
+     <tr><td>12-01 RTOS 판정</td><td>온라인 위크. 보드가 없으면 판정 불가</td><td>반출 가능 12-02 / 불가 12-08</td></tr>
+     <tr><td>12-04 공정 1안 완성</td><td>AGV와 맵이 없는 주</td><td>12-10</td></tr>
+     <tr><td>12-11 기능 추가 끝</td><td>앞이 밀려서</td><td>12-15</td></tr>
+     <tr><td>12-18 촬영 마감 · 12-24 제출</td><td>–</td><td>그대로</td></tr>
+    </table>
+    <div class="sub" style="margin-top:1.5mm">판정 기준과 '못 넘으면 loop판으로 돌아간다'는 규칙은 그대로 둔다.</div>
+   </div>
+  </div>
+ </div>
+ <div class="foot">12-07 주가 가장 빡빡하다. 온라인 위크에 흉내로 전 구간을 끝내 두어야 실물은 바꿔 끼우기만 남는다.</div>
+</div>
+
+<!-- 4쪽 : 고비, 줄이기, 이번 주 -->
+<div class="page">
+ <div class="kick">팀 회의 자료 · 개발 순서 (4/4 고비 · 줄이는 순서 · 이번 주)</div>
+ <h1>늦으면 전체가 밀리는 일, 밀릴 때 버리는 순서, 이번 주 사흘</h1>
+ <div class="meta">두 에이전트의 판단이 같았던 것을 중심으로 적고, 달랐던 곳은 아래에 따로 표시했다</div>
+ <div class="body">
+  <div class="two">
+   <div>
+    <div class="blk">
+     <h2>늦으면 전체가 밀리는 일 다섯 가지</h2>
+     <table>
+      <tr><th style="width:44mm">일</th><th>지키는 방법</th></tr>
+      <tr><td><b>AGV 반시계 주행과 색 칸 인식</b></td><td>11-25 오전에 가장 먼저 해 본다. 안 되면 사흘 안에 다시 학습할 사진을 모은다</td></tr>
+      <tr><td><b>태그 읽음 → AGV 정지</b></td><td>프로젝트에서 가장 큰 위험. 이번 주에 ESP32 하나로 한 번이라도 세워 보고 판독 거리를 잰다</td></tr>
+      <tr><td><b>리더기 · ESP32 구매</b></td><td>리더기는 5개 필요, 보유 2개. 11-25에 주문해야 12-07에 다섯 곳을 깐다. 그사이 2개로 P2와 검사부터</td></tr>
+      <tr><td><b>토픽 · 메시지 이름 합의</b></td><td>11-27까지 설명서 부록을 그대로 동결하고 맞출 사람 1명을 정한다. 온라인 위크의 동시 작업이 여기에 달려 있다</td></tr>
+      <tr><td><b>전용 공유기 (2.4GHz)</b></td><td>이번 주에 실물로 붙여 본다</td></tr>
+     </table>
+    </div>
+    <div class="blk">
+     <h2>이번 주 사흘(11-25~27)에 반드시 끝낼 것</h2>
+     <ol>
+      <li>AGV 수동 주행과 반시계 한 바퀴, 색 칸 영상·사진</li>
+      <li>실측: 맵 칸·선 폭, AGV + 차체, 팔 도달 거리·집게 폭·드는 무게 → 팔 버전 판단</li>
+      <li>ESP32 + 리더기 하나로 판독 거리 재기, AGV 한 번 세우기</li>
+      <li>키트 2세트 검수, 구매 주문, 반출·공유기 확인</li>
+      <li>팀 회의: 담당, 규격 동결, 조정한 일정, 강사 질문(웹·배포 범위, PySide 기준)</li>
+     </ol>
+    </div>
+   </div>
+   <div>
+    <div class="blk">
+     <h2>밀릴 때 버리는 순서 (위에서부터)</h2>
+     <ol>
+      <li>남는 보드(STM32·Renesas) 활용, 무선 업로드(OTA), 공정 2안</li>
+      <li>로봇팔 → 팔 없는 배치로</li>
+      <li>스마트태그 입력 추가(B)와 배터리 → 이력 사본까지만</li>
+      <li>정정 기능, 시험 입력, 서버에서 생산 지시 가져오기</li>
+      <li>웹 실시간 밀어 주기 → 1초마다 다시 읽기. 서보 실측값 → 더미 유지</li>
+      <li>RTOS → loop판 (판정 규칙 그대로)</li>
+      <li>이상 장면 3개 → 비상정지 1개</li>
+      <li>공정 동작을 가장 단순하게 <span class="sub">('공정마다 하나는 움직인다'는 확정 원칙이라 더 줄이려면 사용자 결정 필요)</span></li>
+     </ol>
+    </div>
+    <div class="blk">
+     <h2>끝까지 지키는 것</h2>
+     <ul>
+      <li>명세 필수 기능 전부</li>
+      <li>"현장이 먼저 적고 → Spring → 웹"의 한 줄</li>
+      <li>노랑 → 검사 한 바퀴 영상</li>
+      <li>공정마다 움직임 하나, 비상정지를 현장 버튼으로 해제</li>
+     </ul>
+    </div>
+    <div class="blk">
+     <h2>두 에이전트가 달랐던 곳 → 이 문서의 선택</h2>
+     <table>
+      <tr><th style="width:30mm">항목</th><th style="width:40mm">시니어 개발자</th><th style="width:36mm">프로젝트 매니저</th><th>선택</th></tr>
+      <tr><td>한 줄 관통 시작</td><td>이번 주부터 AGV와 동시에</td><td>온라인 위크에</td><td>이번 주 저녁에 시작, 12-01까지</td></tr>
+      <tr><td>RTOS를 버리는 시점</td><td>이상 장면보다 먼저</td><td>맨 마지막</td><td>12-01 판정 규칙에 맡긴다</td></tr>
+     </table>
+    </div>
+   </div>
+  </div>
+  <div class="warn"><b>아직 확인되지 않은 것:</b> 키트 반출 가능 여부 · 12-07 이후 교육장 일정 · PJT09 웹 요구(Vue·Firebase·Chart.js·Docker·EC2)를 최종에서 어디까지 유지하나 · Spring의 DB 종류와 실행 위치 · PySide2/6 기준 · 팀 담당. 실물 제작과 측정은 아직 하나도 하지 않았다.</div>
+ </div>
+ <div class="foot">에이전트 회의(2026-11-24): 스마트팩토리 시니어 개발자, 프로젝트 매니저가 각자 HANDOFF.md와 next_meeting 자료를 읽고 따로 낸 안을 합쳤다. 날짜·숫자는 제안이며 팀 회의에서 확정한다.</div>
+</div>
+</body></html>
