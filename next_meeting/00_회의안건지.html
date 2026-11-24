@@ -40,8 +40,7 @@ td.d { width:62mm }
  <h2>가져온 자료 <small>이 폴더(next_meeting)에 있음 · 각 PDF의 HTML 원본도 함께</small></h2>
  <table class="docs">
   <tr><td style="width:56mm"><b>데이터흐름_설명서.pdf</b></td><td>데이터 흐름과 이상(오류) 시나리오. 8쪽에 정할 것 목록</td></tr>
-  <tr><td><b>제공맵_공정배치도_팔없음.pdf</b></td><td>교육에서 받은 맵 위의 공정 배치. 반시계, 색 칸에서 차체를 실은 채 작업</td></tr>
-  <tr><td><b>제공맵_공정배치도_팔있음.pdf</b></td><td>로봇팔로 공정마다 차체를 내려놓고 다시 집는 배치</td></tr>
+  <tr><td><b>제공맵_공정배치도.pdf</b></td><td>교육에서 받은 맵 위의 공정 배치. 반시계, 색 칸에서 차체를 실은 채 작업</td></tr>
   <tr><td><b>RTOS_도입_제안서.pdf</b></td><td>공정 ESP32 펌웨어를 FreeRTOS 두 태스크로 나누는 제안. 12-01 판정</td></tr>
   <tr><td><b>esp32_book/ESP32_교본.html</b></td><td>브라우저로 열기. 3D 보드, 핀 지도, 실습 8개. 코드는 esp32_book/code. 온라인판은 공유 설정이 필요</td></tr>
  </table>
@@ -51,12 +50,11 @@ td.d { width:62mm }
   <tr><td class="n">0</td><td class="q"><span class="urgent">GitHub 저장소를 비공개로 바꾼다.</span> 지금 공개 상태이고 SSAFY 교안·키트 자료가 올라가 있다</td><td class="d"><span class="opt">했음</span><span class="opt">회의 중에</span><span class="line"></span></td></tr>
  </table>
 
- <h2>1. 맵과 AGV <small class="ref">팔 없는 배치 · 팔 있는 배치</small></h2>
+ <h2>1. 맵과 AGV <small class="ref">제공맵 공정배치도</small></h2>
  <table>
   <tr><th></th><th>정할 것</th><th>결정</th></tr>
   <tr><td class="n">1-1</td><td class="q"><b>교육에서 받은 맵을 쓴다</b> <span class="sub">(사용자 확정 · 팀 확인)</span>. 반시계 한 바퀴: 노랑 출발 → P1 주황 → P2 초록 → P3 보라 → P4 파랑 → 검사 빨강</td><td class="d"><span class="opt">확인</span><span class="opt">다시 논의</span><span class="line"></span></td></tr>
-  <tr><td class="n">1-2</td><td class="q"><b>로봇팔을 쓸지 정하는 기준.</b> 제안: 한 공정에서 놓기·집기 10번 중 9번 이상 성공하면 팔 있는 배치 1단계(검사에서 놓기만)로 간다</td><td class="d">기준 <span class="fill"></span><br>시험 날짜 <span class="fill"></span></td></tr>
-  <tr><td class="n">1-3</td><td class="q"><b>교육장에서 잴 것과 담당.</b> 팔이 닿는 거리·드는 무게·마디 길이, 차체를 실을 자리, 색 구역 위치, 팔을 숙일 때 카메라를 가리는지, 주행 모델이 반시계로 학습됐는지 <span class="sub">(맵·AGV 크기와 집게 벌림은 실측함)</span></td><td class="d">담당 <span class="fill"></span><br>날짜 <span class="fill"></span></td></tr>
+  <tr><td class="n">1-2</td><td class="q"><b>교육장에서 잴 것과 담당.</b> 팔을 떼어 낸 윗면의 넓이와 차체를 실을 자리, 색 구역 위치, 주행 모델이 반시계로 학습됐는지 <span class="sub">(맵·AGV 크기는 실측함. 로봇팔은 쓰지 않는다)</span></td><td class="d">담당 <span class="fill"></span><br>날짜 <span class="fill"></span></td></tr>
  </table>
 
  <h2>2. 공정 ESP32 · RTOS · 남는 보드 <small class="ref">RTOS 도입 제안서</small></h2>
@@ -104,7 +102,7 @@ td.d { width:62mm }
     <tr><td>관제 Pi5 기록 프로그램</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
     <tr><td>공정 ESP32 펌웨어 (4대 공통, RTOS)</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
     <tr><td>공정별 설비 동작 (각 공정)</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
-    <tr><td>AGV 주행 · 로봇팔</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
+    <tr><td>AGV 주행</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
     <tr><td>Spring · 언리얼 트윈</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
     <tr><td>GitHub: 저장소 하나 / 언리얼 따로</td><td><span class="opt">하나</span><span class="opt">따로</span></td></tr>
    </table>
@@ -126,6 +124,6 @@ td.d { width:62mm }
 
  <h2>메모 · 다음에 할 일</h2>
  <div class="notes"></div>
- <div class="foot">근거: HANDOFF.md, 팔 없는 배치 · 팔 있는 배치, 데이터 흐름 설명서(8쪽), RTOS 도입 제안서. 회의 뒤 결정 사항은 HANDOFF.md로 옮긴다.</div>
+ <div class="foot">근거: HANDOFF.md, 제공맵 공정배치도, 데이터 흐름 설명서(8쪽), RTOS 도입 제안서. 회의 뒤 결정 사항은 HANDOFF.md로 옮긴다.</div>
 </div>
 </body></html>

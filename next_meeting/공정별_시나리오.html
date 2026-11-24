@@ -15,29 +15,20 @@ table { border-collapse:collapse; width:100%; table-layout:fixed }
 td,th { padding:.8mm 1.4mm; text-align:left; vertical-align:top; border-bottom:1px solid #e6eaef; overflow-wrap:anywhere }
 th { color:#5b6675; font-weight:600; font-size:8pt }
 ul,ol { margin:0; padding-left:4.2mm } li { margin-bottom:.6mm }
-.two { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:7mm }
-.three { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:5mm }
+.side { display:grid; gap:7mm; align-items:start }
 .note { background:#f3f5f7; border-left:3px solid #1f2a37; padding:1.8mm 2.6mm }
 .warn { background:#fff6e8; border-left:3px solid #c77a12; padding:1.8mm 2.6mm }
-.ok { background:#eef6f1; border-left:3px solid #2f8a5b; padding:1.8mm 2.6mm }
 .sub { color:#5b6675 }
 .foot { font-size:7.4pt; color:#5b6675; margin-top:auto; padding-top:1.5mm }
-.card { border:1px solid #cfd6de; border-radius:4px; padding:2.4mm 3mm }
-.card .k { font-size:8pt; color:#5b6675; letter-spacing:.04em }
-.card .v { font-size:11.5pt; font-weight:700; line-height:1.35; margin-top:.6mm }
-.card .s { font-size:8.8pt; color:#3b4654; margin-top:1mm }
-.tag { display:inline-block; font-size:7.6pt; font-weight:700; border-radius:2px; padding:0 1.2mm; white-space:nowrap }
-.t1 { color:#1d4f8f; background:#e3eefb } .t2 { color:#7a3d08; background:#fdebd3 } .tn { color:#5b6675; background:#eef1f4 }
-.mono { font-family:Consolas,monospace; font-size:8.4pt }
 svg { display:block; width:100% }
 </style></head><body>
 
 <div class="page">
- <div class="kick">팀 회의 자료 · 공정별 시나리오 (1/5 한 바퀴 한눈에)</div>
- <h1>공정별 시나리오 — 팔은 출발과 검사에서만 쓰고, P1~P4는 실은 채 작업한다</h1>
- <div class="meta">2026-11-24 · 로봇팔 1~2단계를 전제로 쓴 시나리오 · <b>모두 제안</b>: 팔을 쓸지와 어디까지 쓸지는 팔 시험 뒤에 확정, 공정 설비(무엇이 움직이나)는 아직 정하지 않음 · 시간은 추정, 실물로 해 본 것은 아직 없음</div>
+ <div class="kick">팀 회의 자료 · 공정별 시나리오 (1/4 한 바퀴 한눈에)</div>
+ <h1>공정별 시나리오 — 차체는 처음부터 끝까지 AGV에 실린 채 다닌다</h1>
+ <div class="meta">2026-11-24 · <b>로봇팔은 쓰지 않는다 [확정]</b> · 그 밖의 순서와 장치는 제안 · 공정 설비(무엇이 움직이나)는 아직 정하지 않음 · 시간은 추정, 실물로 해 본 것은 아직 없음</div>
  <div class="body">
-  <svg viewBox="0 0 1000 392" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+  <div class="blk"><svg viewBox="0 14 1000 376" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif" style="width:96%;margin:0 auto">
  <defs><marker id="m1" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1f2a37"/></marker></defs>
  <rect x="330" y="60" width="340" height="280" rx="70" fill="none" stroke="#1f2a37" stroke-width="7"/>
  <!-- 방향 화살표 (반시계) -->
@@ -54,52 +45,53 @@ svg { display:block; width:100% }
   <rect x="575" y="315" width="50" height="50" fill="#e2705e" stroke="#1f2a37"/><text x="600" y="345" fill="#fff">검사</text>
  </g>
  <g font-size="11" fill="#5b6675" text-anchor="middle"><text x="500" y="28">프레스</text><text x="378" y="139">차체</text><text x="378" y="274">도장</text><text x="430" y="378">의장</text></g>
- <text x="500" y="190" font-size="13" fill="#5b6675" text-anchor="middle">반시계 한 바퀴 = 차체 1대</text>
- <text x="500" y="210" font-size="12" fill="#5b6675" text-anchor="middle">검사에서 끝난다</text>
+ <text x="500" y="186" font-size="13" fill="#5b6675" text-anchor="middle">반시계 한 바퀴 = 차체 1대</text>
+ <text x="500" y="206" font-size="12" fill="#5b6675" text-anchor="middle">검사에서 끝난다</text>
+ <text x="500" y="226" font-size="12" fill="#5b6675" text-anchor="middle">약 1.5~2분 (추정)</text>
  <!-- 노랑 -->
- <rect x="725" y="96" width="275" height="150" rx="8" fill="#fffdf0" stroke="#b8a500" stroke-width="1.6"/>
- <path d="M697,200 L723,180" stroke="#8b96a3" stroke-dasharray="4 3"/>
- <text x="739" y="120" font-size="15" font-weight="700" fill="#1f2a37">노랑 · 출발</text>
- <rect x="739" y="132" width="52" height="19" rx="3" fill="#e3eefb"/><text x="765" y="146" font-size="11.5" font-weight="700" fill="#1d4f8f" text-anchor="middle">1단계</text>
- <text x="798" y="146" font-size="12.5" fill="#1f2a37">사람이 차체를 AGV에 올린다</text>
- <rect x="739" y="160" width="52" height="19" rx="3" fill="#fdebd3"/><text x="765" y="174" font-size="11.5" font-weight="700" fill="#7a3d08" text-anchor="middle">2단계</text>
- <text x="798" y="174" font-size="12.5" fill="#1f2a37">사람은 투입대에 놓고,</text>
- <text x="798" y="192" font-size="12.5" font-weight="700" fill="#7a3d08">팔이 집어 AGV에 싣는다</text>
- <text x="739" y="218" font-size="11.5" fill="#5b6675">화면의 '투입'을 누르면 출발한다</text>
- <text x="739" y="235" font-size="11.5" fill="#5b6675">리더기 없음. AGV는 색을 보고 선다</text>
+ <rect x="725" y="100" width="275" height="124" rx="8" fill="#fffdf0" stroke="#b8a500" stroke-width="1.6"/>
+ <path d="M697,200 L723,184" stroke="#8b96a3" stroke-dasharray="4 3"/>
+ <text x="739" y="124" font-size="15" font-weight="700" fill="#1f2a37">노랑 · 출발</text>
+ <text x="739" y="148" font-size="12.5" fill="#1f2a37">사람이 차체를 <tspan font-weight="700">AGV 윗면에 올린다</tspan></text>
+ <text x="739" y="168" font-size="12.5" fill="#1f2a37">화면의 '투입'을 누르면 출발한다</text>
+ <text x="739" y="192" font-size="11.5" fill="#5b6675">리더기 없음. AGV는 색을 보고 선다</text>
+ <text x="739" y="209" font-size="11.5" fill="#5b6675">P1에서 처음 읽힌 태그와 묶인다</text>
  <!-- P1~P4 -->
- <rect x="0" y="120" width="270" height="150" rx="8" fill="#f3f5f7" stroke="#8b96a3" stroke-width="1.6"/>
- <path d="M272,150 L303,138 M272,240 L303,265" stroke="#8b96a3" stroke-dasharray="4 3"/>
- <text x="14" y="144" font-size="15" font-weight="700" fill="#1f2a37">P1 · P2 · P3 · P4</text>
- <text x="14" y="168" font-size="12.5" fill="#1f2a37">차체를 <tspan font-weight="700">AGV에 실은 채</tspan> 작업한다</text>
- <text x="14" y="188" font-size="12.5" fill="#1f2a37">AGV의 팔은 움직이지 않는다</text>
- <text x="14" y="212" font-size="11.5" fill="#5b6675">리더기가 태그를 읽으면 AGV가 선다</text>
- <text x="14" y="229" font-size="11.5" fill="#5b6675">→ 설비가 차체 위에서 움직인다</text>
- <text x="14" y="246" font-size="11.5" fill="#5b6675">→ 끝나면 다음 색으로 출발</text>
- <text x="14" y="263" font-size="11.5" fill="#5b6675">1단계 · 2단계 모두 같다</text>
+ <rect x="0" y="124" width="270" height="124" rx="8" fill="#f3f5f7" stroke="#8b96a3" stroke-width="1.6"/>
+ <path d="M272,150 L303,138 M272,232 L303,265" stroke="#8b96a3" stroke-dasharray="4 3"/>
+ <text x="14" y="148" font-size="15" font-weight="700" fill="#1f2a37">P1 · P2 · P3 · P4</text>
+ <text x="14" y="172" font-size="12.5" fill="#1f2a37">차체를 <tspan font-weight="700">AGV에 실은 채</tspan> 작업한다</text>
+ <text x="14" y="196" font-size="11.5" fill="#5b6675">리더기가 태그를 읽으면 AGV가 선다</text>
+ <text x="14" y="213" font-size="11.5" fill="#5b6675">→ 설비가 차체 위에서 움직인다</text>
+ <text x="14" y="230" font-size="11.5" fill="#5b6675">→ 끝나면 다음 색으로 출발</text>
  <!-- 검사 -->
  <rect x="725" y="262" width="275" height="126" rx="8" fill="#fdf1ef" stroke="#a8321f" stroke-width="1.6"/>
  <path d="M627,340 L723,325" stroke="#8b96a3" stroke-dasharray="4 3"/>
  <text x="739" y="286" font-size="15" font-weight="700" fill="#1f2a37">빨강 · 검사</text>
- <text x="739" y="310" font-size="12.5" font-weight="700" fill="#7a3d08">팔이 차체를 검사대에 내려놓는다</text>
- <text x="739" y="330" font-size="12.5" fill="#1f2a37">→ 카메라가 판정 → 완료 / 보류</text>
+ <text x="739" y="310" font-size="12.5" fill="#1f2a37">차체를 <tspan font-weight="700">실은 채</tspan> 검사받는다</text>
+ <text x="739" y="330" font-size="12.5" fill="#1f2a37">→ 위 카메라가 판정 → 완료 / 보류</text>
  <text x="739" y="352" font-size="11.5" fill="#5b6675">운반은 여기서 끝난다</text>
- <text x="739" y="369" font-size="11.5" fill="#5b6675">1단계 · 2단계 모두 같다</text>
-</svg>
-  <div class="three" style="margin-top:3mm">
-   <div class="card"><div class="k">1단계</div><div class="v">팔은 검사에서 한 번<br>(내려놓기만)</div><div class="s">출발은 사람이 차체를 AGV에 올린다. 집기·놓기는 한 바퀴에 1번</div></div>
-   <div class="card"><div class="k">2단계 = 1단계 +</div><div class="v">출발에서도 팔이 집는다</div><div class="s">사람은 투입대에 놓기만 한다. 집기·놓기는 한 바퀴에 2번. 달라지는 곳은 노랑뿐이다</div></div>
-   <div class="card" style="border-color:#c77a12;background:#fffaf1"><div class="k">이 시나리오의 전제 (11-26 팔 시험 0에서 확인)</div><div class="v" style="font-size:10.5pt">팔이 AGV 위 자리에 놓인 차체를 집고 놓을 수 있다</div><div class="s"><b>실측으로 아는 것:</b> 카메라는 몸통에 고정, 팔 밑동은 좌우 90°, 집게 벌림 4.5~5cm. <b>아직 모르는 것:</b> 닿는 거리, 차체를 실을 자리(윗면은 Jetson·팬이 차지), 드는 무게. 안 되면 팔을 떼고 윗면에 싣는다(5쪽)</div></div>
-  </div>
+ <text x="739" y="369" font-size="11.5" fill="#5b6675">사람이 차체를 치우고 '복귀' → 노랑으로</text>
+</svg></div>
+  <h2>자리마다 누가 무엇을 하나</h2>
+  <table>
+   <tr><th style="width:24mm">자리</th><th style="width:62mm">AGV</th><th style="width:88mm">그 자리의 장치 · 사람</th><th>관제 Pi5</th></tr>
+   <tr><td><b>노랑</b></td><td>서 있다 → 출발</td><td>장치 없음. 사람이 차체를 AGV 윗면에 올리고 화면에서 '투입'</td><td>새 차체 번호 → 출발 허가(목적지 P1)</td></tr>
+   <tr><td><b>P1 ~ P4</b></td><td>태그 읽음에 정지 → 멈춤 완료 → 출발</td><td>공정 ESP32: 리더기, 설비(미정), 상태등, 버튼</td><td>순서 확인 → 작업 허가 → 작업 끝 기록 → 이력 사본 → 출발 허가</td></tr>
+   <tr><td><b>검사</b></td><td>태그 읽음에 정지 → 멈춤 완료</td><td>검사 Pi5: 리더기, 카메라 (검사 틀 + 지붕 아래)</td><td>남은 공정 확인 → 검사 허가 → 완료 / 보류</td></tr>
+   <tr><td><b>복귀</b></td><td>노랑으로 가서 색을 보고 선다</td><td>장치 없음. 사람이 차체를 치우고 화면에서 '복귀'</td><td>복귀 명령(목적지 노랑)</td></tr>
+  </table>
  </div>
- <div class="foot">단계 번호는 제공맵_공정배치도_팔있음의 '줄이는 순서'와 같다(1 검사에서 놓기만 / 2 + 노랑에서 집기 / 3 + P1 왕복 / 4 전 공정). 이 문서는 1·2만 다룬다. 메시지 규칙은 데이터 흐름 설명서를 따른다. 1/5</div>
+ <div class="foot">메시지 규칙은 데이터 흐름 설명서를 따른다. 사건 이름은 그 규칙에 맞춘 제안이고 영문 이름은 정하지 않았다. 배치와 검사 틀은 제공맵_공정배치도를 따른다. 1/4</div>
 </div>
 <div class="page">
- <div class="kick">팀 회의 자료 · 공정별 시나리오 (2/5 노랑 · 출발)</div>
- <h1>노랑 · 출발 — 1단계는 사람이 올리고, 2단계는 팔이 집는다</h1>
- <div class="meta">위에서 본 그림 · 검은 세로줄 = 맵의 선, 회색 = AGV, 흰 상자 = 차체(금색 = 태그 팟), 주황 = AGV의 팔 · 노랑에는 리더기가 없어서 AGV는 색을 보고 선다 · 컷은 비율대로가 아니다(실측: AGV 23 × 19.5cm가 색 구역 15 × 15cm보다 크다)</div>
+ <div class="kick">팀 회의 자료 · 공정별 시나리오 (2/4 노랑 · 출발)</div>
+ <h1>노랑 · 출발 — 사람이 차체를 AGV 윗면에 올리고, 화면에서 '투입'을 누른다</h1>
+ <div class="meta">위에서 본 그림 · 검은 세로줄 = 맵의 선, 회색 = AGV, 흰 상자 = 차체(금색 = 태그 팟) · 노랑에는 리더기가 없어서 AGV는 색을 보고 선다 · 컷은 비율대로가 아니다(실측: AGV 23 × 19.5cm가 색 구역 15 × 15cm보다 크다)</div>
  <div class="body">
-  <div class="blk"><h2><span class="tag t1">1단계</span> 사람이 차체를 AGV에 올린다 (팔은 쓰지 않는다)</h2><svg viewBox="0 0 980 176" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif"><g transform="translate(0,0)">
+  <div class="side" style="grid-template-columns:126mm minmax(0,1fr)">
+   <div><svg viewBox="0 0 324 356" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+<g transform="translate(0,0)">
 <rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
 <circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">1</text>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
@@ -107,7 +99,6 @@ svg { display:block; width:100% }
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
 <rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
 <rect x="31" y="46" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="56" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
 <circle cx="108" cy="36" r="6" fill="#5b6675"/><path d="M100,56 q8,-16 16,0 v8 h-16 z" fill="#5b6675"/>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">차체를 AGV에 올린다</text>
 <text x="8" y="141" font-size="10.6" fill="#3b4654">사람이 손으로 올린다</text>
@@ -121,13 +112,12 @@ svg { display:block; width:100% }
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
 <rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
 <rect x="31" y="46" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="56" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
-<rect x="84" y="40" width="64" height="40" rx="4" fill="#f6efe6" stroke="#8a5a2f"/><rect x="94" y="52" width="44" height="18" rx="4" fill="#1f2a37"/><text x="116" y="65" font-size="10.5" font-weight="700" fill="#fff" text-anchor="middle">투입</text>
+<rect x="84" y="40" width="64" height="40" rx="4" fill="#f6efe6" stroke="#8a5a2f"/><rect x="94" y="51" width="44" height="18" rx="4" fill="#1f2a37"/><text x="116" y="64" font-size="10.5" font-weight="700" fill="#fff" text-anchor="middle">투입</text>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">화면에서 '투입'</text>
 <text x="8" y="141" font-size="10.6" fill="#3b4654">새 차체 번호가 생긴다</text>
 <text x="8" y="156" font-size="10.6" fill="#3b4654">(예: BODY-003)</text>
 </g>
-<g transform="translate(328,0)">
+<g transform="translate(0,180)">
 <rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
 <circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">3</text>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
@@ -136,13 +126,12 @@ svg { display:block; width:100% }
 <rect x="24" y="28" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
 <rect x="31" y="38" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="48" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
 <path d="M42,22 l-6,9 h12 z" fill="#1f2a37"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
 <rect x="78" y="78" width="74" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="115" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">목적지 P1</text>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">출발 허가 → 출발</text>
 <text x="8" y="141" font-size="10.6" fill="#3b4654">관제 Pi5가 P1을</text>
 <text x="8" y="156" font-size="10.6" fill="#3b4654">목적지로 보낸다</text>
 </g>
-<g transform="translate(492,0)">
+<g transform="translate(164,180)">
 <rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
 <circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4</text>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
@@ -154,117 +143,41 @@ svg { display:block; width:100% }
 <path d="M62,56 q-5,7 0,14 M58,53 q-8,10 0,20" stroke="#1d6b45" fill="none" stroke-width="1.4"/>
 <rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
 <rect x="31" y="46" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="56" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
 <rect x="78" y="78" width="74" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="115" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">묶음</text>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">P1에서 태그와 묶인다</text>
 <text x="8" y="141" font-size="10.6" fill="#3b4654">P1 리더기가 처음 읽은</text>
 <text x="8" y="156" font-size="10.6" fill="#3b4654">태그를 이 차체에 묶는다</text>
-</g></svg></div>
-  <div class="blk"><h2><span class="tag t2">2단계</span> 사람은 투입대에 놓고, 팔이 집어 싣는다 (주황 테두리 = 팔이 움직이는 컷, 약 10~12초 추정)</h2><svg viewBox="0 0 980 176" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif"><g transform="translate(0,0)">
-<rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
-<circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">1</text>
-<line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="18" y="38" width="48" height="56" fill="#f2e04d" opacity=".55"/>
-<line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="92" y="40" width="32" height="50" rx="3" fill="#c5ccd4" stroke="#5b6675"/>
-<text x="108" y="103" font-size="9.5" fill="#5b6675" text-anchor="middle">투입대</text>
-<rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
-<rect x="97" y="47" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="119" y="57" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
-<circle cx="142" cy="36" r="6" fill="#5b6675"/><path d="M134,56 q8,-16 16,0 v8 h-16 z" fill="#5b6675"/>
-<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">투입대에 차체를 놓는다</text>
-<text x="8" y="141" font-size="10.6" fill="#3b4654">사람은 여기까지만</text>
-<text x="8" y="156" font-size="10.6" fill="#3b4654">AGV는 노랑에 서 있다</text>
 </g>
-<g transform="translate(164,0)">
-<rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
-<circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">2</text>
-<line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="18" y="38" width="48" height="56" fill="#f2e04d" opacity=".55"/>
-<line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="92" y="40" width="32" height="50" rx="3" fill="#c5ccd4" stroke="#5b6675"/>
-<rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
-<rect x="97" y="47" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="119" y="57" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
-<rect x="78" y="78" width="74" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="115" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">집기 허가</text>
-<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">화면에서 '투입'</text>
-<text x="8" y="141" font-size="10.6" fill="#3b4654">새 차체 번호가 생기고</text>
-<text x="8" y="156" font-size="10.6" fill="#3b4654">'집기 허가'가 나간다</text>
-</g>
-<g transform="translate(328,0)">
-<rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fffaf1" stroke="#c77a12" stroke-width="2"/>
-<circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">3</text>
-<line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="18" y="38" width="48" height="56" fill="#f2e04d" opacity=".55"/>
-<line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="92" y="40" width="32" height="50" rx="3" fill="#c5ccd4" stroke="#5b6675"/>
-<text x="108" y="103" font-size="9.5" fill="#5b6675" text-anchor="middle">투입대</text>
-<rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
-<rect x="97" y="47" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="119" y="57" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="65" x2="104" y2="65" stroke="#c77a12" stroke-width="5" stroke-linecap="round"/><circle cx="106" cy="65" r="5" fill="#c77a12"/>
-<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">팔을 뻗어 집는다</text>
-<text x="8" y="141" font-size="10.6" fill="#3b4654">정해 둔 각도를 재생</text>
-<text x="8" y="156" font-size="10.6" fill="#3b4654">손잡이 탭을 쥔다</text>
-</g>
-<g transform="translate(492,0)">
-<rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fffaf1" stroke="#c77a12" stroke-width="2"/>
-<circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4</text>
-<line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="18" y="38" width="48" height="56" fill="#f2e04d" opacity=".55"/>
-<line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="92" y="40" width="32" height="50" rx="3" fill="#c5ccd4" stroke="#5b6675"/>
-<text x="108" y="103" font-size="9.5" fill="#5b6675" text-anchor="middle">투입대</text>
-<rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
-<rect x="31" y="46" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="56" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<path d="M42,44 q14,6 0,20" stroke="#c77a12" stroke-width="4.5" fill="none" stroke-linecap="round"/><circle cx="42" cy="64" r="5" fill="#c77a12"/>
-<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">AGV 위 자리에 싣는다</text>
-<text x="8" y="141" font-size="10.6" fill="#3b4654">차체를 내려놓고</text>
-<text x="8" y="156" font-size="10.6" fill="#3b4654">팔을 주행 자세로</text>
-</g>
-<g transform="translate(656,0)">
-<rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
-<circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">5</text>
-<line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="18" y="38" width="48" height="56" fill="#f2e04d" opacity=".55"/>
-<line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="92" y="40" width="32" height="50" rx="3" fill="#c5ccd4" stroke="#5b6675"/>
-<rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
-<rect x="31" y="46" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="56" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
-<rect x="78" y="78" width="74" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="115" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">집기 완료</text>
-<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">'집기 완료' 확인</text>
-<text x="8" y="141" font-size="10.6" fill="#3b4654">팔 각도 되읽기 · 팔이</text>
-<text x="8" y="156" font-size="10.6" fill="#3b4654">카메라를 가리지 않나</text>
-</g>
-<g transform="translate(820,0)">
-<rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
-<circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">6</text>
-<line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="18" y="38" width="48" height="56" fill="#f2e04d" opacity=".55"/>
-<line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="92" y="40" width="32" height="50" rx="3" fill="#c5ccd4" stroke="#5b6675"/>
-<rect x="24" y="28" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
-<rect x="31" y="38" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="48" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<path d="M42,22 l-6,9 h12 z" fill="#1f2a37"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
-<rect x="78" y="78" width="74" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="115" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">목적지 P1</text>
-<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">출발 허가 → 출발</text>
-<text x="8" y="141" font-size="10.6" fill="#3b4654">확인이 적힌 뒤에만</text>
-<text x="8" y="156" font-size="10.6" fill="#3b4654">출발한다</text>
-</g></svg></div>
-  <div class="two">
-   <div class="warn"><b>2단계에서 가장 어려운 곳.</b> 노랑은 리더기가 없어 색만 보고 서므로 <b>정지 위치가 가장 많이 흔들린다.</b> 집기는 놓기보다 어렵다(놓을 때는 깔때기 모양 자리가 받아 주지만, 집을 때는 손잡이를 정확히 잡아야 한다). 그래서 2단계는 1단계가 된 뒤에 해 본다.<br><b>실측에서 나온 것.</b> 팔 밑동은 오른쪽 90°까지만 돈다. 투입대는 차의 바로 오른쪽(고리 바깥)이라 회전 범위의 끝이고, <b>차가 투입대를 지나쳐 서면 닿지 않는다.</b> 노랑 한가운데에서는 오른쪽 S자 갈림길이 본 경로와 교차한다(위치 추정) — 선이 여러 갈래로 보이는 자리다.</div>
-   <div class="note"><b>실패하면.</b> 정해 둔 시간 안에 '집기 완료'가 안 오면 한 번 다시 시도하고, 그래도 안 되면 화면에 알리고 사람이 손으로 싣는다(= 1단계 방식). 기록에는 '수동 인계'로 남긴다. 집기 실패를 성공으로 세지 않는다.<br><span class="sub">투입대에 차체가 놓였는지는 처음에는 사람이 누르는 '투입'으로 대신한다. 스위치나 리더기를 다는 것은 선택이다.</span></div>
+</svg></div>
+   <div>
+    <div class="blk">
+     <h2>차체를 싣는 자리</h2>
+     <div class="note"><b>[사용자 계획]</b> 카메라와 가장 가까운 첫 관절에서 팔을 떼어 내고, 비운 <b>몸통 윗면(높이 약 20cm)에 차체를 싣는다.</b> 윗면의 평평한 넓이, 떼고 남는 부품, 차체를 고정하는 방법은 아직 모른다(△).</div>
+    </div>
+    <div class="blk">
+     <h2>먼저 확인할 것</h2>
+     <ol>
+      <li><b>차체 모형의 크기</b>와 몸통 윗면에 싣는 자리</li>
+      <li>팔을 뗀 뒤 <b>윗면의 평평한 넓이</b>와 남는 부품</li>
+      <li>차체를 AGV에 <b>고정하는 방법</b></li>
+      <li><b>색 구역 위치</b> (지금은 사진 추정)</li>
+     </ol>
+    </div>
+    <div class="warn"><b>노랑 한가운데의 갈림길.</b> 노랑 한가운데에서는 오른쪽 S자 갈림길이 본 경로와 교차한다(위치 추정) — 선이 여러 갈래로 보이는 자리다. <span class="sub">제공맵_공정배치도의 주의 지점 A와 같은 곳이다.</span></div>
+    <div class="sub" style="margin-top:2.5mm">스마트태그 전원: 개발은 USB, 배터리는 나중에 정한다.</div>
+   </div>
   </div>
  </div>
- <div class="foot">'투입' 버튼과 'P1에서 처음 읽힐 때 묶는다'는 데이터 흐름 설명서의 제안 그대로다. '집기 허가'·'집기 완료'는 팔을 쓸 때 새로 생기는 사건이다(5쪽). 2/5</div>
+ <div class="foot">'투입' 버튼과 'P1에서 처음 읽힐 때 묶는다'는 데이터 흐름 설명서의 제안 그대로다. 2/4</div>
 </div>
 <div class="page">
- <div class="kick">팀 회의 자료 · 공정별 시나리오 (3/5 P1 ~ P4)</div>
- <h1>P1 ~ P4 — 네 곳 모두 같은 여섯 컷, AGV의 팔은 가만히 있다</h1>
- <div class="meta">그림은 P2(초록) 예 · 파란 막대 = 공정 리더기, 진회색 = 공정 기둥, 초록 막대 = 차체 위로 들어온 설비, 오른쪽 위 동그라미 = 상태등 · 1단계와 2단계가 같다</div>
+ <div class="kick">팀 회의 자료 · 공정별 시나리오 (3/4 P1 ~ P4)</div>
+ <h1>P1 ~ P4 — 네 곳 모두 같은 여섯 컷, 차체는 AGV에 실은 채 작업한다</h1>
+ <div class="meta">그림은 P2(초록) 예 · 파란 막대 = 공정 리더기, 진회색 = 공정 기둥, 초록 막대 = 차체 위로 들어온 설비, 오른쪽 위 동그라미 = 상태등 · 주황 테두리 = 이 장면의 핵심 컷</div>
  <div class="body">
-  <div class="blk"><svg viewBox="0 0 980 176" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif"><g transform="translate(0,0)">
+  <div class="side" style="grid-template-columns:180mm minmax(0,1fr)">
+   <div><svg viewBox="0 0 488 356" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+<g transform="translate(0,0)">
 <rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
 <circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">1</text>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
@@ -276,7 +189,6 @@ svg { display:block; width:100% }
 <path d="M62,56 q-5,7 0,14 M58,53 q-8,10 0,20" stroke="#1d6b45" fill="none" stroke-width="1.4"/>
 <rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
 <rect x="31" y="46" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="56" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
 <circle cx="146" cy="16" r="7" fill="#e6eaef" stroke="#1f2a37" stroke-width=".8"/>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">도착 · 정지</text>
 <text x="8" y="141" font-size="10.6" fill="#3b4654">리더기가 태그를 읽으면</text>
@@ -293,7 +205,6 @@ svg { display:block; width:100% }
 <rect x="68" y="52" width="6" height="22" fill="#3a5f9a"/>
 <rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
 <rect x="31" y="46" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="56" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
 <circle cx="146" cy="16" r="7" fill="#e6eaef" stroke="#1f2a37" stroke-width=".8"/>
 <rect x="78" y="78" width="74" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="115" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">작업 허가</text>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">순서 확인 · 허가</text>
@@ -311,13 +222,12 @@ svg { display:block; width:100% }
 <rect x="68" y="52" width="6" height="22" fill="#3a5f9a"/>
 <rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
 <rect x="31" y="46" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="56" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
 <circle cx="146" cy="16" r="7" fill="#e6b422" stroke="#1f2a37" stroke-width=".8"/>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">설비가 움직인다</text>
 <text x="8" y="141" font-size="10.6" fill="#3b4654">차체 위에서 작업</text>
 <text x="8" y="156" font-size="10.6" fill="#3b4654">상태등 노랑 깜빡</text>
 </g>
-<g transform="translate(492,0)">
+<g transform="translate(0,180)">
 <rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
 <circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4</text>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
@@ -328,14 +238,13 @@ svg { display:block; width:100% }
 <rect x="68" y="52" width="6" height="22" fill="#3a5f9a"/>
 <rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
 <rect x="31" y="46" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="56" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
 <circle cx="146" cy="16" r="7" fill="#2f8a5b" stroke="#1f2a37" stroke-width=".8"/>
 <rect x="78" y="78" width="74" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="115" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">작업 끝</text>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">작업 끝 신고</text>
 <text x="8" y="141" font-size="10.6" fill="#3b4654">설비가 제자리로 돌아온</text>
 <text x="8" y="156" font-size="10.6" fill="#3b4654">뒤에 신고한다</text>
 </g>
-<g transform="translate(656,0)">
+<g transform="translate(164,180)">
 <rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
 <circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">5</text>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
@@ -346,14 +255,13 @@ svg { display:block; width:100% }
 <rect x="68" y="52" width="6" height="22" fill="#3a5f9a"/>
 <rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
 <rect x="31" y="46" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="56" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
 <circle cx="146" cy="16" r="7" fill="#2f8a5b" stroke="#1f2a37" stroke-width=".8"/>
 <rect x="78" y="78" width="74" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="115" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">출발 허가</text>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">기록 · 이력 사본</text>
 <text x="8" y="141" font-size="10.6" fill="#3b4654">관제 Pi5가 적고</text>
 <text x="8" y="156" font-size="10.6" fill="#3b4654">태그에 사본을 보낸다</text>
 </g>
-<g transform="translate(820,0)">
+<g transform="translate(328,180)">
 <rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
 <circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">6</text>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
@@ -365,59 +273,59 @@ svg { display:block; width:100% }
 <rect x="24" y="28" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
 <rect x="31" y="38" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="48" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
 <path d="M42,22 l-6,9 h12 z" fill="#1f2a37"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
 <circle cx="146" cy="16" r="7" fill="#e6eaef" stroke="#1f2a37" stroke-width=".8"/>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">다음 색으로 출발</text>
 <text x="8" y="141" font-size="10.6" fill="#3b4654">상태등 꺼짐</text>
 <text x="8" y="156" font-size="10.6" fill="#3b4654">공정은 다시 대기</text>
-</g></svg></div>
-  <div class="two">
+</g>
+</svg></div>
    <div>
-    <h2>공정마다 다른 것은 ③의 '무엇이 움직이나'뿐 — 아직 정하지 않았다</h2>
-    <table>
-     <tr><th style="width:26mm">공정</th><th>색</th><th>③에서 움직이는 것</th><th style="width:30mm">작업 끝</th></tr>
-     <tr><td><b>P1 프레스</b></td><td>주황</td><td class="sub">미정</td><td class="sub" rowspan="4">공정마다 정한다: 설비가 끝나면 저절로 / 사람이 완료 버튼</td></tr>
-     <tr><td><b>P2 차체</b></td><td>초록</td><td class="sub">미정</td></tr>
-     <tr><td><b>P3 도장</b></td><td>보라</td><td class="sub">미정</td></tr>
-     <tr><td><b>P4 의장</b></td><td>파랑</td><td class="sub">미정</td></tr>
-    </table>
-    <div class="sub" style="margin-top:1mm">정해진 것은 "공정마다 하나는 실제로 움직인다"는 원칙이다. 무엇으로 움직일지가 정해지면 이 표를 채운다. 여섯 컷의 순서는 바뀌지 않는다.</div>
-   </div>
-   <div>
-    <h2>이 구간에서 지킬 것</h2>
-    <ul>
-     <li><b>AGV의 팔은 주행 자세 그대로.</b> 설비와 부딪히지 않게 한다. 카메라는 몸통 앞에 고정이라 팔과 따로 움직이지만, 팔이 앞으로 숙여지면 화면을 가릴 수 있다(시험 0에서 확인)</li>
-     <li><b>공정 설비는 옆에서 들어온다.</b> AGV의 팔(똑바로 세우면 바닥에서 46cm 실측, 주행 자세의 높이는 시험 0에서 잰다)에 걸리지 않게 하고, 기다릴 때는 선 밖으로 비켜 있는다. 선에서 맵 끝까지 15cm(실측)라 공정 기둥은 맵 끝이나 맵 밖에 선다</li>
-     <li><b>설비는 AGV가 선 뒤에만 움직인다.</b> '태그 읽음'과 AGV의 '멈춤 완료'가 둘 다 적혀야 허가가 나간다</li>
-     <li><b>출발은 설비가 제자리로 돌아온 뒤.</b> 그래야 출발하는 AGV와 부딪히지 않는다</li>
-    </ul>
-    <div class="note" style="margin-top:2mm"><b>이상이 생기면</b> 데이터 흐름 설명서 그대로다. 비상정지 → 그 자리에서 멈추고 현장 버튼으로만 푼다. 순서를 건너뛴 차체 → 작업을 거부하고 '보류', 검사로 보낸다. 태그를 못 읽음 → AGV가 스스로 선다.</div>
+    <div class="blk">
+     <h2>공정마다 다른 것은 ③의 '무엇이 움직이나'뿐 — 아직 정하지 않았다</h2>
+     <table>
+      <tr><th style="width:20mm">공정</th><th style="width:10mm">색</th><th style="width:21mm">③에서 움직이는 것</th><th>작업 끝</th></tr>
+      <tr><td><b>P1 프레스</b></td><td>주황</td><td class="sub">미정</td><td class="sub" rowspan="4">공정마다 정한다: 설비가 끝나면 저절로 / 사람이 완료 버튼</td></tr>
+      <tr><td><b>P2 차체</b></td><td>초록</td><td class="sub">미정</td></tr>
+      <tr><td><b>P3 도장</b></td><td>보라</td><td class="sub">미정</td></tr>
+      <tr><td><b>P4 의장</b></td><td>파랑</td><td class="sub">미정</td></tr>
+     </table>
+     <div class="sub" style="margin-top:1mm">정해진 것은 "공정마다 하나는 실제로 움직인다"는 원칙이다. 무엇으로 움직일지가 정해지면 이 표를 채운다. 여섯 컷의 순서는 바뀌지 않는다.</div>
+    </div>
+    <div class="blk">
+     <h2>이 구간에서 지킬 것</h2>
+     <ul>
+      <li><b>공정 설비는 옆에서 들어온다.</b> 설비가 피해야 하는 높이는 몸통 20cm(실측) + 차체 높이(△) + 여유다. 기다릴 때는 선 밖으로 비켜 있는다. 선에서 맵 끝까지 15cm(실측)라 공정 기둥은 맵 끝이나 맵 밖에 선다</li>
+      <li><b>설비는 AGV가 선 뒤에만 움직인다.</b> '태그 읽음'과 AGV의 '멈춤 완료'가 둘 다 적혀야 허가가 나간다</li>
+      <li><b>출발은 설비가 제자리로 돌아온 뒤.</b> 그래야 출발하는 AGV와 부딪히지 않는다</li>
+     </ul>
+    </div>
+    <div class="note"><b>이상이 생기면</b> 데이터 흐름 설명서 그대로다. 비상정지 → 그 자리에서 멈추고 현장 버튼으로만 푼다. 순서를 건너뛴 차체 → 작업을 거부하고 '보류', 검사로 보낸다. 태그를 못 읽음 → AGV가 스스로 선다.</div>
    </div>
   </div>
  </div>
- <div class="foot">여섯 컷은 데이터 흐름 설명서 3쪽의 ⓪~⑧을 줄인 것이다(① 태그 읽음, ② 멈춤 완료, ③ 지금 상태 '작업 중', ④ 작업 끝, ⑤ 답과 '완료', ⑥ 이력 사본, ⑦ 출발 허가, ⑧ '대기'). 팔을 쓰지 않으므로 새 사건이 없다. 3/5</div>
+ <div class="foot">여섯 컷은 데이터 흐름 설명서 3쪽의 ⓪~⑧을 줄인 것이다(① 태그 읽음, ② 멈춤 완료, ③ 지금 상태 '작업 중', ④ 작업 끝, ⑤ 답과 '완료', ⑥ 이력 사본, ⑦ 출발 허가, ⑧ '대기'). 3/4</div>
 </div>
 <div class="page">
- <div class="kick">팀 회의 자료 · 공정별 시나리오 (4/5 빨강 · 검사)</div>
- <h1>빨강 · 검사 — 팔이 차체를 검사대에 내려놓고, 한 바퀴가 끝난다</h1>
- <div class="meta">점선 상자 = 검사대의 가림 상자, 위의 검은 점 = 검사 카메라 · 주황 테두리 = 이 장면의 핵심 컷 · 1단계와 2단계가 같다 · 팔 동작은 약 8~10초, 판정은 약 10초(추정)</div>
+ <div class="kick">팀 회의 자료 · 공정별 시나리오 (4/4 빨강 · 검사)</div>
+ <h1>빨강 · 검사 — 차체를 실은 채 검사받고, 한 바퀴가 끝난다</h1>
+ <div class="meta">위에서 본 그림 · 점선 상자 = 검사 틀 + 지붕, 가운데 검은 점 = 위에서 찍는 검사 카메라 · 주황 테두리 = 이 장면의 핵심 컷 · 판정은 약 10초(추정)</div>
  <div class="body">
-  <div class="blk"><svg viewBox="0 0 980 176" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif"><g transform="translate(0,0)">
+  <div class="side" style="grid-template-columns:180mm minmax(0,1fr)">
+   <div><svg viewBox="0 0 488 356" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
+<g transform="translate(0,0)">
 <rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
 <circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">1</text>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
 <rect x="18" y="38" width="48" height="56" fill="#e2705e" opacity=".55"/>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="92" y="40" width="32" height="50" rx="3" fill="#c5ccd4" stroke="#5b6675"/>
-<text x="108" y="109" font-size="9.5" fill="#5b6675" text-anchor="middle">검사대</text>
-<rect x="88" y="34" width="40" height="62" rx="3" fill="none" stroke="#1f2a37" stroke-dasharray="4 3"/>
-<circle cx="108" cy="30" r="5" fill="#1f2a37"/>
-<text x="116" y="33" font-size="9" fill="#1f2a37">카메라</text>
 <rect x="68" y="52" width="6" height="22" fill="#1d6b45"/>
 <path d="M62,56 q-5,7 0,14 M58,53 q-8,10 0,20" stroke="#1d6b45" fill="none" stroke-width="1.4"/>
 <rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
 <rect x="31" y="46" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="56" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
+<rect x="10" y="31" width="68" height="67" rx="3" fill="none" stroke="#1f2a37" stroke-width="1.2" stroke-dasharray="4 3"/>
+<circle cx="42" cy="64" r="4.5" fill="#1f2a37"/>
+<text x="84" y="42" font-size="9.5" fill="#1f2a37">틀 + 지붕</text>
+<line x1="46" y1="67" x2="82" y2="87" stroke="#1f2a37" stroke-width=".8"/><text x="84" y="92" font-size="9.5" fill="#1f2a37">위 카메라</text>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">도착 · 정지</text>
 <text x="8" y="141" font-size="10.6" fill="#3b4654">검사 리더기가 태그를 읽으면</text>
 <text x="8" y="156" font-size="10.6" fill="#3b4654">AGV가 바로 선다</text>
@@ -428,16 +336,13 @@ svg { display:block; width:100% }
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
 <rect x="18" y="38" width="48" height="56" fill="#e2705e" opacity=".55"/>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="92" y="40" width="32" height="50" rx="3" fill="#c5ccd4" stroke="#5b6675"/>
-<rect x="88" y="34" width="40" height="62" rx="3" fill="none" stroke="#1f2a37" stroke-dasharray="4 3"/>
-<circle cx="108" cy="30" r="5" fill="#1f2a37"/>
-<text x="116" y="33" font-size="9" fill="#1f2a37">카메라</text>
 <rect x="68" y="52" width="6" height="22" fill="#3a5f9a"/>
 <rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
 <rect x="31" y="46" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="56" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
-<rect x="78" y="78" width="74" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="115" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">내려놓기 허가</text>
-<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">내려놓기 허가</text>
+<rect x="10" y="31" width="68" height="67" rx="3" fill="none" stroke="#1f2a37" stroke-width="1.2" stroke-dasharray="4 3"/>
+<circle cx="42" cy="64" r="4.5" fill="#1f2a37"/>
+<rect x="84" y="78" width="70" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="119" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">검사 허가</text>
+<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">검사 허가</text>
 <text x="8" y="141" font-size="10.6" fill="#3b4654">남은 공정이 없는지</text>
 <text x="8" y="156" font-size="10.6" fill="#3b4654">관제 Pi5가 확인한다</text>
 </g>
@@ -447,148 +352,80 @@ svg { display:block; width:100% }
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
 <rect x="18" y="38" width="48" height="56" fill="#e2705e" opacity=".55"/>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="92" y="40" width="32" height="50" rx="3" fill="#c5ccd4" stroke="#5b6675"/>
-<text x="108" y="109" font-size="9.5" fill="#5b6675" text-anchor="middle">검사대</text>
-<rect x="88" y="34" width="40" height="62" rx="3" fill="none" stroke="#1f2a37" stroke-dasharray="4 3"/>
-<circle cx="108" cy="30" r="5" fill="#1f2a37"/>
-<text x="116" y="33" font-size="9" fill="#1f2a37">카메라</text>
 <rect x="68" y="52" width="6" height="22" fill="#3a5f9a"/>
 <rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
-<rect x="97" y="47" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="119" y="57" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="65" x2="104" y2="65" stroke="#c77a12" stroke-width="5" stroke-linecap="round"/><circle cx="106" cy="65" r="5" fill="#c77a12"/>
-<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">팔이 내려놓는다</text>
-<text x="8" y="141" font-size="10.6" fill="#3b4654">차체를 집어 검사대의</text>
-<text x="8" y="156" font-size="10.6" fill="#3b4654">깔때기 자리에 놓는다</text>
+<rect x="31" y="46" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="56" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
+<path d="M27,48 v-6 h6 M51,42 h6 v6 M57,80 v6 h-6 M33,86 h-6 v-6" fill="none" stroke="#c77a12" stroke-width="1.8"/>
+<rect x="10" y="31" width="68" height="67" rx="3" fill="none" stroke="#1f2a37" stroke-width="1.2" stroke-dasharray="4 3"/>
+<circle cx="42" cy="64" r="4.5" fill="#1f2a37"/>
+<text x="84" y="42" font-size="9.5" fill="#1f2a37">틀 + 지붕</text>
+<line x1="46" y1="67" x2="82" y2="87" stroke="#1f2a37" stroke-width=".8"/><text x="84" y="92" font-size="9.5" fill="#1f2a37">위 카메라</text>
+<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">카메라가 판정</text>
+<text x="8" y="141" font-size="10.6" fill="#3b4654">위 카메라가 차체를 찍어</text>
+<text x="8" y="156" font-size="10.6" fill="#3b4654">합격 · 불합격을 신고한다</text>
 </g>
-<g transform="translate(492,0)">
+<g transform="translate(0,180)">
 <rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
 <circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">4</text>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
 <rect x="18" y="38" width="48" height="56" fill="#e2705e" opacity=".55"/>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="92" y="40" width="32" height="50" rx="3" fill="#c5ccd4" stroke="#5b6675"/>
-<rect x="88" y="34" width="40" height="62" rx="3" fill="none" stroke="#1f2a37" stroke-dasharray="4 3"/>
-<circle cx="108" cy="30" r="5" fill="#1f2a37"/>
-<text x="116" y="33" font-size="9" fill="#1f2a37">카메라</text>
 <rect x="68" y="52" width="6" height="22" fill="#3a5f9a"/>
 <rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
-<rect x="97" y="47" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="119" y="57" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
-<rect x="78" y="78" width="74" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="115" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">검사 허가</text>
-<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">놓였는지 확인</text>
-<text x="8" y="141" font-size="10.6" fill="#3b4654">AGV: 팔 각도 되읽기</text>
-<text x="8" y="156" font-size="10.6" fill="#3b4654">검사대: 스위치 눌림</text>
+<rect x="31" y="46" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="53" y="56" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
+<rect x="10" y="31" width="68" height="67" rx="3" fill="none" stroke="#1f2a37" stroke-width="1.2" stroke-dasharray="4 3"/>
+<circle cx="42" cy="64" r="4.5" fill="#1f2a37"/>
+<rect x="84" y="78" width="70" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="119" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">완료 / 보류</text>
+<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">완료 / 보류로 적는다</text>
+<text x="8" y="141" font-size="10.6" fill="#3b4654">관제 Pi5가 판정을</text>
+<text x="8" y="156" font-size="10.6" fill="#3b4654">이력과 대조한다</text>
 </g>
-<g transform="translate(656,0)">
-<rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fffaf1" stroke="#c77a12" stroke-width="2"/>
+<g transform="translate(164,180)">
+<rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
 <circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">5</text>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
 <rect x="18" y="38" width="48" height="56" fill="#e2705e" opacity=".55"/>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="92" y="40" width="32" height="50" rx="3" fill="#c5ccd4" stroke="#5b6675"/>
-<rect x="88" y="34" width="40" height="62" rx="3" fill="none" stroke="#1f2a37" stroke-dasharray="4 3"/>
-<circle cx="108" cy="30" r="5" fill="#1f2a37"/>
-<text x="116" y="33" font-size="9" fill="#1f2a37">카메라</text>
 <rect x="68" y="52" width="6" height="22" fill="#3a5f9a"/>
 <rect x="24" y="36" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
+<rect x="10" y="31" width="68" height="67" rx="3" fill="none" stroke="#1f2a37" stroke-width="1.2" stroke-dasharray="4 3"/>
+<circle cx="42" cy="64" r="4.5" fill="#1f2a37"/>
 <rect x="97" y="47" width="22" height="36" rx="4" fill="#fff" stroke="#1f2a37" stroke-width="1.8"/><rect x="119" y="57" width="7" height="14" fill="#d6a94a" stroke="#8a6a1d" stroke-width=".8"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
-<rect x="78" y="78" width="74" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="115" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">완료 / 보류</text>
-<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">카메라가 판정</text>
-<text x="8" y="141" font-size="10.6" fill="#3b4654">위에서 찍어 합격 · 불합격</text>
-<text x="8" y="156" font-size="10.6" fill="#3b4654">관제 Pi5가 이력과 대조</text>
+<circle cx="142" cy="36" r="6" fill="#5b6675"/><path d="M134,56 q8,-16 16,0 v8 h-16 z" fill="#5b6675"/>
+<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">사람이 차체를 치운다</text>
+<text x="8" y="141" font-size="10.6" fill="#3b4654">운반은 여기서 끝난다</text>
+<text x="8" y="156" font-size="10.6" fill="#3b4654">AGV는 빈 채로 서 있다</text>
 </g>
-<g transform="translate(820,0)">
+<g transform="translate(328,180)">
 <rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
 <circle cx="14" cy="14" r="9" fill="#1f2a37"/><text x="14" y="18" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">6</text>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
 <rect x="18" y="38" width="48" height="56" fill="#e2705e" opacity=".55"/>
 <line x1="42" y1="26" x2="42" y2="104" stroke="#1f2a37" stroke-width="5"/>
-<rect x="92" y="40" width="32" height="50" rx="3" fill="#c5ccd4" stroke="#5b6675"/>
-<text x="108" y="109" font-size="9.5" fill="#5b6675" text-anchor="middle">검사대</text>
-<rect x="88" y="34" width="40" height="62" rx="3" fill="none" stroke="#1f2a37" stroke-dasharray="4 3"/>
-<circle cx="108" cy="30" r="5" fill="#1f2a37"/>
+<rect x="68" y="52" width="6" height="22" fill="#3a5f9a"/>
 <rect x="24" y="28" width="36" height="58" rx="6" fill="#dfe4ea" stroke="#1f2a37" stroke-width="1.4"/>
 <path d="M42,22 l-6,9 h12 z" fill="#1f2a37"/>
-<line x1="42" y1="44" x2="42" y2="56" stroke="#c77a12" stroke-width="4.5" stroke-linecap="round"/>
-<circle cx="146" cy="36" r="6" fill="#5b6675"/><path d="M138,56 q8,-16 16,0 v8 h-16 z" fill="#5b6675"/>
-<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">끝 → 복귀</text>
-<text x="8" y="141" font-size="10.6" fill="#3b4654">사람이 차체를 치우고</text>
-<text x="8" y="156" font-size="10.6" fill="#3b4654">'복귀' → AGV는 노랑으로</text>
-</g></svg></div>
-  <div class="two">
+<rect x="10" y="31" width="68" height="67" rx="3" fill="none" stroke="#1f2a37" stroke-width="1.2" stroke-dasharray="4 3"/>
+<circle cx="42" cy="64" r="4.5" fill="#1f2a37"/>
+<rect x="84" y="34" width="64" height="36" rx="4" fill="#f6efe6" stroke="#8a5a2f"/><rect x="94" y="43" width="44" height="18" rx="4" fill="#1f2a37"/><text x="116" y="56" font-size="10.5" font-weight="700" fill="#fff" text-anchor="middle">복귀</text>
+<rect x="84" y="78" width="70" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="119" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">목적지 노랑</text>
+<text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">'복귀' → 노랑으로</text>
+<text x="8" y="141" font-size="10.6" fill="#3b4654">화면에서 '복귀'를 누르면</text>
+<text x="8" y="156" font-size="10.6" fill="#3b4654">노랑에 가서 색을 보고 선다</text>
+</g>
+</svg></div>
    <div>
     <h2>검사에서만 생기는 일</h2>
     <table>
-     <tr><th style="width:36mm">무엇</th><th>어떻게</th></tr>
-     <tr><td><b>검사대</b></td><td>깔때기 모양 자리(정지 오차 약 ±2cm · ±5°를 받아 줌, 추정) + 놓임 스위치 + 세 면과 지붕 가림 상자 + 위에 카메라와 흰 조명. 차의 바로 오른쪽(고리 바깥)에 둔다 — 팔 밑동이 오른쪽 90°까지만 돌아서(실측) 차가 검사대를 지나쳐 서면 닿지 않는다</td></tr>
-     <tr><td><b>놓임 확인 두 가지</b></td><td>AGV가 "내려놓았다"(팔 각도 되읽기)고 하고, 검사대가 "놓였다"(스위치)고 해야 검사를 시작한다. 한쪽만 오면 기다린다</td></tr>
+     <tr><th style="width:21mm">무엇</th><th>어떻게</th></tr>
+     <tr><td><b>검사 틀</b></td><td>틀 + 지붕 + 안쪽 흰 배경판(길이 30cm 이내, 안쪽 높이 = 몸통 20cm + 차체 높이 + 여유). 바깥 다리는 맵 밖, 안쪽 다리는 고리 안에 선다. AGV는 차체를 실은 채 그 아래에 서고, 위 카메라가 찍는다</td></tr>
+     <tr><td><b>검사 허가</b></td><td>관제 Pi5가 남은 공정이 없는지 확인하고 보낸다. 순서는 P1~P4와 같고, '작업 끝' 대신 '검사 결과'가 온다</td></tr>
      <tr><td><b>판정</b></td><td>검사 Pi5는 카메라로 본 합격 · 불합격만 보낸다. 관제 Pi5가 이력과 대조해 <b>완료</b>(합격이고 빠진 공정 없음) 또는 <b>보류</b>로 적는다. 불합격은 이상이 아니라 결과라서 빨간 등과 부저를 쓰지 않는다</td></tr>
-     <tr><td><b>끝</b></td><td>차체는 검사대에 남는다. AGV는 빈 채로 팔을 주행 자세로 돌린 뒤, 사람이 화면에서 '복귀'를 누르면 노랑으로 간다</td></tr>
-    </table>
-   </div>
-   <div>
-    <div class="warn"><b>실패하면.</b> 정해 둔 시간 안에 두 확인이 안 모이면 한 번 다시 시도한다. 그래도 안 되면 화면에 알리고, 사람이 손으로 검사대에 놓은 뒤 현장 버튼을 누른다. 기록에는 '수동 인계'로 남아 촬영이 끊기지 않는다. 떨어뜨린 것을 성공으로 세지 않는다.</div>
-    <div class="note" style="margin-top:2.5mm"><b>스마트태그 전원.</b> 차체를 드는 순간 태그도 같이 들린다. AGV에서 USB 선으로 전기를 주고 있으면 선이 걸린다. 그래서 팔을 쓰려면 <b>태그에 배터리</b>가 있어야 한다(주문 시점은 아직 정하지 않음). 다른 방법: 차체에는 키태그만 두고 ESP32 태그는 AGV에 둔다.</div>
-    <div class="ok" style="margin-top:2.5mm"><b>영상에서 보이는 것.</b> AGV가 차체를 설비에 맡기고 빈 채로 떠난다 → "태그가 AGV가 아니라 차체를 따라간다"가 처음으로 눈에 보인다.</div>
-   </div>
-  </div>
- </div>
- <div class="foot">검사대의 스위치는 검사 Pi5가 읽는 것으로 그렸다(제안). 깔때기 자리와 차체 손잡이 탭의 치수는 제공맵_공정배치도_팔있음 2쪽. '내려놓기 허가'·'내려놓음 완료'·'검사대 확인'은 새로 생기는 사건이다(5쪽). 4/5</div>
-</div>
-<div class="page">
- <div class="kick">팀 회의 자료 · 공정별 시나리오 (5/5 한 장 요약)</div>
- <h1>한 장 요약 — 자리마다 누가 무엇을 하나, 새로 만들 것, 먼저 확인할 것</h1>
- <div class="meta">굵은 글씨 = 팔을 쓰기 때문에 생기는 것 · 사건 이름은 데이터 흐름 설명서의 규칙에 맞춘 제안이고 영문 이름은 정하지 않았다</div>
- <div class="body">
-  <div class="blk">
-   <table>
-    <tr><th style="width:27mm">자리</th><th style="width:34mm">AGV 주행</th><th style="width:44mm">AGV 팔</th><th>그 자리의 장치</th><th style="width:60mm">관제 Pi5</th></tr>
-    <tr><td><b>노랑</b> <span class="tag t1">1단계</span></td><td>서 있다 → 출발</td><td>쓰지 않음</td><td>없음 (사람이 차체를 올리고 화면에서 '투입')</td><td>새 차체 번호 → 출발 허가(목적지 P1)</td></tr>
-    <tr><td><b>노랑</b> <span class="tag t2">2단계</span></td><td>서 있다 → 출발</td><td><b>투입대에서 집어 AGV에 싣기</b></td><td><b>투입대</b>(깔때기 자리. 사람이 차체를 놓고 '투입')</td><td>새 차체 번호 → <b>집기 허가</b> → <b>'집기 완료'가 적히면</b> 출발 허가</td></tr>
-    <tr><td><b>P1 ~ P4</b></td><td>태그 읽음에 정지 → 멈춤 완료 → 출발</td><td>쓰지 않음 (주행 자세 고정)</td><td>공정 ESP32: 리더기, 설비(미정), 상태등, 버튼</td><td>순서 확인 → 작업 허가 → 작업 끝 기록 → 이력 사본 → 출발 허가</td></tr>
-    <tr><td><b>검사</b></td><td>태그 읽음에 정지 → 멈춤 완료</td><td><b>검사대에 내려놓기</b> → 주행 자세로</td><td>검사 Pi5: 리더기, <b>놓임 스위치</b>, 카메라</td><td><b>내려놓기 허가</b> → <b>'내려놓음 완료' + '검사대 확인'이 적히면</b> 검사 허가 → 완료 / 보류</td></tr>
-    <tr><td><b>복귀</b></td><td>노랑으로 가서 색을 보고 선다</td><td>쓰지 않음</td><td>없음 (사람이 차체를 치우고 '복귀')</td><td>복귀 명령(목적지 노랑)</td></tr>
-   </table>
-  </div>
-  <div class="three">
-   <div>
-    <h2>새로 만들 것</h2>
-    <table>
-     <tr><td style="width:19mm"><span class="tag t1">1단계</span></td><td>검사대(깔때기 자리 + 스위치 + 가림 상자), 차체 지붕의 손잡이 탭, 팔 동작 한 벌(집기 → 내려놓기 → 복귀), 사건 세 가지(내려놓기 허가, 내려놓음 완료, 검사대 확인), 태그 배터리</td></tr>
-     <tr><td><span class="tag t2">2단계</span></td><td>투입대, 팔 동작 한 벌 더(투입대에서 집기 → 싣기), 사건 두 가지(집기 허가, 집기 완료)</td></tr>
-     <tr><td><span class="tag tn">공통</span></td><td>'수동 인계' 기록, 단계마다 제한 시간과 한 번 재시도</td></tr>
-    </table>
-   </div>
-   <div>
-    <h2>먼저 확인할 것 (11-26 팔 시험 0)</h2>
-    <ol>
-     <li><b>차체를 AGV 어디에 싣나, 팔이 그 자리에 닿나.</b> 이 시나리오 전체의 전제다</li>
-     <li>차체 + 태그 무게를 집게가 드나(목표 100g 이하, 상한 150g — 추정)</li>
-     <li>팔이 옆으로 닿는 거리와 높이(검사대·투입대를 선에서 얼마나 띄울지. 선에서 맵 끝까지는 15cm뿐이다)</li>
-     <li>팔을 앞으로 숙일 때 주행 카메라 화면을 가리나</li>
-     <li>서보 각도를 되읽을 수 있나('내려놓음 완료'의 근거)</li>
-    </ol>
-    <h2 style="margin-top:2.5mm">이미 아는 것 (11-24 실측)</h2>
-    <ul>
-     <li><b>카메라는 몸통 앞에 고정</b> — 팔을 움직여도 그대로</li>
-     <li><b>밑동은 정면 기준 좌우 90°까지만</b> 돈다 → 검사대·투입대는 차의 바로 옆이 한계다</li>
-     <li>어깨는 앞뒤로 숙여진다 · 집게 벌림 4.5~5cm</li>
-     <li>몸통 23 × 19.5 × 높이 20cm · 팔을 세우면 46cm · 윗면은 Jetson·팬이 차지</li>
-    </ul>
-   </div>
-   <div>
-    <h2>①이 안 되면 — 팔을 쓰지 않는다</h2>
-    <div class="warn"><b>[사용자 계획]</b> 카메라와 가장 가까운 첫 관절에서 <b>팔을 떼어 내고</b>, 비운 몸통 윗면(높이 약 20cm)에 <b>차체를 싣고 다닌다.</b> P1~P4 장면은 그대로이고(실은 채 작업), 노랑에서는 사람이 올리고 검사도 실은 채 받는다(= 팔 없는 배치). 이 문서의 1·2단계는 하지 않는다. 윗면의 평평한 넓이와 떼고 남는 부품은 아직 모른다(△).</div>
-    <h2 style="margin-top:2.5mm">한 바퀴 시간 (추정)</h2>
-    <table>
-     <tr><td>팔 없이</td><td>약 1.5~2분</td></tr>
-     <tr><td>1단계</td><td>+ 약 10초 (검사에서 내려놓기)</td></tr>
-     <tr><td>2단계</td><td>+ 약 10~12초 더 (노랑에서 집기)</td></tr>
+     <tr><td><b>끝</b></td><td>운반은 여기서 끝난다. 사람이 차체를 치우고 화면에서 '복귀'를 누르면, AGV는 빈 채로 노랑으로 가서 색을 보고 선다</td></tr>
     </table>
    </div>
   </div>
  </div>
- <div class="foot">근거: HANDOFF.md, 데이터 흐름 설명서(3쪽 정상 흐름, 한 바퀴 전체), 제공맵_공정배치도_팔있음(받침대, 사건 순서, 실패했을 때, 시험 0~3), 제공맵_공정배치도_팔없음(실은 채 작업, 설비는 옆에서), 개발 단계 순서(시험 날짜). 팔 범위가 정해지면 이 문서를 그 범위에 맞춰 다시 쓴다. 5/5</div>
+ <div class="foot">검사 틀의 치수는 제공맵_공정배치도 2쪽의 제안이다. 근거: HANDOFF.md, 데이터 흐름 설명서(3쪽 정상 흐름, 한 바퀴 전체), 제공맵_공정배치도(실은 채 작업, 설비는 옆에서). 4/4</div>
 </div>
 </body></html>

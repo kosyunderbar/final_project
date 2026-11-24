@@ -282,9 +282,6 @@ svg { display:block; width:100% }
      <tr><td>돌아오기</td><td>사람이 차체를 내리고 화면에서 '복귀'를 누른다 → AGV가 노랑으로 가서 색을 보고 스스로 선다 <span class="tag p">제안</span></td></tr>
     </table>
    </div>
-   <div class="blk open">
-    <span class="tag o">열린 자리</span><b>팔 있는 배치</b>를 쓰면 ②와 ③ 사이에 '내려놓음', ⑤와 ⑦ 사이에 '다시 집음' 신고가 AGV에서 하나씩 더 나온다. 사건 종류만 늘고 나머지 규칙은 같다. 쓸지는 교육장에서 팔을 재 본 뒤 정한다.
-   </div>
    <div class="blk"><b>안전 규칙 두 가지:</b> AGV는 자동 주행 중 브로커와 2초 끊기면 스스로 선다. 수동 조작 중에는 명령이 0.5초 안 오면 선다.<br><b>명세서와의 연결:</b> 출발 허가는 '목적지를 정해 출발'이다. 화면에서 출발지와 목적지를 골라 보낼 때도 같은 명령을 쓴다(PJT15).</div>
   </div>
  </div>
@@ -528,23 +525,22 @@ svg { display:block; width:100% }
 <div class="page">
  <div class="kick">팀 설명서 · 데이터 흐름 · 3부 아직 안 정한 것 (8/10)</div>
  <h1>바뀔 수 있는 자리와 회의에서 정할 것</h1>
- <div class="meta">이 문서의 기본 흐름은 확정된 방식이다. 아래 세 자리는 결정에 따라 바뀌며, 바뀌어도 '한 번 보내고, 현장이 먼저 적는다'는 그대로다.</div>
+ <div class="meta">이 문서의 기본 흐름은 확정된 방식이다. 아래 두 자리는 결정에 따라 바뀌며, 바뀌어도 '한 번 보내고, 현장이 먼저 적는다'는 그대로다.</div>
  <div class="body two">
   <div>
    <div class="blk">
-    <h2>바뀔 수 있는 자리 세 곳 <span class="tag o">열린 자리</span></h2>
+    <h2>바뀔 수 있는 자리 두 곳 <span class="tag o">열린 자리</span></h2>
     <table class="sm">
      <tr><th style="width:27mm">자리</th><th>지금 (기본 흐름)</th><th>채택하면 바뀌는 것</th></tr>
      <tr><td><b>㉠ 공정 ESP32의 판단 범위</b><br><span class="sub">제안. 설비 태스크가 맡는 일</span></td><td>작업 허가는 Pi5가 낸다. 공정 ESP32는 자기 설비의 이상만 스스로 판단한다. 비상정지는 공정이 먼저</td><td>Pi5의 허가가 '해도 된다'는 요청이 된다. 공정 ESP32가 태그 없음·이상·비상정지 상태면 <b>거부하고 이유를 답한다</b>(거부권). 작업 순서와 시간도 설비 태스크가 끝까지 혼자 진행한다. 메시지는 답의 '거부 + 이유'를 공정 → Pi5 방향에도 쓰면 되고 토픽은 늘지 않는다</td></tr>
-     <tr><td><b>㉡ 로봇팔</b><br><span class="sub">팔 있는 배치</span></td><td>차체는 AGV에 실린 채 작업한다(팔 없는 배치)</td><td>공정마다 AGV가 '내려놓음', '다시 집음'을 신고한다. 집기 실패가 새 이상이 된다. 스마트태그는 배터리가 필요하다</td></tr>
-     <tr><td><b>㉢ 공정별 센서</b></td><td>정하지 않았다. 센서 이상은 예시</td><td>센서마다 이상 코드(E1x)와 기준값이 생긴다</td></tr>
+     <tr><td><b>㉡ 공정별 센서</b></td><td>정하지 않았다. 센서 이상은 예시</td><td>센서마다 이상 코드(E1x)와 기준값이 생긴다</td></tr>
     </table>
    </div>
    <div class="blk">
     <h2>함께 볼 자료</h2>
     <table class="sm">
      <tr><td style="width:52mm"><code>00_회의안건지</code></td><td>다음 회의 안건</td></tr>
-     <tr><td><code>제공맵_공정배치도_팔없음</code><br><code>제공맵_공정배치도_팔있음</code></td><td>교육에서 받은 맵 위의 두 배치. 팔 없는 배치 / 팔 있는 배치(㉡)</td></tr>
+     <tr><td><code>제공맵_공정배치도</code></td><td>교육에서 받은 맵 위의 공정 배치. 차체는 AGV에 실린 채 다닌다</td></tr>
      <tr><td><code>RTOS_도입_제안서</code></td><td>공정 ESP32 펌웨어를 통신 태스크와 설비 태스크로 나누는 안. 칩 안 메시지(부록 B의 줄 형식), 12-01 판정</td></tr>
      <tr><td><code>esp32_book/</code></td><td>ESP32 교본과 예제 코드. 줄 처리(<code>modem.ino</code>), 검사값 계산(<code>cs.py</code>)</td></tr>
      <tr><td><code>HANDOFF.md</code></td><td>전체 결정과 진행 기록</td></tr>
@@ -562,7 +558,7 @@ svg { display:block; width:100% }
      <li><b>버튼 쓰는 법.</b> 제안: 비상정지 버튼은 정지만 하고, 이상 중에는 완료 버튼이 확인(짧게)·해제(길게)를 맡는다. 해제 버튼을 하나 더 달지도 정한다.</li>
      <li><b>'작업 끝'을 누가 내나.</b> 공정마다 공정 ESP32가 자동으로 낼지, 완료 버튼으로 낼지.</li>
      <li><b>끊긴 공정의 등 모양.</b></li>
-     <li><b>공정별 센서</b>(㉢). <b>공정 ESP32를 두 태스크로 나누는 안</b>의 팀 확인과 큐에 담는 모양(RTOS 도입 제안서).</li>
+     <li><b>공정별 센서</b>(㉡). <b>공정 ESP32를 두 태스크로 나누는 안</b>의 팀 확인과 큐에 담는 모양(RTOS 도입 제안서).</li>
      <li><b>담당:</b> 토픽·메시지 이름을 맞출 사람 1명, 기록 담당 프로그램의 주인.</li>
      <li><b>공유기:</b> ESP32는 2.4GHz만 붙는다. 전용 공유기를 쓸지.</li>
      <li><b>Spring:</b> DB 종류와 버전, 실행 위치(같은 공유기의 PC / 클라우드).</li>
@@ -714,7 +710,7 @@ svg { display:block; width:100% }
     <h2>F. 흉내 프로그램 (방법 ④, 개발용)</h2>
     <ul style="font-size:8.6pt">
      <li>파이썬 파일 하나가 P1~P4, 검사, AGV, 스마트태그 역할을 한다. 한 바퀴를 자동으로 돌리고, 답을 기다리며 다시 보내기까지 지킨다.</li>
-     <li>키나 옵션으로 이상 발생, 해제, 끊김, 같은 신고 두 번 보내기를 넣는다. 팔 있는 배치 옵션도 둔다.</li>
+     <li>키나 옵션으로 이상 발생, 해제, 끊김, 같은 신고 두 번 보내기를 넣는다.</li>
      <li>현장 화면, Spring, 트윈 담당이 실물 없이 개발할 수 있다.</li>
     </ul>
     <table class="xs" style="margin-top:.8mm">
@@ -738,7 +734,7 @@ svg { display:block; width:100% }
     <h2>E의 모양 (경로와 이름은 제안)</h2>
     <div style="font-size:8.6pt"><code>POST /edge/events</code><br><code>{"run":"r-20261201-1405","mode":"LIVE","events":[{"seq":1042,"at":"…","type":"WORK_DONE","station":"P2","body":"BODY-001","origin":"REAL","changes":[…]}]}</code><br>답 <code>{"storedThrough":1042}</code><br>트윈과 웹은 <code>GET /state</code>로 지금 상태 전체를 가져간다.</div>
    </div>
-   <div class="foot">근거: HANDOFF.md, 팔 없는 배치·팔 있는 배치, RTOS 도입 제안서, 에이전트 회의와 아르곤 검수(11-21).</div>
+   <div class="foot">근거: HANDOFF.md, 제공맵 공정배치도, RTOS 도입 제안서, 에이전트 회의와 아르곤 검수(11-21).</div>
   </div>
  </div>
 </div>
