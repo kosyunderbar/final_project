@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ko">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>AGV 베이스라인 가이드</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column of work-order sections; wide tables scroll inside their own box. */
+:root{
+  --paper:#eef1ee; --sheet:#f8faf8; --ink:#1c2b33; --ink2:#52646d; --rule:#c5cfcc;
+  --move:#d2571e; --ok:#1f8a5b; --warn:#b98207; --mat:#e3e8e4; --track:#2c3a41; --zone:#bfe3c9;
+  --sans:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#12191c; --sheet:#182226; --ink:#e3ebe9; --ink2:#9db0b3; --rule:#33444a;
+  --move:#f08a55; --ok:#4fc490; --warn:#e2b23c; --mat:#1f2b2f; --track:#0b1012; --zone:#234a36; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --paper:#12191c; --sheet:#182226; --ink:#e3ebe9; --ink2:#9db0b3; --rule:#33444a;
+  --move:#f08a55; --ok:#4fc490; --warn:#e2b23c; --mat:#1f2b2f; --track:#0b1012; --zone:#234a36; color-scheme:dark }
+
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.65;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 64px}
+.wrap{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:44px}
+h1{font-size:2rem;line-height:1.2;margin:0;font-weight:700;text-wrap:balance}
+h2{font-size:1.3rem;line-height:1.3;margin:0;font-weight:700;text-wrap:balance;padding-top:14px;border-top:2px solid var(--ink)}
+h3{font-size:1rem;margin:0;font-weight:600}
+p{margin:0;max-width:65ch}
+section{display:flex;flex-direction:column;gap:14px}
+.tagline{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;color:var(--ink2);margin-bottom:8px}
+.lede{color:var(--ink2);margin-top:10px}
+ul,ol{margin:0;padding-left:1.3em;max-width:65ch}
+li{margin:3px 0}
+strong{font-weight:600}
+code{font-family:var(--mono);font-size:.88em}
+pre{margin:0;background:var(--sheet);border:1px solid var(--rule);padding:12px 14px;overflow-x:auto;font-family:var(--mono);font-size:.84rem;line-height:1.55}
+.tw{overflow-x:auto;background:var(--sheet);border:1px solid var(--rule)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-weight:600;font-size:.78rem;color:var(--ink2);white-space:nowrap}
+td.n,th.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.note{border-left:3px solid var(--warn);padding:4px 0 4px 12px;color:var(--ink2);font-size:.92rem;max-width:65ch}
+.sheet{background:var(--sheet);border:1px solid var(--rule);padding:14px}
+svg{display:block;width:100%;height:auto}
+svg text{font-family:var(--mono);fill:var(--ink2)}
+.cap{font-size:.84rem;color:var(--ink2)}
+.flow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.9rem}
+.flow span{border:1px solid var(--ink2);padding:4px 10px;background:var(--sheet)}
+.flow i{font-style:normal;color:var(--ink2)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.cols > div{min-width:0}
+.sw{display:inline-block;width:.8em;height:.8em;vertical-align:-.05em;margin-right:6px;border:1px solid var(--ink2)}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="tagline">제안 · 교육장 11-25 ~ 11-27 · 숫자는 현장에서 다시 정함</div>
+  <h1>AGV 베이스라인 가이드</h1>
+  <p class="lede">AGV가 검은 선을 따라 돌다가 색 구역마다 서고, 정해진 시간을 기다린 뒤 스스로 출발해 계속 도는 코드를 만드는 순서입니다. 나중에 공정과 MQTT를 붙일 때 그대로 쓰는 뼈대가 목표입니다.</p>
+</header>
+
+<section>
+  <h2>끝났다고 볼 기준</h2>
+  <ol>
+    <li>반시계 방향으로 사람 손 없이 10바퀴를 돌고, 60번의 정차에서 놓친 구역이 없다.</li>
+    <li>구역마다 10번 중 9번 이상, 차체 중심이 구역 안에 선다.</li>
+    <li>"언제 서나"와 "언제 출발하나"가 각각 한 곳에 모여 있어, 그곳만 MQTT로 바꾸면 된다.</li>
+    <li>주행 기록, 카메라 사진, 측정표, 영상이 저장돼 있다.</li>
+  </ol>
+  <p class="note">이 코드는 최종 시나리오와 두 가지가 다릅니다. 최종판은 공정의 "태그 읽음"으로 서고, 한 번 운반하면 한 바퀴를 더 돌지 않습니다. 지금은 색으로 서고 계속 돕니다. 3번 기준이 이 차이를 나중에 메우는 자리입니다.</p>
+</section>
+
+<section>
+  <h2>코드를 짜기 전에 확인할 세 가지</h2>
+  <div class="tw"><table>
+    <tr><th>확인할 것</th><th>왜</th><th>결과에 따라</th></tr>
+    <tr><td><strong>로봇팔을 언제 떼나</strong></td><td>팔이 있고 없고에 따라 무게와 카메라가 보는 범위가 달라져, 주행 값과 정지 값을 다시 잡아야 합니다.</td><td>주행 시험 전에 떼는 것을 권합니다(30분 안에). 못 떼면 접은 자세를 사진으로 남기고 그 자세로만 시험합니다.</td></tr>
+    <tr><td><strong>카메라 각도가 고정인가</strong></td><td>교안 샘플에는 5번 서보가 카메라를 위아래로 움직이는 코드가 있습니다. 각도가 바뀌면 색과 선이 보이는 위치가 전부 달라집니다.</td><td>움직인다면 각도 하나를 정해 시작할 때마다 그 값으로 맞춥니다.</td></tr>
+    <tr><td><strong>교육 때 학습한 주행 모델이 있나</strong></td><td>교안의 주행은 직접 학습한 모델로 조향을 예측하는 방식입니다. 그 모델이 반시계로도 도는지 모릅니다.</td><td>아래 "선을 따라가는 두 방법"대로 30분만 시험하고 정합니다.</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>교안에서 가져다 쓰는 것</h2>
+  <ul>
+    <li><strong>모터:</strong> <code>from jetbot import Robot</code>, <code>robot.forward(0.4)</code>, <code>robot.left(0.3)</code>, <code>robot.stop()</code>.</li>
+    <li><strong>카메라:</strong> <code>Camera.instance(width=300, height=300)</code>, 현재 사진은 <code>camera.value</code>(BGR 순서). 카메라는 프로그램 하나만 잡을 수 있고, 끝낼 때 <code>camera.stop()</code>을 불러야 다음에 다시 열립니다.</li>
+    <li><strong>실행 환경:</strong> JetBot 이미지의 컨테이너 안, Python 3.6, OpenCV 4.1.1. 스크립트는 컨테이너 안에서 실행합니다.</li>
+    <li><strong>색:</strong> 교안도 HSV 값을 조사해 저장하고 주행 중에 확인하라고 합니다.</li>
+  </ul>
+  <p class="cap">출처: PJT06 교안 7~11·77·80쪽과 그 샘플 노트북, 과제 명세 16-C-1-08(3~6쪽), 16-C-1-13·14(5~6쪽). 좌우 바퀴 값을 따로 주는 <code>robot.set_motors(왼쪽, 오른쪽)</code>은 교안에 없어 실물에서 되는지 확인해야 합니다. 초당 사진 수, 모델 파일 위치도 교안에서 찾지 못했습니다.</p>
+</section>
+
+<section>
+  <h2>선을 따라가는 두 방법</h2>
+  <div class="cols">
+    <div class="sheet"><h3>가. 사진에서 검은 선을 직접 찾기</h3>
+      <p class="cap" style="margin-top:6px">사진 아래쪽 띠에서 검은 부분의 가운데를 구해, 화면 중앙에서 벗어난 만큼 방향을 틉니다. 학습이 필요 없고 도는 방향과 상관없습니다. 값을 눈으로 보고 고칠 수 있습니다.</p></div>
+    <div class="sheet"><h3>나. 교육 때 학습한 모델</h3>
+      <p class="cap" style="margin-top:6px">이미 잘 돈다면 가장 빠릅니다. 다만 색 구역과 노랑의 교차선에서 어떻게 움직일지 알 수 없고, 안 되면 사진을 다시 모아 학습해야 합니다.</p></div>
+  </div>
+  <p>두 에이전트의 의견이 갈린 부분입니다. PM은 있는 모델부터, 개발자는 "가"부터 하자고 했습니다. 권하는 순서는 이렇습니다. 모델이 있으면 <strong>30분만</strong> 반시계로 돌려 봅니다. 손 안 대고 3바퀴를 돌면 그대로 쓰고, 아니면 미련 없이 "가"로 갑니다. 어느 쪽이든 코드에서는 "사진을 넣으면 방향 값을 돌려주는 부품" 하나로 만들어, 서로 바꿔 끼울 수 있게 둡니다.</p>
+</section>
+
+<section>
+  <h2>프로그램 구조</h2>
+  <h3>한 바퀴의 일 (1초에 약 20번 되풀이)</h3>
+  <div class="flow"><span>사진 받기</span><i>→</i><span>색 판정</span><i>→</i><span>상태 결정</span><i>→</i><span>방향 계산</span><i>→</i><span>모터</span><i>→</i><span>기록</span></div>
+  <p>스레드 하나로 순서대로 돕니다. 나중에 MQTT를 붙일 때는 통신 쪽이 "메시지가 왔다"는 표시만 남기고, 이 순서 안에서 그 표시를 읽습니다.</p>
+
+  <h3>상태</h3>
+  <div class="tw"><table>
+    <tr><th>상태</th><th>하는 일</th><th>다음으로 넘어가는 때</th></tr>
+    <tr><td><strong>주행</strong></td><td>선을 따라가며 색을 찾는다</td><td>다음 차례의 색이 3장 연속 보임</td></tr>
+    <tr><td><strong>접근</strong></td><td>속도를 줄여 계속 간다</td><td>색이 사진 아래 띠에서 사라짐</td></tr>
+    <tr><td><strong>맞추기</strong></td><td>정해진 거리만큼 더 간다</td><td>그 거리를 다 감</td></tr>
+    <tr><td><strong>정차</strong></td><td>모터 0, 출발 조건을 기다린다</td><td>출발 조건이 참 (지금은 시간)</td></tr>
+    <tr><td><strong>이상</strong></td><td>모터 0, 사람이 볼 때까지 그대로</td><td>사람이 다시 시작</td></tr>
+  </table></div>
+
+  <h3>방금 떠난 색을 다시 보지 않는 규칙</h3>
+  <ul>
+    <li>출발할 때 그 색을 잠급니다. 아래 띠에 아무 색도 없는 사진이 10장 이어지면 풉니다.</li>
+    <li>출발 직후 0.3초쯤은 모든 색을 무시합니다. 이 시간을 길게 잡으면 안 됩니다. 보라와 파랑은 가장자리 사이가 14cm뿐이라, 길게 무시하면 파랑을 놓칩니다.</li>
+    <li>순서(노랑 → 주황 → 초록 → 보라 → 파랑 → 빨강)에서 다음 차례가 아닌 색은 기록만 하고 서지 않습니다.</li>
+  </ul>
+
+  <h3>바꿔 끼우는 자리</h3>
+<pre>정지 조건:  should_stop(ctx)   -> 참 / 거짓
+출발 조건:  arm(ctx);  should_depart(ctx) -> 참 / 거짓
+
+지금    정지 = 색을 보고 가운데까지 감      출발 = 5초 지남
+나중    정지 = MQTT "태그 읽음" 도착        출발 = MQTT "작업 완료" 도착
+
+구역별 표:  노랑 = 색으로 정지,  주황 ~ 빨강 = (나중에) 태그로 정지</pre>
+  <p><code>ctx</code>에는 지금 색, 상태에 들어온 시각, 몇 번째 구역인지, 몇 바퀴째인지를 담습니다. 조건을 구역별 표로 두면, 노랑만 색으로 서는 최종 계획에도 그대로 맞습니다.</p>
+
+  <h3>파일</h3>
+  <div class="tw"><table>
+    <tr><th>파일</th><th>맡는 일</th></tr>
+    <tr><td class="n">main.py</td><td>위의 되풀이. 끝날 때 반드시 모터를 0으로</td></tr>
+    <tr><td class="n">drive.py</td><td>모터 명령을 감싼다. 속도 제한과 정지를 한 곳에서</td></tr>
+    <tr><td class="n">line_tracker.py</td><td>사진 → 방향 값. "가"와 "나"를 같은 모양으로</td></tr>
+    <tr><td class="n">color_detector.py</td><td>사진 → 색 이름 또는 없음</td></tr>
+    <tr><td class="n">conditions.py</td><td>정지 조건, 출발 조건</td></tr>
+    <tr><td class="n">fsm.py</td><td>상태와 넘어가는 규칙</td></tr>
+    <tr><td class="n">logger.py</td><td>CSV 기록</td></tr>
+    <tr><td class="n">calib_hsv.py</td><td>구역에 세워 놓고 색 값을 재서 저장</td></tr>
+    <tr><td class="n">config.json</td><td>고칠 수 있는 숫자 전부</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>색을 알아보는 방법</h2>
+  <ol>
+    <li>사진 아래 1/4, 가운데 60% 폭의 띠만 봅니다.</li>
+    <li>HSV로 바꿔 채도와 밝기가 충분한 점만 남깁니다(처음 값: S &gt; 80, V &gt; 60). 흰 바닥과 검은 선이 빠집니다.</li>
+    <li>남은 점이 띠의 30%를 넘으면, 그 점들의 색상(H) 가운데 값을 구합니다.</li>
+    <li>미리 재 둔 여섯 색의 H 값 중 가장 가까운 색으로 정합니다. 너무 멀면 "없음"입니다.</li>
+    <li>같은 색이 3장 이어져야 확정합니다.</li>
+  </ol>
+  <div class="tw"><table>
+    <tr><th>색</th><th class="n">처음 넣어 볼 H</th><th>헷갈리기 쉬운 상대</th></tr>
+    <tr><td><span class="sw" style="background:#e53935"></span>빨강</td><td class="n">3</td><td>주황 (차이 9, 가장 가까움)</td></tr>
+    <tr><td><span class="sw" style="background:#fb8c00"></span>주황</td><td class="n">12</td><td>빨강, 노랑 (차이 13)</td></tr>
+    <tr><td><span class="sw" style="background:#fdd835"></span>노랑</td><td class="n">25</td><td>주황</td></tr>
+    <tr><td><span class="sw" style="background:#43a047"></span>초록</td><td class="n">75</td><td>없음</td></tr>
+    <tr><td><span class="sw" style="background:#1e88e5"></span>파랑</td><td class="n">109</td><td>보라 (차이 20)</td></tr>
+    <tr><td><span class="sw" style="background:#8e24aa"></span>보라</td><td class="n">129</td><td>파랑</td></tr>
+  </table></div>
+  <p class="cap">H 값은 도면의 색에서 계산한 것이라 실제 매트와 조명에서는 다릅니다(OpenCV 기준 0~179). 표의 색 견본은 표시용입니다.</p>
+  <ul>
+    <li><strong>값 재기:</strong> 구역마다 들어가는 자세, 가운데, 나가는 자세 세 번을 재서 저장합니다. 매트 위치와 조명을 그대로 둔 채 잽니다.</li>
+    <li><strong>빨강은 0과 179 양쪽에 걸칩니다.</strong> 거리를 잴 때 원을 한 바퀴 도는 것으로 계산합니다.</li>
+    <li><strong>그래도 헷갈리면</strong> 채도와 밝기를 둘째 기준으로 쓰고, 순서 규칙으로 막습니다. 빨강 다음은 노랑이지 주황일 수 없습니다.</li>
+    <li><strong>색 판정은 방향에 손대지 않습니다.</strong> 보라와 파랑처럼 어두운 구역에서는 검은 선이 잘 안 보일 수 있으니, 선을 놓치면 직전 방향을 0.5초까지 유지합니다.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>구역 가운데에 서는 방법</h2>
+  <p>카메라는 몸통 앞에 있고 AGV(23cm)는 구역(15cm)보다 깁니다. 그래서 색이 보인 순간에 서면 몸통은 아직 구역 밖입니다.</p>
+  <div class="sheet">
+    <svg viewBox="0 0 560 150" role="img" aria-label="옆에서 본 그림. 카메라가 보는 바닥 지점이 구역을 벗어날 때 차체 중심은 구역 중심보다 4 더하기 d 센티미터 뒤에 있다">
+      <rect x="0" y="112" width="560" height="6" fill="var(--mat)"/>
+      <rect x="330" y="112" width="150" height="6" fill="var(--zone)" stroke="var(--ok)" stroke-width="1"/>
+      <text x="372" y="134" font-size="11">구역 15cm</text>
+      <line x1="405" y1="60" x2="405" y2="112" stroke="var(--ok)" stroke-width="1" stroke-dasharray="4 3"/>
+      <text x="382" y="54" font-size="10">구역 중심</text>
+      <rect x="190" y="62" width="230" height="44" rx="6" fill="var(--sheet)" stroke="var(--ink)" stroke-width="1.5"/>
+      <rect x="198" y="100" width="214" height="12" rx="6" fill="var(--track)"/>
+      <rect x="404" y="50" width="22" height="16" fill="var(--ink)"/>
+      <text x="236" y="88" font-size="11">AGV 23cm</text>
+      <line x1="305" y1="40" x2="305" y2="112" stroke="var(--move)" stroke-width="1.5"/>
+      <text x="268" y="34" font-size="10" style="fill:var(--move)">차체 중심</text>
+      <line x1="426" y1="58" x2="480" y2="112" stroke="var(--ink2)" stroke-width="1" stroke-dasharray="3 3"/>
+      <text x="486" y="98" font-size="10">카메라가 보는</text>
+      <text x="486" y="110" font-size="10">바닥 (앞끝 + d)</text>
+      <line x1="305" y1="142" x2="405" y2="142" stroke="var(--move)" stroke-width="1.5"/>
+      <line x1="305" y1="137" x2="305" y2="147" stroke="var(--move)" stroke-width="1.5"/>
+      <line x1="405" y1="137" x2="405" y2="147" stroke="var(--move)" stroke-width="1.5"/>
+      <text x="318" y="138" font-size="10" style="fill:var(--move)">남은 4 + d cm</text>
+    </svg>
+    <p class="cap" style="margin-top:8px">색이 아래 띠에서 사라지는 순간의 모습입니다. d는 차 앞끝에서 사진 맨 아래에 비치는 바닥까지의 거리이고, 현장에서 잽니다.</p>
+  </div>
+  <div class="tw"><table>
+    <tr><th>기준으로 삼는 순간</th><th class="n">가운데까지 남은 거리</th><th>평가</th></tr>
+    <tr><td>색이 처음 보일 때</td><td class="n">19 + d cm</td><td>멀어서 속도 오차가 크게 쌓임. 예비 방법</td></tr>
+    <tr><td><strong>색이 사라질 때</strong></td><td class="n">4 + d cm</td><td>짧아서 오차가 작음. 먼저 해 볼 방법</td></tr>
+  </table></div>
+  <ol>
+    <li>색이 확정되면 속도를 줄입니다.</li>
+    <li>색이 아래 띠에서 사라질 때까지 갑니다.</li>
+    <li>(4 + d)cm에 해당하는 시간만큼 더 가서 멈춥니다.</li>
+  </ol>
+  <p>"몇 cm가 몇 초인가"는 30cm 직선을 달려 시간을 재서 구합니다. 배터리가 닳으면 달라지니 잴 때 배터리 상태도 적어 둡니다. 모서리와 겹친 구역(초록, 보라, 파랑, 빨강)은 값이 다를 수 있어, 더 가는 거리를 구역마다 따로 둘 수 있게 합니다.</p>
+</section>
+
+<section>
+  <h2>올라가는 순서</h2>
+  <p>한 단계를 통과할 때마다 쓸 수 있는 결과가 남게 짰습니다. 시간 안에 못 넘으면 오른쪽 칸으로 갑니다.</p>
+  <div class="tw"><table>
+    <tr><th>#</th><th>할 일</th><th>통과 기준</th><th>시간</th><th>못 넘으면</th></tr>
+    <tr><td class="n">0</td><td>충전, 부팅, 접속, 수동 주행. 원래 있던 노트북과 모델을 복사해 둠</td><td>전·후·좌·우·정지 다섯 명령이 듣고, 사진 한 장이 저장됨</td><td class="n">45분</td><td>강사에게 묻고, 그동안 색 구역 위치를 자로 잼</td></tr>
+    <tr><td class="n">1</td><td>반시계 방향 선 따라가기</td><td>손 안 대고 3바퀴, 영상 1개</td><td class="n">90분</td><td>속도를 낮춤. 모델이면 "가" 방법으로 바꿈</td></tr>
+    <tr><td class="n">2</td><td>달리면서 구역별 사진과 색 값 저장</td><td>색 6개 × 30장</td><td class="n">60분</td><td>조명 한 가지만</td></tr>
+    <tr><td class="n">3</td><td>서지 않고 달리며 색 이름만 출력</td><td>5바퀴 30번 통과 중 29번 이상 맞고, 구역 밖에서 잘못 본 것 0</td><td class="n">90분</td><td>띠를 더 아래로, 3장 연속 조건, 다음 차례 색만 받기</td></tr>
+    <tr><td class="n">4</td><td>색을 보고 가운데에 정지</td><td>구역마다 10번 중 9번, 앞뒤 ±4cm, 좌우 ±3cm, 각도 ±10°</td><td class="n">120분</td><td>더 느리게 접근, 구역별 값을 따로</td></tr>
+    <tr><td class="n">5</td><td>기다렸다 스스로 출발 (상태 연결)</td><td>3바퀴 18번 정차와 출발, 손댄 횟수 0</td><td class="n">60분</td><td>노랑에서 출발 뒤 1초는 색을 끄고 직진</td></tr>
+    <tr><td class="n">6</td><td>혼자 10바퀴</td><td>60번 정차, 손댄 횟수 0, 놓친 구역 0</td><td class="n">60분</td><td>5바퀴 두 번으로 낮추고, 가장 잦은 실패 하나만 고침</td></tr>
+  </table></div>
+  <p class="cap">통과 기준의 숫자는 제안입니다. 4단계의 ±4cm는 나중에 RFID 리더가 태그를 읽는 거리와 맞춰 다시 정합니다.</p>
+
+  <h3>날짜별</h3>
+  <div class="tw"><table>
+    <tr><th>날</th><th>단계</th><th>그날 반드시 남길 것</th></tr>
+    <tr><td class="n">첫날</td><td class="n">0 ~ 3</td><td>반시계 3바퀴 영상, 색 6개 사진</td></tr>
+    <tr><td class="n">둘째 날</td><td class="n">4 ~ 6</td><td>여섯 구역에 서고 출발하는 한 바퀴 영상 (목표는 10바퀴)</td></tr>
+    <tr><td class="n">11-27</td><td>예비</td><td>못 끝낸 단계, AGV 포장</td></tr>
+  </table></div>
+  <ul>
+    <li><strong>매트를 다른 팀이 쓰는 동안</strong>에는 기록을 정리하고, 저장한 사진으로 색 판정을 시험합니다.</li>
+    <li><strong>밀리면 버리는 순서:</strong> 둘째 조명 → 좌우·각도 측정(앞뒤만 남김) → 10바퀴를 5바퀴로 → 구역별 10번을 5번으로.</li>
+    <li><strong>버리지 않는 것:</strong> 기록 저장과 1단계 영상.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>혼자 돌게 둘 때의 안전</h2>
+  <div class="tw"><table>
+    <tr><th>상황</th><th>동작</th></tr>
+    <tr><td>선을 0.5초 넘게 놓침</td><td>정지하고 이상 상태. 스스로 찾으러 돌지 않음 (선에서 맵 끝까지 15cm뿐)</td></tr>
+    <tr><td>색 없이 너무 오래 달림</td><td>가장 긴 구간(46.5cm)에 걸리는 시간의 2배를 넘으면 정지</td></tr>
+    <tr><td>한 바퀴의 일이 0.3초를 넘김, 사진이 새로 안 옴</td><td>정지</td></tr>
+    <tr><td>프로그램이 어떤 식으로든 끝남</td><td>모터 0, 카메라 닫기. 정상 종료, Ctrl+C, 오류 모두에서</td></tr>
+    <tr><td>사람이 세우고 싶음</td><td>터미널에서 Ctrl+C, 안 되면 전원 스위치</td></tr>
+    <tr><td>통신이 2초 끊김 (나중)</td><td>자리만 만들어 둠</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>일어나기 쉬운 문제</h2>
+  <div class="tw"><table>
+    <tr><th>문제</th><th>먼저 해 볼 것</th></tr>
+    <tr><td>노랑의 교차선에서 엉뚱한 선을 탄다</td><td>띠를 더 아래로, 더 좁게. 직전 위치에 가장 가까운 선만 고름. 노랑 안에서는 직진으로 고정</td></tr>
+    <tr><td>빨강·주황·노랑을 헷갈린다</td><td>그 자리에서 값을 다시 잼. 순서 규칙을 엄격하게</td></tr>
+    <tr><td>서는 위치가 들쭉날쭉하다</td><td>접근 속도를 낮춤. 배터리 상태를 적음</td></tr>
+    <tr><td>모서리 구역에서 색이 일찍 사라진다</td><td>띠 폭을 넓히고, 더 가는 거리를 구역별로</td></tr>
+    <tr><td>느린 속도에서 방향이 안 먹거나 떤다</td><td>움직이기 시작하는 최소 모터 값을 잼. 한쪽을 세우는 대신 좌우 차이를 주는 방식으로</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>설정과 기록</h2>
+  <div class="cols">
+    <div><h3>config.json에 둘 것</h3>
+      <ul>
+        <li>주행: 보통 속도, 접근 속도, 방향 민감도</li>
+        <li>색: 띠 위치, S·V 하한, 여섯 색의 H, 확정·해제 장수</li>
+        <li>정차: 더 가는 거리(구역별), cm당 시간, 기다리는 시간, 순서</li>
+        <li>안전: 각 제한 시간</li>
+        <li>MQTT: 주소와 토픽 (지금은 비움)</li>
+      </ul></div>
+    <div><h3>CSV 기록의 열</h3>
+      <p class="cap">시각, 한 바퀴 일에 걸린 시간, 상태, 바퀴 수, 구역 번호, 본 색, 확정된 색, H·S·V 가운데 값, 색이 띠를 채운 비율, 선을 찾았는지, 선이 벗어난 정도, 방향 값, 왼쪽·오른쪽 모터, 사건</p></div>
+  </div>
+  <h3>손으로 적는 표 네 장</h3>
+  <div class="tw"><table>
+    <tr><th>표</th><th>열</th></tr>
+    <tr><td>색 인식</td><td>시각, 조명, 구역, 통과 횟수, 맞음, 틀림(무슨 색으로), 놓침, H·S·V 범위, 처음 보였을 때 차 앞끝에서 구역까지 거리</td></tr>
+    <tr><td>정차 위치 (구역마다 10줄)</td><td>구역, 회차, 속도, 더 간 거리 값, 앞뒤 오차, 좌우 오차, 각도, 구역 안인지, 비고</td></tr>
+    <tr><td>바퀴와 배터리</td><td>바퀴, 시작 시각, 걸린 시간, 정차 수, 손댄 횟수, 배터리, 코드 판</td></tr>
+    <tr><td>실패</td><td>시각, 바퀴, 위치, 증상, 짐작한 원인, 한 일, 다시 났는지, 영상·기록 파일</td></tr>
+  </table></div>
+</section>
+
+<section>
+  <h2>가져갈 것과 남길 것</h2>
+  <div class="cols">
+    <div><h3>가져갈 것</h3>
+      <ul><li>줄자, 30cm 자, 각도기</li><li>마스킹테이프 (차체 중심 표시)</li><li>드라이버, USB, 충전기</li><li>휴대폰 거치대 (영상)</li><li>인쇄한 표 네 장</li></ul></div>
+    <div><h3>매일 떠나기 전에 저장</h3>
+      <ul><li>코드 전체, 원래 있던 노트북과 모델</li><li>CSV 기록, 그날의 설정값</li><li>구역별 사진과 한 바퀴 연속 사진</li><li>정차 위치 사진, 매트 전체 사진, 영상</li><li>채운 표</li></ul></div>
+  </div>
+  <h3>온라인 주에 AGV만 가지고 할 수 있는 일</h3>
+  <div class="cols">
+    <div class="sheet"><h3>됩니다</h3>
+      <ul><li>저장한 사진을 다시 돌려 색 판정 시험</li><li>가짜 색 신호로 상태 흐름 시험</li><li>기다리는 시간을 MQTT "작업 완료"로 바꾸기</li><li>통신 2초 끊김 감시</li><li>바닥에서 직진과 정지 밀림 재기, 배터리 지속 시간</li></ul></div>
+    <div class="sheet"><h3>매트가 있어야 합니다</h3>
+      <ul><li>선 따라가기 조정</li><li>색 값 확정</li><li>정차 위치 정확도</li><li>노랑 교차 통과</li><li>혼자 10바퀴</li></ul></div>
+  </div>
+  <p>그래서 한 바퀴 연속 사진을 넉넉히 남기는 것이 중요합니다. 집에서는 그 사진이 매트를 대신합니다.</p>
+</section>
+
+</div>
