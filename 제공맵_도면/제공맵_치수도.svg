@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1840 1300" width="1840" height="1300">
+<title>제공 맵 치수도</title>
+<defs>
+<marker id="ar" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="9" markerHeight="9" markerUnits="userSpaceOnUse" orient="auto-start-reverse"><path d="M0 1.5 L10 5 L0 8.5z" fill="#27313B"/></marker>
+<marker id="ax" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="12" markerHeight="12" markerUnits="userSpaceOnUse" orient="auto"><path d="M0 1 L10 5 L0 9z" fill="#27313B"/></marker>
+<style>
+text{font-family:'Pretendard','Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo',sans-serif}
+.d{stroke:#27313B;stroke-width:1.4;fill:none}
+.e{stroke:#8B96A1;stroke-width:1}
+.t{font-size:19px;font-weight:600;text-anchor:middle;font-variant-numeric:tabular-nums}
+.s{font-size:15px;fill:#5D6B78}
+.h1{font-size:34px;font-weight:800;fill:#1B1C1F}
+.h2{font-size:20px;font-weight:700;fill:#1B1C1F}
+.p{font-size:17px;fill:#27313B}
+.ph{font-size:15px;fill:#5D6B78}
+.pnum{font-size:17px;font-weight:600;font-variant-numeric:tabular-nums}
+.pw{font-size:17px;font-weight:700;fill:#FFFFFF}
+</style></defs>
+<rect width="1840" height="1300" fill="#FFFFFF"/>
+<g transform="translate(250 200)">
+<rect x="0" y="0" width="1000" height="1000" fill="#F6F7F5"/>
+<rect id="zone-yellow" x="775.0" y="425.0" width="150" height="150" fill="#F2D94B"/>
+<rect id="zone-orange" x="425.0" y="75.0" width="150" height="150" fill="#EC9459"/>
+<rect id="zone-green" x="75.0" y="250.0" width="150" height="150" fill="#6CBF96"/>
+<rect id="zone-purple" x="75.0" y="600.0" width="150" height="150" fill="#5B3F9F"/>
+<rect id="zone-blue" x="250.0" y="775.0" width="150" height="150" fill="#2E64C6"/>
+<rect id="zone-red" x="600.0" y="775.0" width="150" height="150" fill="#D5503F"/>
+<g fill="#8D96AB" font-family="'Pretendard','Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo',sans-serif" text-anchor="middle"><text x="500.0" y="484" font-size="31" font-weight="800" letter-spacing="0.5">SSAFY</text><text x="500.0" y="509" font-size="13.5" font-weight="700">IoT Data 물류로봇</text></g>
+<g fill="none" stroke="#1B1C1F" stroke-width="20" stroke-linejoin="round"><path id="track-main" d="M850.0 290.0 L850.0 710.0 A140.0 140.0 0 0 1 710.0 850.0 L290.0 850.0 A140.0 140.0 0 0 1 150.0 710.0 L150.0 290.0 A140.0 140.0 0 0 1 290.0 150.0 L710.0 150.0 A140.0 140.0 0 0 1 850.0 290.0 Z"/><path id="track-left-branch" d="M150.0 390.0 C164.0 397.7 180.0 403.5 192.0 413.0 C204.0 422.5 215.7 435.8 222.0 447.0 C228.3 458.2 230.2 468.5 230.0 480.0 C229.8 491.5 227.7 504.0 221.0 516.0 C214.3 528.0 201.8 540.5 190.0 552.0 C178.2 563.5 163.3 574.0 150.0 585.0"/><path id="track-right-branch" d="M809.0 191.0 C797.3 206.0 786.2 219.2 774.0 236.0 C761.8 252.8 745.0 273.8 736.0 292.0 C727.0 310.2 721.5 326.7 720.0 345.0 C718.5 363.3 719.8 383.7 727.0 402.0 C734.2 420.3 742.5 438.7 763.0 455.0 C783.5 471.3 820.5 484.5 850.0 500.0 C879.5 515.5 918.0 528.3 939.7 548.0 C961.4 567.7 975.7 597.0 980.0 618.0 C984.3 639.0 977.6 657.7 965.7 674.0 C953.8 690.3 928.6 704.0 908.5 716.0 C888.4 728.0 866.3 736.2 845.2 746.2"/></g>
+<g font-family="'Pretendard','Noto Sans KR','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="17" font-weight="700" text-anchor="middle" fill="#1B1C1F" fill-opacity=".72">
+<text x="892" y="452">노랑</text>
+<text x="500" y="104">주황</text>
+<text x="107" y="331">초록</text>
+<text x="107" y="681">보라</text>
+<text x="325" y="902">파랑</text>
+<text x="675" y="902">빨강</text>
+</g>
+<rect x="0" y="0" width="1000" height="1000" fill="none" stroke="#9AA5B0" stroke-width="1.5"/>
+<line class="e" x1="0" y1="0" x2="0" y2="-53"/><line class="e" x1="425.0" y1="0" x2="425.0" y2="-53"/><line class="d" x1="0" y1="-45" x2="425.0" y2="-45" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="212.5" y="-52" fill="#C9561A">425</text><line class="e" x1="425.0" y1="0" x2="425.0" y2="-53"/><line class="e" x1="575.0" y1="0" x2="575.0" y2="-53"/><line class="d" x1="425.0" y1="-45" x2="575.0" y2="-45" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="500.0" y="-52" fill="#27313B">150</text><line class="e" x1="575.0" y1="0" x2="575.0" y2="-53"/><line class="e" x1="1000" y1="0" x2="1000" y2="-53"/><line class="d" x1="575.0" y1="-45" x2="1000" y2="-45" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="787.5" y="-52" fill="#C9561A">425</text>
+<line class="e" x1="0" y1="0" x2="0" y2="-108"/><line class="e" x1="140.0" y1="0" x2="140.0" y2="-108"/><line class="d" x1="0" y1="-100" x2="140.0" y2="-100" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="70.0" y="-107" fill="#27313B">140</text><line class="e" x1="140.0" y1="0" x2="140.0" y2="-108"/><line class="e" x1="860.0" y1="0" x2="860.0" y2="-108"/><line class="d" x1="140.0" y1="-100" x2="860.0" y2="-100" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="500.0" y="-107" fill="#27313B">720</text><line class="e" x1="860.0" y1="0" x2="860.0" y2="-108"/><line class="e" x1="1000" y1="0" x2="1000" y2="-108"/><line class="d" x1="860.0" y1="-100" x2="1000" y2="-100" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="930.0" y="-107" fill="#27313B">140</text>
+<line class="e" x1="0" y1="0" x2="0" y2="-163"/><line class="e" x1="1000" y1="0" x2="1000" y2="-163"/><line class="d" x1="0" y1="-155" x2="1000" y2="-155" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="500.0" y="-162" fill="#27313B">1000</text>
+<line class="e" x1="0" y1="0" x2="-53" y2="0"/><line class="e" x1="0" y1="250.0" x2="-53" y2="250.0"/><line class="d" x1="-45" y1="0" x2="-45" y2="250.0" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="-53" y="125.0" fill="#C9561A" transform="rotate(-90 -53 125.0)">250</text><line class="e" x1="0" y1="250.0" x2="-53" y2="250.0"/><line class="e" x1="0" y1="400.0" x2="-53" y2="400.0"/><line class="d" x1="-45" y1="250.0" x2="-45" y2="400.0" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="-53" y="325.0" fill="#27313B" transform="rotate(-90 -53 325.0)">150</text><line class="e" x1="0" y1="400.0" x2="-53" y2="400.0"/><line class="e" x1="0" y1="600.0" x2="-53" y2="600.0"/><line class="d" x1="-45" y1="400.0" x2="-45" y2="600.0" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="-53" y="500.0" fill="#C9561A" transform="rotate(-90 -53 500.0)">200</text><line class="e" x1="0" y1="600.0" x2="-53" y2="600.0"/><line class="e" x1="0" y1="750.0" x2="-53" y2="750.0"/><line class="d" x1="-45" y1="600.0" x2="-45" y2="750.0" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="-53" y="675.0" fill="#27313B" transform="rotate(-90 -53 675.0)">150</text><line class="e" x1="0" y1="750.0" x2="-53" y2="750.0"/><line class="e" x1="0" y1="1000" x2="-53" y2="1000"/><line class="d" x1="-45" y1="750.0" x2="-45" y2="1000" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="-53" y="875.0" fill="#C9561A" transform="rotate(-90 -53 875.0)">250</text>
+<line class="e" x1="0" y1="0" x2="-108" y2="0"/><line class="e" x1="0" y1="140.0" x2="-108" y2="140.0"/><line class="d" x1="-100" y1="0" x2="-100" y2="140.0" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="-108" y="70.0" fill="#27313B" transform="rotate(-90 -108 70.0)">140</text><line class="e" x1="0" y1="140.0" x2="-108" y2="140.0"/><line class="e" x1="0" y1="860.0" x2="-108" y2="860.0"/><line class="d" x1="-100" y1="140.0" x2="-100" y2="860.0" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="-108" y="500.0" fill="#27313B" transform="rotate(-90 -108 500.0)">720</text><line class="e" x1="0" y1="860.0" x2="-108" y2="860.0"/><line class="e" x1="0" y1="1000" x2="-108" y2="1000"/><line class="d" x1="-100" y1="860.0" x2="-100" y2="1000" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="-108" y="930.0" fill="#27313B" transform="rotate(-90 -108 930.0)">140</text>
+<line class="e" x1="0" y1="0" x2="-163" y2="0"/><line class="e" x1="0" y1="1000" x2="-163" y2="1000"/><line class="d" x1="-155" y1="0" x2="-155" y2="1000" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="-163" y="500.0" fill="#27313B" transform="rotate(-90 -163 500.0)">1000</text>
+<line class="e" x1="0" y1="1000" x2="0" y2="1053"/><line class="e" x1="250.0" y1="1000" x2="250.0" y2="1053"/><line class="d" x1="0" y1="1045" x2="250.0" y2="1045" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="125.0" y="1066" fill="#C9561A">250</text><line class="e" x1="250.0" y1="1000" x2="250.0" y2="1053"/><line class="e" x1="400.0" y1="1000" x2="400.0" y2="1053"/><line class="d" x1="250.0" y1="1045" x2="400.0" y2="1045" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="325.0" y="1066" fill="#27313B">150</text><line class="e" x1="400.0" y1="1000" x2="400.0" y2="1053"/><line class="e" x1="600.0" y1="1000" x2="600.0" y2="1053"/><line class="d" x1="400.0" y1="1045" x2="600.0" y2="1045" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="500.0" y="1066" fill="#C9561A">200</text><line class="e" x1="600.0" y1="1000" x2="600.0" y2="1053"/><line class="e" x1="750.0" y1="1000" x2="750.0" y2="1053"/><line class="d" x1="600.0" y1="1045" x2="750.0" y2="1045" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="675.0" y="1066" fill="#27313B">150</text><line class="e" x1="750.0" y1="1000" x2="750.0" y2="1053"/><line class="e" x1="1000" y1="1000" x2="1000" y2="1053"/><line class="d" x1="750.0" y1="1045" x2="1000" y2="1045" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="875.0" y="1066" fill="#C9561A">250</text>
+<line class="e" x1="1000" y1="0" x2="1053" y2="0"/><line class="e" x1="1000" y1="425.0" x2="1053" y2="425.0"/><line class="d" x1="1045" y1="0" x2="1045" y2="425.0" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="1065" y="212.5" fill="#C9561A" transform="rotate(-90 1065 212.5)">425</text><line class="e" x1="1000" y1="425.0" x2="1053" y2="425.0"/><line class="e" x1="1000" y1="575.0" x2="1053" y2="575.0"/><line class="d" x1="1045" y1="425.0" x2="1045" y2="575.0" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="1065" y="500.0" fill="#27313B" transform="rotate(-90 1065 500.0)">150</text><line class="e" x1="1000" y1="575.0" x2="1053" y2="575.0"/><line class="e" x1="1000" y1="1000" x2="1053" y2="1000"/><line class="d" x1="1045" y1="575.0" x2="1045" y2="1000" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="1065" y="787.5" fill="#C9561A" transform="rotate(-90 1065 787.5)">425</text>
+<line class="e" x1="160.0" y1="650" x2="160.0" y2="658"/><line class="e" x1="840.0" y1="650" x2="840.0" y2="658"/><line class="d" x1="160.0" y1="650" x2="840.0" y2="650" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="500.0" y="643" fill="#27313B">안쪽 680</text>
+<line class="d" x1="500" y1="840.0" x2="500" y2="860.0"/><line class="e" x1="488" y1="840.0" x2="512" y2="840.0"/><line class="e" x1="488" y1="860.0" x2="512" y2="860.0"/><path class="d" d="M500 836.0 L500 740.0 L520 740.0"/><text class="t" x="524" y="746.0" style="text-anchor:start" fill="#27313B">경로 폭 20</text>
+<rect x="140.0" y="140.0" width="150" height="150" fill="none" stroke="#2A7FD4" stroke-width="2" stroke-dasharray="8 6"/>
+<line class="e" x1="140.0" y1="140.0" x2="140.0" y2="110.0"/><line class="e" x1="290.0" y1="140.0" x2="290.0" y2="110.0"/><line class="d" x1="140.0" y1="118.0" x2="290.0" y2="118.0" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="215.0" y="111.0" fill="#27313B">150</text>
+<text class="t" x="304.0" y="324.0" style="text-anchor:start" fill="#2A7FD4">곡선 구역 150 × 150</text>
+<line class="e" x1="140.0" y1="480" x2="140.0" y2="488"/><line class="e" x1="240.0" y1="480" x2="240.0" y2="488"/><line class="d" x1="140.0" y1="480" x2="240.0" y2="480" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="190.0" y="473" fill="#27313B">100</text>
+<line class="e" x1="710.0" y1="345" x2="710.0" y2="353"/><line class="e" x1="860.0" y1="345" x2="860.0" y2="353"/><line class="d" x1="710.0" y1="345" x2="860.0" y2="345" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="785.0" y="338" fill="#27313B">150</text>
+<line class="e" x1="840.0" y1="618" x2="840.0" y2="626"/><line class="e" x1="990.0" y1="618" x2="990.0" y2="626"/><line class="d" x1="840.0" y1="618" x2="990.0" y2="618" marker-start="url(#ar)" marker-end="url(#ar)"/><text class="t" x="915.0" y="639" fill="#27313B">150</text>
+<circle cx="850.0" cy="500" r="17" fill="none" stroke="#2A7FD4" stroke-width="2.5"/>
+<g stroke="#27313B" stroke-width="2" fill="#27313B"><path d="M0 0 L60 0" marker-end="url(#ax)"/><path d="M0 0 L0 60" marker-end="url(#ax)"/></g><text class="s" x="66" y="22">x</text><text class="s" x="8" y="80">y</text>
+</g>
+<line x1="1350" y1="40" x2="1350" y2="1270" stroke="#DCE2E8" stroke-width="1.5"/>
+<text class="h1" x="1385" y="70" >제공 맵 도면</text>
+<text class="p" x="1385" y="102" >SSAFY IoT Data 물류로봇 맵 · 위에서 본 그림</text>
+<text class="p" x="1385" y="128" >단위 mm · 1000 × 1000 · 2026-11-24 실측 기준</text>
+<rect x="1385" y="150" width="425" height="72" rx="6" fill="#F1F4F7"/>
+<text class="pnum" x="1401" y="178" fill="#27313B">1000</text>
+<text class="p" x="1463" y="178" >검정 숫자 = 실측 (사용자 측정)</text>
+<text class="pnum" x="1401" y="208" fill="#C9561A">1000</text>
+<text class="p" x="1463" y="208" >주황 숫자 = 사진에서 추정, 실측 필요</text>
+<text class="h2" x="1385" y="262" >색 구역 · 150 × 150 (실측)</text>
+<text class="ph" x="1429" y="290" >색</text>
+<text class="ph" x="1535" y="290" >중심 x, y (추정)</text>
+<text class="ph" x="1703" y="290" >공정 배정</text>
+<rect x="1385" y="301" width="28" height="22" rx="3" fill="#F2D94B"/>
+<text class="p" x="1429" y="318" >노랑</text>
+<text class="pnum" x="1535" y="318" fill="#C9561A">850, 500</text>
+<text class="p" x="1703" y="318" >출발</text>
+<rect x="1385" y="331" width="28" height="22" rx="3" fill="#EC9459"/>
+<text class="p" x="1429" y="348" >주황</text>
+<text class="pnum" x="1535" y="348" fill="#C9561A">500, 150</text>
+<text class="p" x="1703" y="348" >P1 프레스</text>
+<rect x="1385" y="361" width="28" height="22" rx="3" fill="#6CBF96"/>
+<text class="p" x="1429" y="378" >초록</text>
+<text class="pnum" x="1535" y="378" fill="#C9561A">150, 325</text>
+<text class="p" x="1703" y="378" >P2 차체</text>
+<rect x="1385" y="391" width="28" height="22" rx="3" fill="#5B3F9F"/>
+<text class="p" x="1429" y="408" >보라</text>
+<text class="pnum" x="1535" y="408" fill="#C9561A">150, 675</text>
+<text class="p" x="1703" y="408" >P3 도장</text>
+<rect x="1385" y="421" width="28" height="22" rx="3" fill="#2E64C6"/>
+<text class="p" x="1429" y="438" >파랑</text>
+<text class="pnum" x="1535" y="438" fill="#C9561A">325, 850</text>
+<text class="p" x="1703" y="438" >P4 의장</text>
+<rect x="1385" y="451" width="28" height="22" rx="3" fill="#D5503F"/>
+<text class="p" x="1429" y="468" >빨강</text>
+<text class="pnum" x="1535" y="468" fill="#C9561A">675, 850</text>
+<text class="p" x="1703" y="468" >검사</text>
+<text class="h2" x="1385" y="520" >경로</text>
+<text class="p" x="1385" y="548" >바깥 720 · 안쪽 680 · 폭 20 (실측)</text>
+<text class="p" x="1385" y="574" >중심선은 150~850 사이 700 × 700 사각형</text>
+<text class="p" x="1385" y="600" >모서리 곡선 구역 150 × 150 (실측)</text>
+<text class="p" x="1385" y="626" >→ 바깥 가장자리 반지름 150, 중심선 140로 해석</text>
+<text class="h2" x="1385" y="680" >갈림길</text>
+<text class="p" x="1385" y="708" >벌어짐은 바깥 가장자리끼리 잰 값으로 해석</text>
+<text class="p" x="1385" y="734" >왼쪽: 최대 100 (실측)</text>
+<text class="p" x="1385" y="760" >   y 390에서 갈라져 y 585에서 합류 (추정)</text>
+<text class="p" x="1385" y="786" >오른쪽 S자: 오른쪽 위 모서리에서 갈라짐</text>
+<text class="p" x="1385" y="812" >   → 안쪽으로 최대 150 (실측)</text>
+<text class="p" x="1385" y="838" >   → 노랑 가운데 (850, 500)에서 직선과 교차</text>
+<text class="p" x="1385" y="864" >   → 바깥으로 최대 150 (실측)</text>
+<text class="p" x="1385" y="890" >   → 오른쪽 아래 모서리 시작에서 합류</text>
+<text class="h2" x="1385" y="940" >같은 축척 크기 비교</text>
+<rect x="1385" y="985" width="150" height="150" fill="#F2D94B"/>
+<text class="p" x="1460.0" y="1161" text-anchor="middle">색 구역 150×150</text>
+<rect x="1575" y="985" width="195" height="230" rx="10" fill="#3A4652"/><rect x="1655" y="977" width="35" height="18" rx="3" fill="#252D35"/>
+<text class="pw" x="1672.5" y="1107" text-anchor="middle">AGV</text>
+<text class="pw" x="1672.5" y="1131" text-anchor="middle">195 × 230</text>
+<text class="p" x="1672.5" y="969" text-anchor="middle">앞 (카메라)</text>
+<text class="p" x="1672.5" y="1241" text-anchor="middle">JETANK 실측 (팔 제외)</text>
+<text class="s" x="1385" y="1282" >원본: AGV_맵.png · 생성: build_map.py · 좌표: 제공맵_좌표.json</text>
+</svg>
