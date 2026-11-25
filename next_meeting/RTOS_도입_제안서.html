@@ -32,9 +32,9 @@ svg { display:block; width:100% }
 
 <!-- 1쪽 : 한 장 요약 -->
 <div class="page">
- <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · 사용자 확정, 팀 확인 전 (1/6 한 장 요약)</div>
- <h1>RTOS 도입 제안 — 직원 한 명이 다 하던 일을 두 명이 나눠 한다</h1>
- <div class="meta">2026-11-23 · 사용자 확정, 팀 확인 전 · 시간 숫자는 추정이며 11-24에 실제로 잰다</div>
+ <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · [확정 — 2026-11-24 팀 동의] (1/6 한 장 요약)</div>
+ <h1>RTOS 도입 — 직원 한 명이 다 하던 일을 두 명이 나눠 한다 <span style="display:inline-block; vertical-align:2px; margin-left:3mm; font-size:11pt; color:#fff; background:#1d6b45; border-radius:3px; padding:.6mm 2.4mm">확정 · 2026-11-24 팀 동의</span></h1>
+ <div class="meta">2026-11-23 작성 · <b>[확정 — 2026-11-24 팀 동의] 공정 ESP32 펌웨어를 이 구조로 짠다</b> · 회의에 남은 것은 판정일, 담당, 큐 모양, ‘끊김’ 표시 모양 · 시간 숫자는 추정이며 11-24에 실제로 잰다</div>
  <div class="body">
   <svg viewBox="0 0 1000 330" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
    <defs>
@@ -60,11 +60,11 @@ svg { display:block; width:100% }
 
    <!-- 오른쪽: 제안 -->
    <rect x="520" y="0" width="480" height="330" rx="8" fill="#eff7f2" stroke="#bfdccb"/>
-   <text x="540" y="32" font-size="20" font-weight="700" fill="#1d6b45">제안 — 태스크 2개 = 직원 2명</text>
+   <text x="540" y="32" font-size="20" font-weight="700" fill="#1d6b45">앞으로 — 태스크 2개 = 직원 2명</text>
    <circle cx="620" cy="110" r="26" fill="#fff" stroke="#2f8a5b" stroke-width="2.5"/>
    <circle cx="620" cy="101" r="8.5" fill="#2f8a5b"/><path d="M605,125 q15,-19 30,0" fill="#2f8a5b"/>
    <text x="620" y="160" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2a37">설비 담당</text>
-   <text x="620" y="182" font-size="13.5" text-anchor="middle" fill="#1f2a37">버튼 · 리더기 · 모터 · 등</text>
+   <text x="620" y="182" font-size="13.5" text-anchor="middle" fill="#1f2a37">버튼 · 리더기 · 모터 · LED</text>
    <text x="620" y="202" font-size="13.5" text-anchor="middle" fill="#1d6b45">0.01초마다 계속 본다</text>
    <circle cx="900" cy="110" r="26" fill="#fff" stroke="#3a5f9a" stroke-width="2.5"/>
    <circle cx="900" cy="101" r="8.5" fill="#3a5f9a"/><path d="M885,125 q15,-19 30,0" fill="#3a5f9a"/>
@@ -84,7 +84,7 @@ svg { display:block; width:100% }
   </svg>
   <div class="cards" style="margin-top:4mm">
    <div class="card"><div class="k">무엇을</div><div class="v">공정 ESP32 펌웨어를<br>FreeRTOS 태스크 2개로</div><div class="s">P1~P4 같은 펌웨어 한 벌. 공정은 ESP32가 혼자 맡으므로 펌웨어를 어차피 새로 짠다</div></div>
-   <div class="card"><div class="k">보여 줄 장면</div><div class="v">관제 Pi5를 꺼도<br>공정 버튼이 바로 반응</div><div class="s">하던 작업은 끝내고, Pi5가 돌아오면 밀린 기록이 한 번만 들어간다</div></div>
+   <div class="card"><div class="k">보여 줄 장면</div><div class="v">엣지 서버 Pi5를 꺼도<br>공정 버튼이 바로 반응</div><div class="s">하던 작업은 끝내고, Pi5가 돌아오면 밀린 기록이 한 번만 들어간다</div></div>
    <div class="card"><div class="k">되돌아갈 길</div><div class="v">12-01까지 안정 안 되면<br>지금 loop판으로</div><div class="s">loop판(modem.ino)은 이미 있다. 잃는 것 없이 시도할 수 있다</div></div>
   </div>
  </div>
@@ -93,9 +93,9 @@ svg { display:block; width:100% }
 
 <!-- 2쪽 : 시간 그래프 -->
 <div class="page">
- <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · 사용자 확정, 팀 확인 전 (2/6 무엇이 달라지나)</div>
+ <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · [확정 — 2026-11-24 팀 동의] (2/6 무엇이 달라지나)</div>
  <h1>같은 상황, 두 펌웨어 — 버튼을 누르면 언제 반응하나</h1>
- <div class="meta">상황: 관제 Pi5(브로커)가 꺼져 ESP32가 서버에 다시 접속을 시도하는 동안, 작업자가 버튼을 두 번 누른다 · 막대 길이는 modem.ino 설정(접속 대기 약 3초, 3초마다 재시도)으로 그린 <b>추정</b></div>
+ <div class="meta">상황: 엣지 서버 Pi5(브로커)가 꺼져 ESP32가 서버에 다시 접속을 시도하는 동안, 작업자가 버튼을 두 번 누른다 · 막대 길이는 modem.ino 설정(접속 대기 약 3초, 3초마다 재시도)으로 그린 <b>추정</b></div>
  <div class="body">
   <svg viewBox="0 0 1000 400" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
    <defs>
@@ -160,7 +160,7 @@ svg { display:block; width:100% }
    <text x="550" y="394" font-size="13" text-anchor="middle" fill="#5b6675">서보 신호 자체는 하드웨어(LEDC)가 내므로 두 경우 모두 끊기지 않는다. 늦어지는 것은 ‘읽고 판단하는 일’이다.</text>
   </svg>
   <div class="two" style="margin-top:3mm">
-   <div class="note"><b>정말 이만큼 막히는지는 아직 모른다.</b> 11-24에 지금 loop판으로 ① 관제 Pi5를 끈 경우 ② 공유기를 끈 경우 각각 20번 잰다. 공유기를 끄면 Wi-Fi 자체가 끊겨 재접속 함수를 덜 부르므로, <b>가장 크게 막히는 건 ①로 예상</b>한다. 짧게 나오면 그대로 보고하고 이 제안의 이유가 약해진다.</div>
+   <div class="note"><b>정말 이만큼 막히는지는 아직 모른다.</b> 11-24에 지금 loop판으로 ① 엣지 서버 Pi5를 끈 경우 ② 공유기를 끈 경우 각각 20번 잰다. 공유기를 끄면 Wi-Fi 자체가 끊겨 재접속 함수를 덜 부르므로, <b>가장 크게 막히는 건 ①로 예상</b>한다. 짧게 나오면 그대로 보고하고 이 제안의 이유가 약해진다.</div>
    <div class="warn"><b>이렇게 말하지 않는다.</b> ‘고장 분리’가 아니다 — 칩이 통째로 리셋되면 둘 다 멈춘다(그건 워치독과 전원 차단 배선이 맡는다). ‘RTOS라서만 된다’도 아니다 — 잘 짠 loop로도 가능하다. RTOS는 그걸 <b>구조로 보장</b>하는 방법이다.</div>
   </div>
  </div>
@@ -169,7 +169,7 @@ svg { display:block; width:100% }
 
 <!-- 3쪽 : 구조 + 장면 -->
 <div class="page">
- <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · 사용자 확정, 팀 확인 전 (3/6 어떻게 생겼나)</div>
+ <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · [확정 — 2026-11-24 팀 동의] (3/6 어떻게 생겼나)</div>
  <h1>구조 한 장, 영상 장면 네 컷</h1>
  <div class="meta">P1~P4 모두 같은 구조. 공정마다 다른 것은 ‘작업 동작’ 칸(P1 누름판, P2 용접 팔, P3 팬·조명, P4 회전대)뿐</div>
  <div class="body">
@@ -181,7 +181,7 @@ svg { display:block; width:100% }
     <rect x="0" y="66" width="120" height="36" rx="5" fill="#fff" stroke="#8b96a3"/><text x="60" y="89">버튼 2개</text>
     <rect x="0" y="112" width="120" height="36" rx="5" fill="#fbe9e5" stroke="#a8321f"/><text x="60" y="135">비상정지</text>
     <rect x="0" y="158" width="120" height="36" rx="5" fill="#fff" stroke="#8b96a3"/><text x="60" y="181">모터</text>
-    <rect x="0" y="204" width="120" height="36" rx="5" fill="#fff" stroke="#8b96a3"/><text x="60" y="227">상태등 · 부저</text>
+    <rect x="0" y="204" width="120" height="36" rx="5" fill="#fff" stroke="#8b96a3"/><text x="60" y="227">RGB LED · 부저</text>
    </g>
    <path d="M122,38 L198,100" stroke="#8b96a3" stroke-width="1.3"/><path d="M122,84 L198,110" stroke="#8b96a3" stroke-width="1.3"/>
    <path d="M122,130 L198,125" stroke="#a8321f" stroke-width="2"/><text x="160" y="150" font-size="11.5" fill="#a8321f" text-anchor="middle">인터럽트</text>
@@ -194,7 +194,7 @@ svg { display:block; width:100% }
    <text x="332" y="94" font-size="13" text-anchor="middle" fill="#1d6b45">우선순위 높음 · 0.01초 박자</text>
    <text x="238" y="124" font-size="13.5" fill="#1f2a37">· 버튼, 리더기 읽기</text>
    <text x="238" y="148" font-size="13.5" fill="#1f2a37">· 작업 순서(상태 기계)</text>
-   <text x="238" y="172" font-size="13.5" fill="#1f2a37">· 모터, 등, 부저</text>
+   <text x="238" y="172" font-size="13.5" fill="#1f2a37">· 모터, RGB LED, 부저</text>
    <text x="238" y="196" font-size="13.5" fill="#1f2a37">· 신고 번호, 다시 보내기</text>
    <text x="238" y="220" font-size="13.5" fill="#a8321f">· 비상정지 즉시 잠금</text>
    <rect x="458" y="78" width="80" height="30" rx="4" fill="#fff" stroke="#1f2a37"/><text x="498" y="98" font-size="13" text-anchor="middle" fill="#1f2a37">신고 큐</text>
@@ -213,10 +213,10 @@ svg { display:block; width:100% }
    <path d="M762,125 L838,125" stroke="#1f2a37" stroke-width="1.5" marker-end="url(#a3)"/>
    <text x="800" y="115" font-size="12" text-anchor="middle" fill="#5b6675">Wi-Fi</text>
    <rect x="840" y="86" width="160" height="80" rx="8" fill="#f6efe6" stroke="#8a5a2f" stroke-width="1.6"/>
-   <text x="920" y="118" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2a37">관제 Pi5</text>
+   <text x="920" y="118" font-size="16" font-weight="700" text-anchor="middle" fill="#1f2a37">엣지 서버 Pi5</text>
    <text x="920" y="142" font-size="13" text-anchor="middle" fill="#5b6675">브로커 · 기록</text>
   </svg>
-  <h2 style="margin-top:3mm">영상 장면 — 관제 Pi5 전원을 뽑았다가 다시 꽂는다</h2>
+  <h2 style="margin-top:3mm">영상 장면 — 엣지 서버 Pi5 전원을 뽑았다가 다시 꽂는다</h2>
   <svg viewBox="0 0 1000 205" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
    <g>
     <rect x="0" y="0" width="235" height="200" rx="8" fill="#fff" stroke="#cfd6de"/>
@@ -240,7 +240,7 @@ svg { display:block; width:100% }
     <text x="14" y="26" font-size="15" font-weight="700" fill="#1d6b45">③ 그래도 버튼이 반응</text>
     <circle cx="117" cy="72" r="24" fill="#a8321f"/><text x="117" y="77" font-size="12" text-anchor="middle" fill="#fff" font-weight="700">비상정지</text>
     <text x="14" y="128" font-size="13.5" fill="#1f2a37">버튼·비상정지를 누르면</text>
-    <text x="14" y="150" font-size="13.5" fill="#1f2a37">0.01초 안에 등·부저 반응</text>
+    <text x="14" y="150" font-size="13.5" fill="#1f2a37">0.01초 안에 LED·부저 반응</text>
     <text x="14" y="176" font-size="13.5" fill="#1d6b45" font-weight="700">← loop판과 다른 장면</text>
    </g>
    <g transform="translate(765,0)">
@@ -260,7 +260,7 @@ svg { display:block; width:100% }
 
 <!-- 4쪽 : 할 만한가 -->
 <div class="page">
- <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · 사용자 확정, 팀 확인 전 (4/6 할 만한가)</div>
+ <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · [확정 — 2026-11-24 팀 동의] (4/6 할 만한가)</div>
  <h1>할 만한가 — 새로 까는 게 아니라, 태스크를 하나 더 만드는 일</h1>
  <div class="meta">새로 배울 함수 약 5개 · RTOS 때문에 늘어나는 일 1~3일(추정) · 안 되면 12-01에 loop판으로</div>
  <div class="body" style="display:grid; grid-template-columns:47fr 53fr; gap:6mm">
@@ -377,9 +377,9 @@ void loop() { vTaskDelete(nullptr); }</pre>
 
 <!-- 5쪽 : 일정 · 정할 것 -->
 <div class="page">
- <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · 사용자 확정, 팀 확인 전 (5/6 언제, 무엇을 정하나)</div>
+ <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · [확정 — 2026-11-24 팀 동의] (5/6 언제, 무엇을 정하나)</div>
  <h1>일정 — 12-01에 한 번 판정한다</h1>
- <div class="meta">일정 제안(11-24 책상 위 조립, 11-28 P2 한 곳, 12-04 공정 1안)에 맞춘다 · 12-01 판정은 사용자 확정, 팀 확인 전 · 나머지 날짜는 제안</div>
+ <div class="meta">일정 제안(11-24 책상 위 조립, 11-28 P2 한 곳, 12-04 공정 1안)에 맞춘다 · 판정 규칙은 확정, 판정일(이 문서는 12-01)은 회의 안건 · 나머지 날짜는 제안</div>
  <div class="body">
   <svg viewBox="0 0 1000 250" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
    <defs><marker id="a4" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#1f2a37"/></marker></defs>
@@ -408,27 +408,27 @@ void loop() { vTaskDelete(nullptr); }</pre>
   </svg>
   <div class="two" style="margin-top:2mm">
    <div>
-    <h2>회의에서 확인하고 정할 것 — 네 가지</h2>
+    <h2>회의에서 정할 것 — 네 가지 (구조는 확정)</h2>
     <table>
-     <tr><td style="width:7mm">☐</td><td><b>이 구조와 12-01 판정 확인</b> (사용자 확정, 팀 확인 전)</td></tr>
+     <tr><td style="width:7mm">☐</td><td><b>판정일</b>: 이 문서는 12-01로 적었다. 판정 규칙(30분 + Pi5 끄기 10번 + 비상정지 10번)은 그대로</td></tr>
      <tr><td>☐</td><td><b>담당</b>: 공정 공통 펌웨어 1명 + 공정별 ‘작업 동작’은 각 공정 담당</td></tr>
      <tr><td>☐</td><td><b>메모(큐)에 담는 모양</b>: 지금 쓰는 줄 형식 그대로(권장) / C 구조체</td></tr>
-     <tr><td>☐</td><td><b>‘끊김’ 상태등 모양</b> (데이터 흐름 설명서의 열린 안건)</td></tr>
+     <tr><td>☐</td><td><b>‘끊김’ 표시 모양</b>: 공정의 상태 RGB LED 1개로 보여 준다. 색·깜빡임은 미정</td></tr>
     </table>
    </div>
    <div>
     <h2>발표에서 한 문장</h2>
-    <div class="note" style="font-size:10pt">“공정 ESP32는 FreeRTOS로 통신과 설비 제어를 나눴습니다. 서버 접속이 몇 초 걸려도 설비는 0.01초 박자를 지켜, 관제 서버가 꺼져도 버튼과 비상정지가 그대로 반응합니다.”<br><span class="sub">+ 측정 숫자(“loop판 최대 ○초 → 태스크판 ○ms”) + 전원 뽑기 영상</span></div>
+    <div class="note" style="font-size:10pt">“공정 ESP32는 FreeRTOS로 통신과 설비 제어를 나눴습니다. 서버 접속이 몇 초 걸려도 설비는 0.01초 박자를 지켜, 엣지 서버가 꺼져도 버튼과 비상정지가 그대로 반응합니다.”<br><span class="sub">+ 측정 숫자(“loop판 최대 ○초 → 태스크판 ○ms”) + 전원 뽑기 영상</span></div>
     <div class="sub" style="margin-top:2mm">명세서에 RTOS라는 말은 없다(필수는 AGV 쪽 Python Threading, F1302). 점수 근거가 아니라 완성도와 학습을 위한 선택이다. ‘동시에 여러 일 하기’라는 같은 주제로 F1302와 한 줄로 이을 수 있다.</div>
    </div>
   </div>
  </div>
- <div class="foot">판정 기준과 날짜: 사용자 확정, 팀 확인 전. 5/6</div>
+ <div class="foot">구조와 판정 규칙: [확정 — 2026-11-24 팀 동의]. 판정일·담당·큐 모양·‘끊김’ 표시 모양은 회의 안건. 5/6</div>
 </div>
 
 <!-- 6쪽 : 부록 -->
 <div class="page">
- <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · 사용자 확정, 팀 확인 전 (6/6 부록 — 만드는 사람용)</div>
+ <div class="kick">RTOS 제안서 · 공정 ESP32 펌웨어 · [확정 — 2026-11-24 팀 동의] (6/6 부록 — 만드는 사람용)</div>
  <h1>부록 — 태스크 표, 규칙, 처음 숫자</h1>
  <div class="meta">Arduino-ESP32 코어 3.3.x 고정(교본과 같음) · 숫자는 시작값, 실측 후 조정</div>
  <div class="body r64">
@@ -437,7 +437,7 @@ void loop() { vTaskDelete(nullptr); }</pre>
     <h2>태스크와 맡는 것</h2>
     <table>
      <tr><th style="width:24mm">이름</th><th style="width:18mm">코어·우선</th><th>한 바퀴에 하는 일</th><th style="width:30mm">혼자 만지는 것</th></tr>
-     <tr><td><b>설비</b> ctrl</td><td>1 · 높음(3)</td><td>10ms마다: 비상정지 알림 확인 → 버튼(떨림 거름, 짧게/길게 2초) → 리더기(50ms마다) → 상태 기계 한 칸 → 모터·등·부저 → 명령 큐 처리 → 다시 보낼 신고 확인</td><td>SPI(RC522), 공정 핀, 신고 번호 n, 작업 번호 job</td></tr>
+     <tr><td><b>설비</b> ctrl</td><td>1 · 높음(3)</td><td>10ms마다: 비상정지 알림 확인 → 버튼(떨림 거름, 짧게/길게 2초) → 리더기(50ms마다) → 상태 기계 한 칸 → 모터·LED·부저 → 명령 큐 처리 → 다시 보낼 신고 확인</td><td>SPI(RC522), 공정 핀, 신고 번호 n, 작업 번호 job</td></tr>
      <tr><td><b>통신</b> comm</td><td>0 · 보통(2)</td><td>Wi-Fi 유지(15초 재시도), MQTT 접속(3초)·수신·발행, 유언 link=0. 신고 큐 → 토픽 발행, 받은 cmd/state/test → 명령 큐, 2초마다 <span class="mono">$L,up=1/0</span></td><td>WiFi, mqtt 객체</td></tr>
      <tr><td><b>비상정지</b> ISR</td><td>—</td><td>핀이 바뀌는 순간 설비 태스크에 알림만(<span class="mono">vTaskNotifyGiveFromISR</span>). 출력·로그 금지. 함수에 IRAM_ATTR</td><td>—</td></tr>
     </table>
@@ -470,7 +470,7 @@ void loop() { vTaskDelete(nullptr); }</pre>
     <h2>워치독 · 부팅</h2>
     <ul>
      <li>두 태스크를 태스크 워치독에 등록. 전체 제한 시간 약 8초로 시작(접속 대기보다 길게, 측정 후 확정). 코어 3.x는 IDF 5 함수 이름(확인 필요).</li>
-     <li>워치독이 터지면 재시작 → 안전 자세(서보 원위치, 등 꺼짐) → <span class="mono">BOOT</span> 신고 → 작업 중이었다면 Pi5가 ‘작업 중 재시작(F04)’으로 적고 현장 버튼으로 푼다.</li>
+     <li>워치독이 터지면 재시작 → 안전 자세(서보 원위치, LED 꺼짐) → <span class="mono">BOOT</span> 신고 → 작업 중이었다면 Pi5가 ‘작업 중 재시작(F04)’으로 적고 현장 버튼으로 푼다.</li>
     </ul>
    </div>
    <div class="blk">

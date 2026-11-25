@@ -371,7 +371,7 @@ labels = icd ORDER BY updated DESC</pre>
 </table>
 <p>이 프로젝트에서 얻는 것은 세 가지다.</p>
 <ul>
-  <li><b>두 사람의 경계가 문서로 남는다.</b> 나는 HW/SW 인터페이스, 팀원은 트윈·관제를 맡는다. 둘이 만나는 곳은 MQTT 메시지, HTTP 규격, DB 구조이고, 양쪽은 상대의 코드가 아니라 규격 페이지를 보고 만든다.</li>
+  <li><b>두 사람의 경계가 문서로 남는다.</b> 나는 하드웨어 쪽, 팀원은 디지털 트윈 쪽을 맡고 그 밖의 일은 생기는 대로 맡는다. 둘이 만나는 곳은 MQTT 메시지, HTTP 규격, DB 구조이고, 양쪽은 상대의 코드가 아니라 규격 페이지를 보고 만든다.</li>
   <li><b>발표 자료의 근거가 쌓인다.</b> 발표가 PT와 시연 영상이라, 시험 기록과 결정 기록이 그대로 발표 근거가 된다.</li>
   <li><b>현업 도구를 실제 프로젝트로 익힌다.</b> 수업 명세서에는 Jira·Confluence 요구가 없다. 필수가 아니므로 가볍게 쓰고, 맞지 않는 부분은 줄여도 된다.</li>
 </ul>
@@ -384,10 +384,10 @@ labels = icd ORDER BY updated DESC</pre>
 <table>
   <thead><tr><th style="width:30%">에픽</th><th style="width:14%">담당</th><th>이슈 예시</th></tr></thead>
   <tbody>
-    <tr><td>공정 ESP32 줄기<br>(RFID·설비·MQTT, FreeRTOS 두 태스크)</td><td>나</td><td>loop판에서 <code>mqtt.connect()</code>가 막히는 시간을 관제 Pi5를 끈 경우와 공유기를 끈 경우 각 20번 재서 시험 기록에 남긴다 · 통신 태스크(코어 0)와 설비 태스크(코어 1)의 뼈대를 큐로만 잇는다 · 12-01에 P2에서 RTOS판이 안정됐는지 판정해 결정 기록에 올린다</td></tr>
-    <tr><td>스마트태그</td><td>나</td><td>소형 팟 출력물에 NodeMCU-32와 키태그를 끼워 본 결과를 기록한다 · 역할 선택지 A/B/C 중 하나를 골라 결정 기록에 올린다 · 배터리를 정한다 (개발은 USB 전원)</td></tr>
+    <tr><td>공정 ESP32 줄기<br>(RFID·설비·MQTT, FreeRTOS 두 태스크)</td><td>나</td><td>loop판에서 <code>mqtt.connect()</code>가 막히는 시간을 엣지 서버 Pi5를 끈 경우와 공유기를 끈 경우 각 20번 재서 시험 기록에 남긴다 · 통신 태스크(코어 0)와 설비 태스크(코어 1)의 뼈대를 큐로만 잇는다 · 12-01에 P2에서 RTOS판이 안정됐는지 판정해 결정 기록에 올린다</td></tr>
+    <tr><td>스마트태그</td><td>나</td><td>소형 팟 출력물에 NodeMCU-32와 키태그를 끼워 본 결과를 기록한다 · MPU6050과 상태 RGB LED를 팟 안 어디에 둘지 정해 결정 기록에 올린다 · 배터리를 정한다 (개발은 USB 전원)</td></tr>
     <tr><td>AGV 주행·정차</td><td>나</td><td>색 구역 여섯 곳의 위치를 줄자로 재서 적는다 · 색 구역에서 태그를 읽고 멈추기를 20번 해서 성공 횟수를 기록한다 · 리더기에서 AGV까지 MQTT 지연을 잰다</td></tr>
-    <tr><td>관제 Pi5 (기록 프로그램, HMI)</td><td>HMI는 팀원, 기록 프로그램은 미정</td><td>HMI 시안을 실물 Pi5의 7인치 화면에 전체 화면으로 띄운다 · 기록 프로그램이 신고 1건을 SQLite에 적은 뒤 공정 ESP32에 답한다</td></tr>
+    <tr><td>엣지 서버 Pi5 (기록 프로그램, HMI)</td><td>HMI는 팀원, 기록 프로그램은 미정</td><td>HMI 시안을 실물 Pi5의 7인치 화면에 전체 화면으로 띄운다 · 기록 프로그램이 신고 1건을 SQLite에 적은 뒤 공정 ESP32에 답한다</td></tr>
     <tr><td>Spring·메인 DB·디지털 트윈</td><td>팀원</td><td>Pi5의 사건 묶음을 HTTP POST로 받아 중복 없이 저장한다 · 언리얼에서 되는 통신 방식을 확인해 결정 기록에 올린다 · 트윈 맵을 제공 맵 실측값과 맞춘다</td></tr>
     <tr><td>바닥·공정 모형·구매</td><td>공동</td><td>키트 2세트를 검수해 부품 현황의 '실물 확인' 칸을 채운다 · RC522 부족분과 ESP32 1개를 주문해 도착과 동작 확인까지 한다 · 공정 설비에 모자란 싼 부품을 골라 소량 주문한다</td></tr>
     <tr><td>결정·확인</td><td>공동</td><td>'작업 허가를 Pi5가 낸다'를 확정하거나 뒤집는다 · 토픽·메시지 이름 담당 1명을 정한다 · 강사에게 확인할 항목(HANDOFF.md)을 묻고 답을 기록한다 · 공정별 센서를 정한다</td></tr>
@@ -397,7 +397,7 @@ labels = icd ORDER BY updated DESC</pre>
 <p>공정별 센서는 아직 정하지 않았다. 그래서 <code>P1 진동 센서 드라이버</code> 같은 이슈를 미리 만들지 않고, <code>공정별 센서를 정한다</code>라는 결정 이슈 하나에 후보 목록을 링크한다. 구현 이슈는 정해진 뒤에 만든다.</p>
 <p>분류는 라벨로 하고, 필요해질 때 하나씩 만든다. 처음에는 <code>icd</code>, <code>구매</code>, <code>결정필요</code>, <code>강사확인</code>, <code>촬영</code> 다섯 개면 충분하고, 아래는 늘릴 때 쓸 후보다.</p>
 <ul>
-  <li><b>장치 라벨</b>(어느 장치의 일인가, 이슈당 하나): <code>P1-ESP32</code>, <code>P2-ESP32</code>, <code>P3-ESP32</code>, <code>P4-ESP32</code>, <code>검사-Pi5</code>, <code>관제-Pi5</code>, <code>스마트태그</code>, <code>JETANK</code>, <code>Spring</code>, <code>트윈</code>, <code>바닥·모형</code></li>
+  <li><b>장치 라벨</b>(어느 장치의 일인가, 이슈당 하나): <code>P1-ESP32</code>, <code>P2-ESP32</code>, <code>P3-ESP32</code>, <code>P4-ESP32</code>, <code>검사-Pi5</code>, <code>엣지서버-Pi5</code>, <code>스마트태그</code>, <code>JETANK</code>, <code>Spring</code>, <code>트윈</code>, <code>바닥·모형</code></li>
   <li><b>성격 라벨</b>(어떤 종류의 일인가, 여러 개 가능): <code>hw</code>, <code>fw</code>, <code>sw</code>, <code>구매</code>, <code>3D출력</code>, <code>실측</code>, <code>시험</code>, <code>결정필요</code>, <code>강사확인</code>, <code>icd</code> (규격에 영향), <code>촬영</code></li>
 </ul>
 <p>하드웨어 일도 이슈로 만든다.</p>
@@ -449,11 +449,13 @@ labels = icd ORDER BY updated DESC</pre>
 <table class="dr">
   <thead><tr><th style="width:10%">번호</th><th style="width:9%">날짜</th><th style="width:34%">내용</th><th style="width:17%">상태</th><th style="width:20%">근거 자료</th><th>실물 검증</th></tr></thead>
   <tbody>
-    <tr><td>DR-015</td><td>11-18</td><td>현장 기록의 원본은 관제 Pi5의 SQLite</td><td>확정</td><td>데이터 흐름 설명서</td><td>전</td></tr>
+    <tr><td>DR-015</td><td>11-18</td><td>현장 기록의 원본은 엣지 서버 Pi5의 SQLite</td><td>확정</td><td>데이터 흐름 설명서</td><td>전</td></tr>
     <tr><td>DR-016</td><td>11-18</td><td>작업 허가는 Pi5가 낸다</td><td>제안 (팀 회의 대기)</td><td>데이터 흐름 설명서</td><td>전</td></tr>
     <tr><td>DR-017</td><td>11-23</td><td>공정 4곳은 ESP32(NodeMCU-32) 한 개씩이 혼자 맡는다 (RFID·설비·MQTT)</td><td>확정</td><td>HANDOFF.md</td><td>전</td></tr>
     <tr><td>DR-018</td><td>11-23</td><td>교육에서 받은 맵을 쓰고, 반시계 한 바퀴로 돈다</td><td>확정 (팀 회의에서 최종 확인)</td><td>AGV_맵.png, 공정 배치도</td><td>전</td></tr>
-    <tr><td>DR-019</td><td>11-23</td><td>공정 ESP32 펌웨어는 FreeRTOS 두 태스크, 12-01에 판정하고 안 되면 loop판</td><td>사용자 확정 (팀 확인 전)</td><td>RTOS 도입 제안서</td><td>전</td></tr>
+    <tr><td>DR-019</td><td>11-23</td><td>공정 ESP32 펌웨어는 FreeRTOS 두 태스크, 판정에 못 넘으면 loop판</td><td>확정 (11-24 팀 동의, 판정일은 회의 안건)</td><td>RTOS 도입 제안서</td><td>전</td></tr>
+    <tr><td>DR-020</td><td>11-24</td><td>스마트태그에 MPU6050과 상태 RGB LED를 넣는다</td><td>확정</td><td>HANDOFF.md 9절</td><td>전</td></tr>
+    <tr><td>DR-021</td><td>11-24</td><td>공정 P1~P4와 스마트태그의 상태 표시는 RGB LED 1개씩, 검사는 OLED</td><td>거의 확정</td><td>HANDOFF.md 5절</td><td>전</td></tr>
   </tbody>
 </table>
 
@@ -530,7 +532,7 @@ labels = icd ORDER BY updated DESC</pre>
 │  └─ common/         메시지 줄 형식·검사값처럼 같이 쓰는 C 코드
 ├─ agv/               JETANK 주행
 ├─ smarttag/
-├─ pi-control/        관제 Pi5: 기록 프로그램, HMI, 브로커 설정
+├─ pi-edge/           엣지 서버 Pi5: 기록 프로그램, HMI, 브로커 설정
 ├─ pi-inspection/     검사 Pi5
 ├─ server/            Spring
 ├─ web/               Vue

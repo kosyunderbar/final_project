@@ -55,7 +55,7 @@ svg { display:block; width:100% }
      <rect x="4" y="26" width="196" height="74" rx="6" fill="#e8eef7" stroke="#2f5f9e" stroke-width="1.4"/>
      <text x="102" y="48" text-anchor="middle" font-weight="700">공정 P1 · P2 · P3 · P4</text>
      <text x="102" y="68" text-anchor="middle" font-size="12">공정마다 ESP32 한 개</text>
-     <text x="102" y="87" text-anchor="middle" font-size="11.5" fill="#5b6675">리더기 · 상태등 · 버튼 · 설비</text>
+     <text x="102" y="87" text-anchor="middle" font-size="11.5" fill="#5b6675">리더기 · RGB LED · 버튼 · 설비</text>
      <rect x="4" y="112" width="196" height="52" rx="6" fill="#e8eef7" stroke="#2f5f9e" stroke-width="1.4"/>
      <text x="102" y="134" text-anchor="middle" font-weight="700">검사</text>
      <text x="102" y="153" text-anchor="middle" font-size="12">Pi5 #2 + 카메라 + 리더기</text>
@@ -64,11 +64,11 @@ svg { display:block; width:100% }
      <text x="102" y="217" text-anchor="middle" font-size="12">선 따라가기 · 색 구역 인식</text>
      <rect x="4" y="240" width="196" height="52" rx="6" fill="#f6efe6" stroke="#8a5a2f" stroke-width="1.4"/>
      <text x="102" y="262" text-anchor="middle" font-weight="700">스마트태그 (차체에 부착)</text>
-     <text x="102" y="281" text-anchor="middle" font-size="12">이력 사본을 받아 적음</text>
+     <text x="102" y="281" text-anchor="middle" font-size="11.5">이력 사본 · MPU6050 · RGB LED</text>
     </g>
-    <!-- 관제 Pi5 -->
+    <!-- 엣지 서버 Pi5 -->
     <rect x="262" y="8" width="250" height="300" rx="8" fill="#fff" stroke="#1f2a37" stroke-width="2"/>
-    <text x="387" y="30" text-anchor="middle" font-size="15" font-weight="700">관제 Pi5 #1 (현장)</text>
+    <text x="387" y="30" text-anchor="middle" font-size="15" font-weight="700">엣지 서버 Pi5 #1 (현장)</text>
     <rect x="278" y="42" width="218" height="38" rx="5" fill="#f3f5f7" stroke="#9aa5b1"/>
     <text x="387" y="66" text-anchor="middle" font-size="13">브로커 (메시지 우체국)</text>
     <rect x="278" y="96" width="218" height="46" rx="5" fill="#1f2a37"/>
@@ -130,7 +130,7 @@ svg { display:block; width:100% }
     <div><span class="n">6</span><b>웹과 트윈.</b> Spring이 웹에 새 상태를 밀어 주고, 트윈은 0.5초마다 가져간다.</div>
    </div>
    <div class="blk note">
-    <b>한 문장으로:</b> 현장에서 생긴 일은 관제 Pi5의 기록장에 먼저 적히고, 화면·서버·트윈은 모두 그 기록장에서 가져간다. 그래서 서버가 꺼져도 현장은 멈추지 않고, 어긋날 수 있는 것은 '아직 안 넘어간 줄' 하나뿐이다.
+    <b>한 문장으로:</b> 현장에서 생긴 일은 엣지 서버 Pi5의 기록장에 먼저 적히고, 화면·서버·트윈은 모두 그 기록장에서 가져간다. 그래서 서버가 꺼져도 현장은 멈추지 않고, 어긋날 수 있는 것은 '아직 안 넘어간 줄' 하나뿐이다.
    </div>
    <div class="blk">
     <h2>이 문서 읽는 법</h2>
@@ -142,7 +142,7 @@ svg { display:block; width:100% }
     </table>
    </div>
    <div class="blk">
-    <span class="tag">확정</span>사용자가 정한 것 <span class="tag o">열린 자리</span>곧 바뀔 수 있는 곳 <span class="tag p">제안</span>표시 없는 나머지 전부
+    <span class="tag">확정</span>사용자나 팀이 정한 것 <span class="tag o">열린 자리</span>곧 바뀔 수 있는 곳 <span class="tag p">제안</span>표시 없는 나머지 전부
    </div>
   </div>
  </div>
@@ -179,7 +179,7 @@ svg { display:block; width:100% }
     <h2>두 개의 기록</h2>
     <table class="sm">
      <tr><th style="width:17mm"></th><th>현장 기록장</th><th>메인 DB</th></tr>
-     <tr><td>어디에</td><td>관제 Pi5 안의 파일 하나 (SQLite) <span class="tag">확정</span></td><td>Spring 서버 쪽</td></tr>
+     <tr><td>어디에</td><td>엣지 서버 Pi5 안의 파일 하나 (SQLite) <span class="tag">확정</span></td><td>Spring 서버 쪽</td></tr>
      <tr><td>현장 기록</td><td class="red">원본</td><td>같은 내용의 사본, 오래 보관</td></tr>
      <tr><td>쓰는 곳</td><td>기록 담당 프로그램 하나</td><td>Spring 하나</td></tr>
      <tr><td>읽는 곳</td><td>현장 화면</td><td>웹, 트윈</td></tr>
@@ -192,11 +192,11 @@ svg { display:block; width:100% }
     <h2>장치마다 하는 일</h2>
     <table class="sm">
      <tr><th style="width:27mm">장치</th><th>하는 일</th><th style="width:48mm">말하는 방법</th></tr>
-     <tr><td><b>공정 ESP32</b> P1~P4 <span class="tag">확정</span></td><td>공정마다 ESP32 한 개가 혼자 맡는다. 리더기로 차체 태그를 읽고, 설비를 움직이고, 일이 생기면 신고한다. 자기 설비의 이상은 스스로 알아챈다. 칩 안은 통신 태스크와 설비 태스크로 나눈다(사용자 결정, 팀 확인 전 · RTOS 도입 제안서). <span class="tag o">열린 자리</span> 맡는 범위(8쪽)</td><td>Wi-Fi로 브로커와 MQTT(브로커를 거쳐 주고받는 가벼운 메시지)</td></tr>
-     <tr><td><b>검사</b> Pi5 #2</td><td>리더기로 태그를 읽고, 카메라로 본 결과(합격·불합격)만 신고한다. 이력 대조와 마지막 판정은 관제 Pi5가 한다</td><td>Wi-Fi로 MQTT</td></tr>
+     <tr><td><b>공정 ESP32</b> P1~P4 <span class="tag">확정</span></td><td>공정마다 ESP32 한 개가 혼자 맡는다. 리더기로 차체 태그를 읽고, 설비를 움직이고, 일이 생기면 신고한다. 자기 설비의 이상은 스스로 알아챈다. 칩 안은 통신 태스크와 설비 태스크로 나눈다(<b>확정 — 2026-11-24 팀 동의</b> · RTOS 도입 제안서). <span class="tag o">열린 자리</span> 맡는 범위(8쪽)</td><td>Wi-Fi로 브로커와 MQTT(브로커를 거쳐 주고받는 가벼운 메시지)</td></tr>
+     <tr><td><b>검사</b> Pi5 #2</td><td>리더기로 태그를 읽고, 카메라로 본 결과(합격·불합격)만 신고한다. 이력 대조와 마지막 판정은 엣지 서버 Pi5가 한다</td><td>Wi-Fi로 MQTT</td></tr>
      <tr><td><b>AGV</b></td><td>선을 따라 돌다가 목적지 공정의 '태그 읽음'을 받으면 선다. '멈춤 완료'를 신고하고 '출발 허가'를 기다린다</td><td>Wi-Fi로 MQTT</td></tr>
-     <tr><td><b>스마트태그</b></td><td>차체에 붙어 다닌다. 안의 RFID 키태그는 전원 없이 읽힌다(식별). ESP32는 이력 사본을 받아 적고 상태를 불빛으로 보여 준다</td><td>Wi-Fi로 MQTT. 꺼져도 라인은 돈다</td></tr>
-     <tr><td><b>관제 Pi5 #1</b></td><td>브로커 + 기록 담당 프로그램 + 기록장 + 현장 화면. 공정 순서를 확인하고 작업 허가와 출발 허가를 낸다. <span class="tag o">열린 자리</span> 허가의 주인(8쪽)</td><td>현장: MQTT / 서버: HTTP</td></tr>
+     <tr><td><b>스마트태그</b></td><td>차체에 붙어 다닌다. 안의 RFID 키태그는 전원 없이 읽힌다(식별). ESP32는 이력 사본을 받아 적고 상태를 RGB LED 하나로 보여 준다. MPU6050을 넣는다 <span class="tag">확정</span>(무엇을 알릴지는 미정)</td><td>Wi-Fi로 MQTT. 꺼져도 라인은 돈다</td></tr>
+     <tr><td><b>엣지 서버 Pi5 #1</b></td><td>브로커 + 기록 담당 프로그램 + 기록장 + 현장 화면. 공정 순서를 확인하고 작업 허가와 출발 허가를 낸다. <span class="tag o">열린 자리</span> 허가의 주인(8쪽)</td><td>현장: MQTT / 서버: HTTP</td></tr>
      <tr><td><b>Spring</b></td><td>받은 줄을 메인 DB에 저장하고 웹과 트윈에 내보낸다. 계산은 하지 않는다</td><td>Pi5가 HTTP로 올린다</td></tr>
      <tr><td><b>트윈 · 웹</b></td><td>그리기만 한다</td><td>Spring에서 가져감. 로봇 위치만 브로커에서 직접</td></tr>
     </table>
@@ -225,7 +225,7 @@ svg { display:block; width:100% }
     <g font-size="13" font-weight="700" text-anchor="middle">
      <rect x="10" y="4" width="112" height="30" rx="5" fill="#e8eef7" stroke="#2f5f9e"/><text x="66" y="24">공정 P2</text>
      <rect x="140" y="4" width="112" height="30" rx="5" fill="#e9f4ee" stroke="#2f8a5b"/><text x="196" y="24">AGV</text>
-     <rect x="270" y="4" width="140" height="30" rx="5" fill="#1f2a37"/><text x="340" y="24" fill="#fff">관제 Pi5 (기록)</text>
+     <rect x="262" y="4" width="156" height="30" rx="5" fill="#1f2a37"/><text x="340" y="24" fill="#fff">엣지 서버 Pi5 (기록)</text>
      <rect x="428" y="4" width="96" height="30" rx="5" fill="#f6efe6" stroke="#8a5a2f"/><text x="476" y="24">스마트태그</text>
      <rect x="540" y="4" width="92" height="30" rx="5" fill="#f3f5f7" stroke="#9aa5b1"/><text x="586" y="24">현장 화면</text>
     </g>
@@ -257,7 +257,7 @@ svg { display:block; width:100% }
      <path d="M340,412 L198,412" stroke="#5b6675" stroke-width="1.6" marker-end="url(#a)" fill="none"/><text x="268" y="406" text-anchor="middle">⑦ 출발 허가</text>
      <rect x="150" y="420" width="92" height="20" rx="3" fill="#e9f4ee"/><text x="196" y="434" text-anchor="middle" font-size="11.5">다음 색으로</text>
      <!-- 8 -->
-     <path d="M340,470 L68,470" stroke="#5b6675" stroke-width="1.6" marker-end="url(#a)" fill="none"/><text x="204" y="464" text-anchor="middle">⑧ 지금 상태 '대기' (등 꺼짐)</text>
+     <path d="M340,470 L68,470" stroke="#5b6675" stroke-width="1.6" marker-end="url(#a)" fill="none"/><text x="204" y="464" text-anchor="middle">⑧ 지금 상태 '대기' (LED 꺼짐)</text>
     </g>
    </svg>
   </div>
@@ -278,7 +278,7 @@ svg { display:block; width:100% }
      <tr><th style="width:22mm">자리</th><th>일어나는 일</th></tr>
      <tr><td>노랑 (출발)</td><td>사람이 차체를 AGV에 올리고 현장 화면에서 '투입'을 누른다 → 새 차체 번호가 생기고 출발 허가가 나간다. 노랑에는 리더기가 없다. P1에서 처음 읽히는 태그를 그 차체에 묶는다(앞 차체와의 묶음은 푼다) <span class="tag p">제안</span></td></tr>
      <tr><td>P1 ~ P4</td><td>위 그림 ⓪~⑧을 네 번 되풀이한다</td></tr>
-     <tr><td>빨강 (검사)</td><td>검사 Pi5가 태그를 읽고 → AGV 정지 → 카메라 판정을 신고 → 관제 Pi5가 이력과 대조해 차체를 '완료' 또는 '보류'로 적는다. 운반은 여기서 끝난다</td></tr>
+     <tr><td>빨강 (검사)</td><td>검사 Pi5가 태그를 읽고 → AGV 정지 → 카메라 판정을 신고 → 엣지 서버 Pi5가 이력과 대조해 차체를 '완료' 또는 '보류'로 적는다. 운반은 여기서 끝난다</td></tr>
      <tr><td>돌아오기</td><td>사람이 차체를 내리고 화면에서 '복귀'를 누른다 → AGV가 노랑으로 가서 색을 보고 스스로 선다 <span class="tag p">제안</span></td></tr>
     </table>
    </div>
@@ -310,7 +310,7 @@ svg { display:block; width:100% }
     <table class="sm">
      <tr><th style="width:24mm">이름</th><th style="width:22mm">누가 붙이나</th><th>무엇에 쓰나</th></tr>
      <tr><td><b>신고 번호</b> (n)</td><td>장치</td><td>같은 신고를 다시 보낼 때 같은 번호를 쓴다. Pi5는 이미 적은 번호가 또 오면 적지 않고 답만 다시 보낸다</td></tr>
-     <tr><td><b>회차 + 순번</b> (run_id, seq) <span class="tag">확정</span></td><td>관제 Pi5</td><td>기록 한 줄의 이름표다. 메인 DB에 '겹칠 수 없음'을 걸어, 같은 줄이 두 번 올라가도 한 번만 저장된다</td></tr>
+     <tr><td><b>회차 + 순번</b> (run_id, seq) <span class="tag">확정</span></td><td>엣지 서버 Pi5</td><td>기록 한 줄의 이름표다. 메인 DB에 '겹칠 수 없음'을 걸어, 같은 줄이 두 번 올라가도 한 번만 저장된다</td></tr>
     </table>
     <div class="sub" style="font-size:8.8pt;margin-top:.8mm">회차는 현장 화면에서 '새 회차'를 누를 때 바뀐다. 그 사이에 생긴 일은 차체가 없을 때의 통신 끊김까지 모두 지금 회차에 적는다. 회차 밖의 기록은 없다.</div>
    </div>
@@ -353,12 +353,12 @@ svg { display:block; width:100% }
 <div class="page">
  <div class="kick">팀 설명서 · 데이터 흐름 · 2부 이상이 생기면 (5/10)</div>
  <h1>이상(오류)의 원칙 — 현장에서 생기고, 현장에서 푼다</h1>
- <div class="meta">2026-11-21 사용자 결정: 이상은 공정에서 일어나 관제 화면으로 올라간다. 서버가 "이상을 내라"고 시키는 방식은 쓰지 않는다.</div>
+ <div class="meta">2026-11-21 사용자 결정: 이상은 공정에서 일어나 현장 화면(HMI)으로 올라간다. 서버가 "이상을 내라"고 시키는 방식은 쓰지 않는다.</div>
  <div class="body">
   <div class="three">
    <div class="blk note">
     <div class="big">① 이상은 현장에서 생긴다 <span class="tag">확정</span></div>
-    <div>누군가 실제로 알아챈 것만 이상이다. 공정 ESP32가 알아채거나, 관제 Pi5가 기록을 보고 알아챈다. 위에서 아래로 "이상 상태가 돼라"고 내려보내지 않는다.</div>
+    <div>누군가 실제로 알아챈 것만 이상이다. 공정 ESP32, 또는 기록을 보는 엣지 서버 Pi5가 알아챈다. 위에서 아래로 "이상 상태가 돼라"고 내려보내지 않는다.</div>
    </div>
    <div class="blk note">
     <div class="big">② 멈추는 것이 먼저다 <span class="tag">확정</span></div>
@@ -376,8 +376,8 @@ svg { display:block; width:100% }
      <table class="sm">
       <tr><th style="width:21mm">종류</th><th style="width:26mm">누가 알아채나</th><th>예</th></tr>
       <tr><td><b>설비 이상</b></td><td>공정 ESP32, AGV</td><td>비상정지, 센서 값이 기준을 넘음(센서는 미정), AGV 선 이탈</td></tr>
-      <tr><td><b>흐름 이상</b></td><td>관제 Pi5 (기록을 보고)</td><td>공정 순서를 건너뜀, 태그가 제때 안 읽힘, 작업이 너무 오래 걸림</td></tr>
-      <tr><td><b>통신 이상</b></td><td>브로커와 관제 Pi5</td><td>공정 ESP32나 AGV의 연결이 끊김</td></tr>
+      <tr><td><b>흐름 이상</b></td><td>엣지 서버 Pi5 (기록을 보고)</td><td>공정 순서를 건너뜀, 태그가 제때 안 읽힘, 작업이 너무 오래 걸림</td></tr>
+      <tr><td><b>통신 이상</b></td><td>브로커와 엣지 서버 Pi5</td><td>공정 ESP32나 AGV의 연결이 끊김</td></tr>
      </table>
      <div class="sub" style="font-size:8.8pt;margin-top:.8mm">흐름 이상과 통신 이상도 '서버가 시킨 이상'이 아니다. Pi5가 실제로 본 것이다. 센서가 정해지지 않아도 비상정지·순서 위반·태그 미판독·연결 끊김은 지금 설계로 만들 수 있다.</div>
     </div>
@@ -410,7 +410,7 @@ svg { display:block; width:100% }
       <tr><td>① 손으로 원인을 만든다</td><td>전부</td><td class="grn">영상의 주 장면</td></tr>
       <tr><td>② 공정 ESP32의 시험 버튼</td><td>공정의 판단부터 전부</td><td>손으로 재현하기 어려울 때</td></tr>
       <tr><td>③ 노트북 → 공정 ESP32에 '시험 입력'</td><td>공정의 판단부터 전부</td><td>②와 같다. 선택 사항, 나중에</td></tr>
-      <tr><td>④ 노트북이 공정인 척 브로커에 신고</td><td>관제 Pi5와 화면만</td><td class="red">개발용. 영상에 쓰지 않는다</td></tr>
+      <tr><td>④ 노트북이 공정인 척 브로커에 신고</td><td>엣지 서버 Pi5와 화면만</td><td class="red">개발용. 영상에 쓰지 않는다</td></tr>
      </table>
      <div class="sub" style="font-size:8.8pt;margin-top:.8mm">②③은 '센서 값이 이렇게 들어왔다고 치자'를 공정 ESP32에 넣는 것이다. 판단과 정지는 설비 태스크가 실제로 한다. 기록에는 <b>'시험'</b> 표시가 남아 통계에서 빠진다. ④는 공정 ESP32가 자기에게 이상이 난 줄 모르므로 화면과 현장이 어긋난다.</div>
     </div>
@@ -426,14 +426,14 @@ svg { display:block; width:100% }
  <div class="meta">숫자는 제안이며 실물로 잰 뒤 고친다. 센서 이상은 예시다(공정별 센서는 아직 정하지 않았다). '촬영 때'는 영상에서 이 이상을 일으키는 방법이다.</div>
  <div class="body">
   <table class="xs" style="table-layout:fixed">
-   <tr><th style="width:25mm">이상</th><th style="width:40mm">종류 · 알아채는 곳</th><th style="width:36mm">공정이 먼저 하는 일</th><th style="width:33mm">AGV</th><th style="width:38mm">현장 화면</th><th style="width:40mm">푸는 법 <span class="tag p">제안</span></th><th style="width:22mm">그 뒤 차체</th><th>촬영 때</th></tr>
+   <tr><th style="width:25mm">이상</th><th style="width:44mm">종류 · 알아채는 곳</th><th style="width:36mm">공정이 먼저 하는 일</th><th style="width:33mm">AGV</th><th style="width:38mm">현장 화면</th><th style="width:40mm">푸는 법 <span class="tag p">제안</span></th><th style="width:22mm">그 뒤 차체</th><th>촬영 때</th></tr>
    <tr><td><b>비상정지</b><br><code>E00</code></td><td>설비 · 공정 ESP32</td><td>움직임을 멈추고 빨강, 부저. 그 뒤에 신고</td><td>어느 공정 것이든 직접 받아 선다. 풀리면 Pi5가 출발 허가를 다시 보낸다</td><td>빨간 띠 "P2 비상정지"</td><td>그 공정 해제 버튼</td><td>그 자리에서 재작업</td><td>① 버튼을 누른다</td></tr>
    <tr><td><b>센서 이상</b> (예시)<br><code>E1x</code></td><td>설비 · 공정 ESP32</td><td>위와 같다</td><td>그 공정에서 대기</td><td>"P1 설비 이상(진동)"</td><td>값이 정상으로 돌아온 뒤 해제 버튼</td><td>재작업</td><td>① 틀을 흔든다 ② 시험 버튼 ③ 시험 입력</td></tr>
-   <tr><td><b>공정 순서 위반</b><br><code>F01</code></td><td>흐름 · 관제 Pi5</td><td>작업하지 않는다. Pi5가 보낸 상태를 받아 빨강</td><td>선 채로 대기</td><td>"BODY-001: P2 없이 P3 도착, 작업 거부"</td><td>확인 뒤 그 공정 해제 버튼</td><td><b>보류.</b> 남은 공정에 서지 않고 검사로</td><td>① 차체를 손으로 P3 앞에 놓고 출발</td></tr>
+   <tr><td><b>공정 순서 위반</b><br><code>F01</code></td><td>흐름 · 엣지 서버 Pi5</td><td>작업하지 않는다. Pi5가 보낸 상태를 받아 빨강</td><td>선 채로 대기</td><td>"BODY-001: P2 없이 P3 도착, 작업 거부"</td><td>확인 뒤 그 공정 해제 버튼</td><td><b>보류.</b> 남은 공정에 서지 않고 검사로</td><td>① 차체를 손으로 P3 앞에 놓고 출발</td></tr>
    <tr><td><b>태그 미판독</b><br><code>F02</code></td><td>흐름 · <b>AGV</b> (목적지 색 구역에 들어와 2초 안에 '태그 읽음'이 없음). Pi5도 출발 뒤 20초로 한 번 더 본다</td><td>모른다. Pi5가 보낸 상태로 빨강</td><td>스스로 정지하고 신고. 다음 공정까지 가지 않는다</td><td>"P2 태그 못 읽음"</td><td>차를 정지 칸 앞 선 위에 다시 놓고 해제 버튼</td><td>계속</td><td>① 리더기를 가린다, 태그를 뺀다</td></tr>
-   <tr><td><b>작업 시간 초과</b><br><code>F03</code></td><td>흐름 · 관제 Pi5 ('작업 중' 뒤 30초)</td><td>Pi5가 보낸 상태로 빨강</td><td>대기</td><td>"P3 작업 지연 32초"</td><td>그 공정 해제 버튼</td><td>재작업</td><td>① 완료 버튼을 누르지 않는다</td></tr>
-   <tr><td><b>멈춤 완료 안 옴</b><br><code>F05</code></td><td>흐름 · 관제 Pi5 ('태그 읽음' 뒤 3초)</td><td>Pi5가 보낸 상태로 빨강</td><td>Pi5 명령으로 정지</td><td>"P2 AGV 멈춤 확인 안 됨"</td><td>AGV를 살펴본 뒤 그 공정 해제 버튼</td><td>계속</td><td>① AGV 통신을 끊는다</td></tr>
-   <tr><td><b>작업 중 재시작</b><br><code>F04</code></td><td>흐름 · 관제 Pi5 ('작업 중'인 공정이 '시작됨'을 보냄)</td><td>처음 상태로 다시 켜진다</td><td>대기</td><td>"P4 재시작됨, 확인 필요"</td><td>그 공정 해제 버튼</td><td>재작업</td><td>① ESP32의 리셋 버튼을 누른다</td></tr>
+   <tr><td><b>작업 시간 초과</b><br><code>F03</code></td><td>흐름 · 엣지 서버 Pi5 ('작업 중' 뒤 30초)</td><td>Pi5가 보낸 상태로 빨강</td><td>대기</td><td>"P3 작업 지연 32초"</td><td>그 공정 해제 버튼</td><td>재작업</td><td>① 완료 버튼을 누르지 않는다</td></tr>
+   <tr><td><b>멈춤 완료 안 옴</b><br><code>F05</code></td><td>흐름 · 엣지 서버 Pi5 ('태그 읽음' 뒤 3초)</td><td>Pi5가 보낸 상태로 빨강</td><td>Pi5 명령으로 정지</td><td>"P2 AGV 멈춤 확인 안 됨"</td><td>AGV를 살펴본 뒤 그 공정 해제 버튼</td><td>계속</td><td>① AGV 통신을 끊는다</td></tr>
+   <tr><td><b>작업 중 재시작</b><br><code>F04</code></td><td>흐름 · 엣지 서버 Pi5 ('작업 중'인 공정이 '시작됨'을 보냄)</td><td>처음 상태로 다시 켜진다</td><td>대기</td><td>"P4 재시작됨, 확인 필요"</td><td>그 공정 해제 버튼</td><td>재작업</td><td>① ESP32의 리셋 버튼을 누른다</td></tr>
    <tr><td><b>공정 연결 끊김</b><br><code>C01</code></td><td>통신 · 브로커와 Pi5 (6초)</td><td>하던 작업만 끝낸다. 새 작업은 하지 않는다. 보낼 신고는 쥐고 있는다</td><td>출발 허가가 없어 대기</td><td>그 공정 칸이 회색 "끊김 · 마지막 수신 14:23:21"</td><td>다시 붙으면 저절로 풀린다. 그사이 재시작했으면 F04</td><td>계속 또는 재작업</td><td>① 공유기를 끈다</td></tr>
    <tr><td><b>AGV 연결 끊김</b> <code>C02</code><br><b>선 이탈</b> <code>E20</code></td><td>통신 / 설비 · AGV 스스로, Pi5도 본다</td><td>없음</td><td>스스로 정지 (2초)</td><td>"AGV 끊김" / "AGV 선 이탈"</td><td>선 위에 다시 놓는다. <span class="tag o">열린 자리</span> AGV에는 버튼이 없다(8쪽)</td><td>계속</td><td>① 공유기를 끈다, 선을 가린다</td></tr>
    <tr><td><b>검사 불합격</b><br>(이상 아님)</td><td>결과 · 검사 Pi5</td><td>판정 '불합격' 표시. 빨강·부저 없음</td><td>정상 종료</td><td>차체 칸에 "보류"</td><td>없음. 고칠 때는 '정정'</td><td>보류</td><td>불량 표시가 있는 차체</td></tr>
@@ -454,8 +454,8 @@ svg { display:block; width:100% }
     </div>
    </div>
    <div>
-    <div class="blk warn"><b>끊긴 공정은 Pi5가 보낸 상태를 받지 못한다.</b> 그래서 같은 칩 안에서 통신 태스크가 2초마다 '연결 상태'를 설비 태스크에 알려 준다. 설비 태스크는 '끊김'을 받거나 이 메시지가 5초 동안 없으면 스스로 끊김 표시를 켠다. 등 모양은 아직 정하지 않았다.</div>
-    <div class="blk note"><b>한 공정에 이상이 겹치면</b> 화면과 상태등에는 가장 무거운 것 하나를 보인다(설비 &gt; 통신 &gt; 흐름). 해제 버튼 한 번에 그 공정의 이상이 모두 풀린다.</div>
+    <div class="blk warn"><b>끊긴 공정은 Pi5가 보낸 상태를 받지 못한다.</b> 그래서 같은 칩 안에서 통신 태스크가 2초마다 '연결 상태'를 설비 태스크에 알려 준다. 설비 태스크는 '끊김'을 받거나 이 메시지가 5초 동안 없으면 스스로 끊김 표시를 켠다. 공정의 상태 RGB LED 1개로 보여 주며, 모양은 아직 정하지 않았다.</div>
+    <div class="blk note"><b>한 공정에 이상이 겹치면</b> 화면과 상태 LED에는 가장 무거운 것 하나를 보인다(설비 &gt; 통신 &gt; 흐름). 해제 버튼 한 번에 그 공정의 이상이 모두 풀린다.</div>
    </div>
   </div>
  </div>
@@ -494,7 +494,7 @@ svg { display:block; width:100% }
      <li>Pi5가 P3에 지금 상태 '이상(순서 위반)'을 보낸다. P3는 움직이지 않고 빨강이 된다.</li>
      <li>현장 화면: "BODY-001: P2 없이 P3 도착, 작업 거부".</li>
      <li>작업자가 확인하고 P3의 완료 버튼을 길게 눌러 푼다.</li>
-     <li>Pi5가 P3에 지금 상태 '대기'를 보내고(등 꺼짐) 차체를 '보류'로 적는다. AGV에 목적지를 검사로 한 출발 허가를 준다.</li>
+     <li>Pi5가 P3에 지금 상태 '대기'를 보내고(LED 꺼짐) 차체를 '보류'로 적는다. AGV에 목적지를 검사로 한 출발 허가를 준다.</li>
      <li>AGV는 P4에 서지 않고 지나간다. P4 리더기가 태그를 읽어도 목적지가 아니므로 Pi5는 답만 하고 도착으로 치지 않는다. 검사에서 '보류(공정 누락)'로 끝난다.</li>
     </ol>
    </div>
@@ -514,10 +514,10 @@ svg { display:block; width:100% }
      <li>Pi5가 '통신 복구'를 적고 출발 허가를 낸다.</li>
     </ol>
    </div>
-   <div class="note"><b>관제 Pi5(브로커)가 꺼지면:</b> 기록도 같이 멈추므로 공정은 '작업 끝' 신고를 쥐고 기다린다(버튼과 비상정지는 그대로 반응). Pi5가 켜지면 같은 번호로 도착해 한 번만 적힌다(RTOS 도입 제안서의 장면).</div>
+   <div class="note"><b>엣지 서버 Pi5(브로커)가 꺼지면:</b> 기록도 같이 멈추므로 공정은 '작업 끝' 신고를 쥐고 기다린다(버튼과 비상정지는 그대로 반응). Pi5가 켜지면 같은 번호로 도착해 한 번만 적힌다(RTOS 도입 제안서의 장면).</div>
   </div>
  </div>
- <div class="note" style="margin-top:3mm"><b>평가자에게 보여 줄 장면 세 가지:</b> ① <b>비상정지</b> — 현장 화면에서 눌러도 안 풀리고 현장 버튼으로만 풀린다. ② <b>공정 순서 위반</b> — P2를 건너뛴 차체가 오면 P3가 작업을 거부한다. 관제가 왜 필요한지 가장 잘 보인다. ③ <b>공유기 끄기와 복구</b> — 4쪽의 '서버 끄기' 장면과 짝이 된다.</div>
+ <div class="note" style="margin-top:3mm"><b>평가자에게 보여 줄 장면 세 가지:</b> ① <b>비상정지</b> — 현장 화면에서 눌러도 안 풀리고 현장 버튼으로만 풀린다. ② <b>공정 순서 위반</b> — P2를 건너뛴 차체가 오면 P3가 작업을 거부한다. 엣지 서버가 왜 필요한지 가장 잘 보인다. ③ <b>공유기 끄기와 복구</b> — 4쪽의 '서버 끄기' 장면과 짝이 된다.</div>
  </div>
 </div>
 
@@ -541,7 +541,7 @@ svg { display:block; width:100% }
     <table class="sm">
      <tr><td style="width:52mm"><code>00_회의안건지</code></td><td>다음 회의 안건</td></tr>
      <tr><td><code>제공맵_공정배치도</code></td><td>교육에서 받은 맵 위의 공정 배치. 차체는 AGV에 실린 채 다닌다</td></tr>
-     <tr><td><code>RTOS_도입_제안서</code></td><td>공정 ESP32 펌웨어를 통신 태스크와 설비 태스크로 나누는 안. 칩 안 메시지(부록 B의 줄 형식), 12-01 판정</td></tr>
+     <tr><td><code>RTOS_도입_제안서</code></td><td>공정 ESP32 펌웨어를 통신 태스크와 설비 태스크로 구조(확정 — 2026-11-24 팀 동의). 칩 안 메시지(부록 B의 줄 형식), 12-01 판정</td></tr>
      <tr><td><code>esp32_book/</code></td><td>ESP32 교본과 예제 코드. 줄 처리(<code>modem.ino</code>), 검사값 계산(<code>cs.py</code>)</td></tr>
      <tr><td><code>HANDOFF.md</code></td><td>전체 결정과 진행 기록</td></tr>
     </table>
@@ -557,8 +557,9 @@ svg { display:block; width:100% }
      <li><b>흐름 이상과 통신 이상의 해제 버튼.</b> 제안: 이상에 적힌 공정의 버튼.</li>
      <li><b>버튼 쓰는 법.</b> 제안: 비상정지 버튼은 정지만 하고, 이상 중에는 완료 버튼이 확인(짧게)·해제(길게)를 맡는다. 해제 버튼을 하나 더 달지도 정한다.</li>
      <li><b>'작업 끝'을 누가 내나.</b> 공정마다 공정 ESP32가 자동으로 낼지, 완료 버튼으로 낼지.</li>
-     <li><b>끊긴 공정의 등 모양.</b></li>
-     <li><b>공정별 센서</b>(㉡). <b>공정 ESP32를 두 태스크로 나누는 안</b>의 팀 확인과 큐에 담는 모양(RTOS 도입 제안서).</li>
+     <li><b>RTOS</b>(도입은 확정): 판정일, 담당, 큐에 담는 모양, ‘끊김’ 표시 모양(공정의 상태 RGB LED 1개로 보여 준다. 색·깜빡임은 미정).</li>
+     <li><b>공정별 센서</b>(㉡). 이번 주 안에 공정 구성과 함께 정한다.</li>
+     <li><b>스마트태그:</b> MPU6050으로 무엇을 알릴지, 버튼을 둘지, 상태 LED의 위치와 색 규칙.</li>
      <li><b>담당:</b> 토픽·메시지 이름을 맞출 사람 1명, 기록 담당 프로그램의 주인.</li>
      <li><b>공유기:</b> ESP32는 2.4GHz만 붙는다. 전용 공유기를 쓸지.</li>
      <li><b>Spring:</b> DB 종류와 버전, 실행 위치(같은 공유기의 PC / 클라우드).</li>
@@ -586,7 +587,7 @@ svg { display:block; width:100% }
      <tr><td><code>station/{이름}/report</code></td><td>공정 · 검사 → 기록</td><td>시작됨, 작업 끝, 검사 결과, 이상 발생 · 봤다 · 해제</td><td>–</td><td>일이 생길 때</td></tr>
      <tr><td><code>station/{이름}/tag</code></td><td>공정 · 검사 → AGV, 기록</td><td>태그 읽음</td><td>–</td><td>읽은 즉시</td></tr>
      <tr><td><code>station/{이름}/cmd</code></td><td>기록 → 공정</td><td>신고에 대한 답(받음 / 거부)</td><td>–</td><td>적은 직후</td></tr>
-     <tr><td><code>station/{이름}/state</code></td><td>기록 → 공정</td><td>작업 단계, 상태등, 차체, 이상 코드</td><td>보관</td><td>바뀔 때</td></tr>
+     <tr><td><code>station/{이름}/state</code></td><td>기록 → 공정</td><td>작업 단계, 상태 LED, 차체, 이상 코드</td><td>보관</td><td>바뀔 때</td></tr>
      <tr><td><code>station/{이름}/alive</code></td><td>공정 → 기록</td><td>살아 있다는 신호</td><td>–</td><td>2초마다</td></tr>
      <tr><td><code>station/{이름}/test</code></td><td>노트북 → 공정</td><td>시험 입력 (방법 ③, 선택)</td><td>–</td><td>시험할 때</td></tr>
      <tr><td><code>{종류}/{이름}/link</code></td><td>각 장치 → 기록</td><td>붙음 / 끊김. 끊기면 브로커가 대신 알린다</td><td>보관</td><td>붙거나 끊길 때</td></tr>
@@ -598,11 +599,12 @@ svg { display:block; width:100% }
      <tr><td><code>tag/{이름}/cmd</code> · <code>report</code></td><td>기록 ↔ 스마트태그</td><td>이력 사본 / 답</td><td>–</td><td>작업 끝 뒤</td></tr>
     </table>
     <ul style="margin-top:1.2mm;font-size:8.6pt">
-     <li><b>관제 Pi5와 스마트태그</b>는 살아 있음을 따로 보내지 않고 <code>link</code>로 본다.</li>
+     <li><b>엣지 서버 Pi5와 스마트태그</b>는 살아 있음을 따로 보내지 않고 <code>link</code>로 본다.</li>
      <li><b>AGV가 듣는 것:</b> <code>station/+/tag</code>(목적지 것이면 정지), <code>station/+/report</code>의 비상정지(어느 공정이든 정지), <code>agv/1/cmd</code>, <code>agv/1/manual</code>. Pi5도 목적지가 아닌 공정의 태그 읽음은 답만 한다.</li>
      <li><b>흐름 이상과 통신 이상</b>은 Pi5가 스스로 만드는 사건이라 올라오는 토픽이 없다. 공정에는 <code>state</code>의 이상 코드로 내려간다.</li>
      <li><code>cmd</code>에서 <code>re</code>가 있으면 답, <code>id</code>가 있으면 명령이다. 명령을 받은 쪽은 신고 번호 없이 <code>re</code>로 답한다(다시 보내지 않는다).</li>
      <li>장치가 보내는 것은 한 번만 보내고(QoS 0) '답이 올 때까지 다시 보내기'로 지킨다. Pi5가 보내는 것은 QoS 1.</li>
+     <li><code>lamp</code>는 공정의 상태 RGB LED 1개가 낼 색이다(부록 B). 색 규칙은 제안이며 다시 정한다.</li>
     </ul>
    </div>
   </div>

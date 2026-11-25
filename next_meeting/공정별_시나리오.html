@@ -75,10 +75,10 @@ svg { display:block; width:100% }
 </svg></div>
   <h2>자리마다 누가 무엇을 하나</h2>
   <table>
-   <tr><th style="width:24mm">자리</th><th style="width:62mm">AGV</th><th style="width:88mm">그 자리의 장치 · 사람</th><th>관제 Pi5</th></tr>
+   <tr><th style="width:24mm">자리</th><th style="width:62mm">AGV</th><th style="width:88mm">그 자리의 장치 · 사람</th><th>엣지 서버 Pi5</th></tr>
    <tr><td><b>노랑</b></td><td>서 있다 → 출발</td><td>장치 없음. 사람이 차체를 AGV 윗면에 올리고 화면에서 '투입'</td><td>새 차체 번호 → 출발 허가(목적지 P1)</td></tr>
-   <tr><td><b>P1 ~ P4</b></td><td>태그 읽음에 정지 → 멈춤 완료 → 출발</td><td>공정 ESP32: 리더기, 설비(미정), 상태등, 버튼</td><td>순서 확인 → 작업 허가 → 작업 끝 기록 → 이력 사본 → 출발 허가</td></tr>
-   <tr><td><b>검사</b></td><td>태그 읽음에 정지 → 멈춤 완료</td><td>검사 Pi5: 리더기, 카메라 (검사 틀 + 지붕 아래)</td><td>남은 공정 확인 → 검사 허가 → 완료 / 보류</td></tr>
+   <tr><td><b>P1 ~ P4</b></td><td>태그 읽음에 정지 → 멈춤 완료 → 출발</td><td>공정 ESP32: 리더기, 설비(미정), 상태 LED(RGB 1개), 버튼</td><td>순서 확인 → 작업 허가 → 작업 끝 기록 → 이력 사본 → 출발 허가</td></tr>
+   <tr><td><b>검사</b></td><td>태그 읽음에 정지 → 멈춤 완료</td><td>검사 Pi5: 리더기, 카메라 (검사 틀 + 지붕 아래), 상태는 OLED</td><td>남은 공정 확인 → 검사 허가 → 완료 / 보류</td></tr>
    <tr><td><b>복귀</b></td><td>노랑으로 가서 색을 보고 선다</td><td>장치 없음. 사람이 차체를 치우고 화면에서 '복귀'</td><td>복귀 명령(목적지 노랑)</td></tr>
   </table>
  </div>
@@ -128,7 +128,7 @@ svg { display:block; width:100% }
 <path d="M42,22 l-6,9 h12 z" fill="#1f2a37"/>
 <rect x="78" y="78" width="74" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="115" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">목적지 P1</text>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">출발 허가 → 출발</text>
-<text x="8" y="141" font-size="10.6" fill="#3b4654">관제 Pi5가 P1을</text>
+<text x="8" y="141" font-size="10.6" fill="#3b4654">엣지 서버 Pi5가 P1을</text>
 <text x="8" y="156" font-size="10.6" fill="#3b4654">목적지로 보낸다</text>
 </g>
 <g transform="translate(164,180)">
@@ -164,7 +164,7 @@ svg { display:block; width:100% }
      </ol>
     </div>
     <div class="warn"><b>노랑 한가운데의 갈림길.</b> 노랑 한가운데에서는 오른쪽 S자 갈림길이 본 경로와 교차한다(위치 추정) — 선이 여러 갈래로 보이는 자리다. <span class="sub">제공맵_공정배치도의 주의 지점 A와 같은 곳이다.</span></div>
-    <div class="sub" style="margin-top:2.5mm">스마트태그 전원: 개발은 USB, 배터리는 나중에 정한다.</div>
+    <div class="sub" style="margin-top:2.5mm">스마트태그(차체에 붙음): MPU6050 + 상태 RGB LED [확정, 2026-11-24 팀 회의]. 전원은 개발 중 USB, 배터리는 나중에 정한다.</div>
    </div>
   </div>
  </div>
@@ -173,7 +173,7 @@ svg { display:block; width:100% }
 <div class="page">
  <div class="kick">팀 회의 자료 · 공정별 시나리오 (3/4 P1 ~ P4)</div>
  <h1>P1 ~ P4 — 네 곳 모두 같은 여섯 컷, 차체는 AGV에 실은 채 작업한다</h1>
- <div class="meta">그림은 P2(초록) 예 · 파란 막대 = 공정 리더기, 진회색 = 공정 기둥, 초록 막대 = 차체 위로 들어온 설비, 오른쪽 위 동그라미 = 상태등 · 주황 테두리 = 이 장면의 핵심 컷</div>
+ <div class="meta">그림은 P2(초록) 예 · 파란 막대 = 공정 리더기, 진회색 = 공정 기둥, 초록 막대 = 차체 위로 들어온 설비, 오른쪽 위 동그라미 = 상태 LED(RGB 1개, 색은 제안 — 다시 정한다) · 주황 테두리 = 이 장면의 핵심 컷</div>
  <div class="body">
   <div class="side" style="grid-template-columns:180mm minmax(0,1fr)">
    <div><svg viewBox="0 0 488 356" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif">
@@ -209,7 +209,7 @@ svg { display:block; width:100% }
 <rect x="78" y="78" width="74" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="115" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">작업 허가</text>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">순서 확인 · 허가</text>
 <text x="8" y="141" font-size="10.6" fill="#3b4654">앞 공정이 끝난 차체인지</text>
-<text x="8" y="156" font-size="10.6" fill="#3b4654">관제 Pi5가 확인한다</text>
+<text x="8" y="156" font-size="10.6" fill="#3b4654">엣지 서버 Pi5가 확인한다</text>
 </g>
 <g transform="translate(328,0)">
 <rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fffaf1" stroke="#c77a12" stroke-width="2"/>
@@ -225,7 +225,7 @@ svg { display:block; width:100% }
 <circle cx="146" cy="16" r="7" fill="#e6b422" stroke="#1f2a37" stroke-width=".8"/>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">설비가 움직인다</text>
 <text x="8" y="141" font-size="10.6" fill="#3b4654">차체 위에서 작업</text>
-<text x="8" y="156" font-size="10.6" fill="#3b4654">상태등 노랑 깜빡</text>
+<text x="8" y="156" font-size="10.6" fill="#3b4654">상태 LED 노랑 깜빡</text>
 </g>
 <g transform="translate(0,180)">
 <rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fff" stroke="#cfd6de" stroke-width="1"/>
@@ -258,7 +258,7 @@ svg { display:block; width:100% }
 <circle cx="146" cy="16" r="7" fill="#2f8a5b" stroke="#1f2a37" stroke-width=".8"/>
 <rect x="78" y="78" width="74" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="115" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">출발 허가</text>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">기록 · 이력 사본</text>
-<text x="8" y="141" font-size="10.6" fill="#3b4654">관제 Pi5가 적고</text>
+<text x="8" y="141" font-size="10.6" fill="#3b4654">엣지 서버 Pi5가 적고</text>
 <text x="8" y="156" font-size="10.6" fill="#3b4654">태그에 사본을 보낸다</text>
 </g>
 <g transform="translate(328,180)">
@@ -275,7 +275,7 @@ svg { display:block; width:100% }
 <path d="M42,22 l-6,9 h12 z" fill="#1f2a37"/>
 <circle cx="146" cy="16" r="7" fill="#e6eaef" stroke="#1f2a37" stroke-width=".8"/>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">다음 색으로 출발</text>
-<text x="8" y="141" font-size="10.6" fill="#3b4654">상태등 꺼짐</text>
+<text x="8" y="141" font-size="10.6" fill="#3b4654">상태 LED 꺼짐</text>
 <text x="8" y="156" font-size="10.6" fill="#3b4654">공정은 다시 대기</text>
 </g>
 </svg></div>
@@ -344,7 +344,7 @@ svg { display:block; width:100% }
 <rect x="84" y="78" width="70" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="119" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">검사 허가</text>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">검사 허가</text>
 <text x="8" y="141" font-size="10.6" fill="#3b4654">남은 공정이 없는지</text>
-<text x="8" y="156" font-size="10.6" fill="#3b4654">관제 Pi5가 확인한다</text>
+<text x="8" y="156" font-size="10.6" fill="#3b4654">엣지 서버 Pi5가 확인한다</text>
 </g>
 <g transform="translate(328,0)">
 <rect x="0.5" y="0.5" width="159" height="175" rx="5" fill="#fffaf1" stroke="#c77a12" stroke-width="2"/>
@@ -377,7 +377,7 @@ svg { display:block; width:100% }
 <circle cx="42" cy="64" r="4.5" fill="#1f2a37"/>
 <rect x="84" y="78" width="70" height="20" rx="4" fill="#eef6f1" stroke="#2f8a5b"/><text x="119" y="92" font-size="10.5" font-weight="700" fill="#1d6b45" text-anchor="middle">완료 / 보류</text>
 <text x="8" y="124" font-size="12" font-weight="700" fill="#1f2a37">완료 / 보류로 적는다</text>
-<text x="8" y="141" font-size="10.6" fill="#3b4654">관제 Pi5가 판정을</text>
+<text x="8" y="141" font-size="10.6" fill="#3b4654">엣지 서버 Pi5가 판정을</text>
 <text x="8" y="156" font-size="10.6" fill="#3b4654">이력과 대조한다</text>
 </g>
 <g transform="translate(164,180)">
@@ -419,8 +419,8 @@ svg { display:block; width:100% }
     <table>
      <tr><th style="width:21mm">무엇</th><th>어떻게</th></tr>
      <tr><td><b>검사 틀</b></td><td>틀 + 지붕 + 안쪽 흰 배경판(길이 30cm 이내, 안쪽 높이 = 몸통 20cm + 차체 높이 + 여유). 바깥 다리는 맵 밖, 안쪽 다리는 고리 안에 선다. AGV는 차체를 실은 채 그 아래에 서고, 위 카메라가 찍는다</td></tr>
-     <tr><td><b>검사 허가</b></td><td>관제 Pi5가 남은 공정이 없는지 확인하고 보낸다. 순서는 P1~P4와 같고, '작업 끝' 대신 '검사 결과'가 온다</td></tr>
-     <tr><td><b>판정</b></td><td>검사 Pi5는 카메라로 본 합격 · 불합격만 보낸다. 관제 Pi5가 이력과 대조해 <b>완료</b>(합격이고 빠진 공정 없음) 또는 <b>보류</b>로 적는다. 불합격은 이상이 아니라 결과라서 빨간 등과 부저를 쓰지 않는다</td></tr>
+     <tr><td><b>검사 허가</b></td><td>엣지 서버 Pi5가 남은 공정이 없는지 확인하고 보낸다. 순서는 P1~P4와 같고, '작업 끝' 대신 '검사 결과'가 온다</td></tr>
+     <tr><td><b>판정</b></td><td>검사 Pi5는 카메라로 본 합격 · 불합격만 보낸다. 엣지 서버 Pi5가 이력과 대조해 <b>완료</b>(합격이고 빠진 공정 없음) 또는 <b>보류</b>로 적는다. 불합격은 이상이 아니라 결과라서 이상 표시(빨강 · 부저)를 내지 않는다. 검사의 상태는 LED가 아니라 OLED 모듈로 보여 준다</td></tr>
      <tr><td><b>끝</b></td><td>운반은 여기서 끝난다. 사람이 차체를 치우고 화면에서 '복귀'를 누르면, AGV는 빈 채로 노랑으로 가서 색을 보고 선다</td></tr>
     </table>
    </div>

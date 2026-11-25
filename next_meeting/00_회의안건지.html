@@ -9,114 +9,137 @@ body { margin:0; font-family:"Apple SD Gothic Neo","Malgun Gothic",sans-serif; c
 h1 { font-size:17pt; margin:1mm 0 0 }
 .meta { font-size:8.5pt; color:#5b6675; margin-top:1.2mm }
 .fill { display:inline-block; border-bottom:1px solid #9aa5b1; min-width:28mm; height:4.2mm; vertical-align:-1mm }
-h2 { font-size:10.6pt; margin:3.6mm 0 1.2mm; padding-bottom:.8mm; border-bottom:1.5px solid #1f2a37; display:flex; justify-content:space-between; align-items:baseline }
+h2 { font-size:10.6pt; margin:3.2mm 0 1mm; padding-bottom:.8mm; border-bottom:1.5px solid #1f2a37; display:flex; justify-content:space-between; align-items:baseline }
 h2 small { font-size:8pt; font-weight:400; color:#5b6675 }
 table { border-collapse:collapse; width:100% }
-td, th { padding:1.0mm 1.4mm; text-align:left; vertical-align:top; border-bottom:1px solid #e1e6eb; font-size:8.8pt; line-height:1.42 }
+td, th { padding:.9mm 1.4mm; text-align:left; vertical-align:top; border-bottom:1px solid #e1e6eb; font-size:8.6pt; line-height:1.4 }
 th { font-size:7.8pt; color:#5b6675; font-weight:600 }
 td.n { width:7mm; color:#5b6675; font-weight:700 }
-td.q { width:76mm }
+td.q { width:80mm }
 td.d { width:62mm }
 .opt { display:inline-block; margin-right:2.6mm; white-space:nowrap }
 .opt::before { content:""; display:inline-block; width:2.8mm; height:2.8mm; border:1px solid #5b6675; border-radius:.5mm; margin-right:1mm; vertical-align:-.3mm }
-.line { display:block; border-bottom:1px solid #c5cdd5; height:4.6mm; margin-top:.8mm }
+.line { display:block; border-bottom:1px solid #c5cdd5; height:4.4mm; margin-top:.6mm }
 .sub { color:#5b6675; font-size:8pt }
 .ref { color:#2f5f9e; font-size:7.8pt; font-weight:600 }
 .urgent { color:#a8321f; font-weight:700 }
-.box { border:1px solid #cfd6de; border-radius:2mm; padding:2.4mm 3mm; font-size:8.8pt; line-height:1.5 }
-.docs td { font-size:8.6pt }
+.done { border:1px solid #9cc5ad; background:#f2f8f4; border-radius:2mm; padding:2mm 3mm; font-size:8.5pt; line-height:1.5; margin-top:2.6mm }
+.done b.t { color:#1d6b45 }
+.done ul { margin:.6mm 0 0; padding-left:4.2mm; columns:2; column-gap:6mm }
+.done li { margin-bottom:.3mm; break-inside:avoid }
+.docs td { font-size:8.3pt; padding:.6mm 1.4mm }
 .two { display:grid; grid-template-columns:1fr 1fr; gap:5mm }
-.notes { flex:1; border:1px solid #cfd6de; border-radius:2mm; padding:2.4mm 3mm; font-size:8.6pt; color:#5b6675; background:repeating-linear-gradient(#fff 0 6.4mm,#e1e6eb 6.4mm 6.6mm) }
+.side { border:1px solid #cfd6de; border-radius:2mm; padding:1.6mm 2.4mm; font-size:8.4pt; line-height:1.45; margin-bottom:1.2mm }
+.side .k { font-size:7.8pt; color:#5b6675; font-weight:700 }
+.notes { flex:1; min-height:16mm; border:1px solid #cfd6de; border-radius:2mm; padding:2.4mm 3mm; font-size:8.6pt; color:#5b6675; background:repeating-linear-gradient(#fff 0 6.4mm,#e1e6eb 6.4mm 6.6mm) }
 .foot { font-size:7.4pt; color:#5b6675; margin-top:2mm }
 </style></head><body>
 
 <!-- 1쪽 -->
 <div class="page">
  <div class="kick">팀 회의 · 안건지</div>
- <h1>다음 회의 — 정할 것과 담당</h1>
- <div class="meta">작성 2026-11-23 · 회의 날짜 <span class="fill"></span> · 참석 <span class="fill" style="min-width:70mm"></span></div>
- <div class="meta">아래 선택지와 날짜는 <b>제안</b>입니다. <b>사용자 확정</b>이라 적은 것은 팀 확인만 받습니다. 정한 칸에 표시하고 결정 칸을 채우면 회의록이 됩니다.</div>
+ <h1>다음 회의 — 정할 것</h1>
+ <div class="meta">작성 2026-11-25 · 회의 날짜 <span class="fill"></span> · 참석 <span class="fill" style="min-width:70mm"></span></div>
+ <div class="meta">아래 선택지와 날짜는 <b>제안</b>입니다. 정한 칸에 표시하고 결정 칸을 채우면 회의록이 됩니다.</div>
+
+ <div class="done"><b class="t">정해진 것 — 다시 논의하지 않는다</b> <span class="sub">(2026-11-24 팀 회의)</span>
+  <ul>
+   <li><b>RTOS 도입.</b> 공정 ESP32 펌웨어를 FreeRTOS 두 태스크로 짠다</li>
+   <li><b>공정 보드.</b> P1~P4에 ESP32 한 개씩, 모두 4개만 쓴다</li>
+   <li><b>스마트태그.</b> MPU6050을 넣고 상태 RGB LED를 단다</li>
+   <li><b>상태 RGB LED 5개.</b> P1~P4에 1개씩 + 태그 1개. 검사는 OLED (거의 확정)</li>
+   <li><b>로봇팔은 쓰지 않는다.</b> 차체는 AGV 몸통 윗면에 싣는다</li>
+   <li><b>11-27(금) 3D 출력.</b> 차체와 공정 부품</li>
+   <li><b>일 나누기.</b> 디지털 트윈 쪽 / 하드웨어 쪽 (2쪽 6)</li>
+   <li><b>Pi5 #1의 이름 = 엣지 서버 Pi5</b> <span class="sub">(사용자 결정)</span></li>
+  </ul>
+ </div>
 
  <h2>가져온 자료 <small>이 폴더(next_meeting)에 있음 · 각 PDF의 HTML 원본도 함께</small></h2>
  <table class="docs">
-  <tr><td style="width:56mm"><b>데이터흐름_설명서.pdf</b></td><td>데이터 흐름과 이상(오류) 시나리오. 8쪽에 정할 것 목록</td></tr>
-  <tr><td><b>제공맵_공정배치도.pdf</b></td><td>교육에서 받은 맵 위의 공정 배치. 반시계, 색 칸에서 차체를 실은 채 작업</td></tr>
-  <tr><td><b>RTOS_도입_제안서.pdf</b></td><td>공정 ESP32 펌웨어를 FreeRTOS 두 태스크로 나누는 제안. 12-01 판정</td></tr>
-  <tr><td><b>esp32_book/ESP32_교본.html</b></td><td>브라우저로 열기. 3D 보드, 핀 지도, 실습 8개. 코드는 esp32_book/code. 온라인판은 공유 설정이 필요</td></tr>
+  <tr><td style="width:56mm"><b>AGV_베이스라인_가이드.html</b></td><td>브라우저로 열기. 선을 따라 돌다 색 구역마다 서고, 정해진 시간 뒤 스스로 출발하는 AGV 주행 뼈대</td></tr>
+  <tr><td><b>개발_단계_순서.pdf</b></td><td>날짜별 할 일과 관문(12-04 loop판 P2 · 12-11 리허설), 밀릴 때 버리는 순서</td></tr>
+  <tr><td><b>공정별_시나리오.pdf</b></td><td>노랑 · P1~P4 · 검사에서 차체를 실은 채 일어나는 일을 컷 그림으로</td></tr>
+  <tr><td><b>제공맵_공정배치도.pdf</b></td><td>교육에서 받은 맵 위의 공정 배치(실측 축척), 공정 한 칸의 치수</td></tr>
+  <tr><td><b>데이터흐름_설명서.pdf</b></td><td>데이터 흐름과 이상(오류) 시나리오. 8쪽에 정할 것 목록</td></tr>
+  <tr><td><b>RTOS_도입_제안서.pdf</b></td><td>공정 ESP32의 두 태스크 구조와 판정 규칙</td></tr>
+  <tr><td><b>esp32_book/ESP32_교본.html</b></td><td>브라우저로 열기. 3D 보드, 핀 지도, 실습. 코드는 esp32_book/code</td></tr>
  </table>
 
  <h2>0. 회의 전에 <small>급함</small></h2>
  <table>
-  <tr><td class="n">0</td><td class="q"><span class="urgent">GitHub 저장소를 비공개로 바꾼다.</span> 지금 공개 상태이고 SSAFY 교안·키트 자료가 올라가 있다</td><td class="d"><span class="opt">했음</span><span class="opt">회의 중에</span><span class="line"></span></td></tr>
+  <tr><td class="n">0</td><td class="q"><span class="urgent">GitHub 저장소를 비공개로 바꾼다.</span> 지금 공개 상태이고 SSAFY 교안 · 제공 맵이 올라가 있다</td><td class="d"><span class="opt">했음</span><span class="opt">회의 중에</span></td></tr>
  </table>
 
- <h2>1. 맵과 AGV <small class="ref">제공맵 공정배치도</small></h2>
+ <h2>1. 공정 설비 · 3D 출력 <small><span class="urgent">이번 주 안에 정하고 11-27(금) 출력</span> · <span class="ref">공정별 시나리오 · 제공맵 공정배치도</span></small></h2>
  <table>
-  <tr><th></th><th>정할 것</th><th>결정</th></tr>
-  <tr><td class="n">1-1</td><td class="q"><b>교육에서 받은 맵을 쓴다</b> <span class="sub">(사용자 확정 · 팀 확인)</span>. 반시계 한 바퀴: 노랑 출발 → P1 주황 → P2 초록 → P3 보라 → P4 파랑 → 검사 빨강</td><td class="d"><span class="opt">확인</span><span class="opt">다시 논의</span><span class="line"></span></td></tr>
-  <tr><td class="n">1-2</td><td class="q"><b>교육장에서 잴 것과 담당.</b> 팔을 떼어 낸 윗면의 넓이와 차체를 실을 자리, 색 구역 위치, 주행 모델이 반시계로 학습됐는지 <span class="sub">(맵·AGV 크기는 실측함. 로봇팔은 쓰지 않는다)</span></td><td class="d">담당 <span class="fill"></span><br>날짜 <span class="fill"></span></td></tr>
+  <tr><td class="n">1-1</td><td class="q"><b>공정별 디자인과 구성 요소.</b> 공정마다 무엇이 움직이나. 아직 정해진 것은 없다. 함께 정할 것: 모터 배정, 프레스 위치(차 위 / 옆 받침대), 도장 방식과 색, 소리, 전원, 예산 · 주문 마감</td><td class="d">P1 <span class="fill" style="min-width:21mm"></span> P2 <span class="fill" style="min-width:21mm"></span><br>P3 <span class="fill" style="min-width:21mm"></span> P4 <span class="fill" style="min-width:21mm"></span><br>검사 <span class="fill" style="min-width:19mm"></span> 출력 파일 마감 <span class="fill" style="min-width:12mm"></span></td></tr>
+  <tr><td class="n">1-2</td><td class="q"><b>공정별 센서.</b> 아직 정하지 않았다. 후보: P1 진동, P2 초음파(패널 부족). 핀표(3-3)와 함께</td><td class="d">P1 <span class="fill" style="min-width:21mm"></span> P2 <span class="fill" style="min-width:21mm"></span><br>P3 <span class="fill" style="min-width:21mm"></span> P4 <span class="fill" style="min-width:21mm"></span></td></tr>
+  <tr><td class="n">1-3</td><td class="q"><b>차체 모형 크기와 AGV에 고정하는 방법.</b> 출력 전에 몸통 윗면(높이 20cm) 실측과 맞춘다</td><td class="d">크기 <span class="fill"></span><br>고정 <span class="fill"></span></td></tr>
  </table>
 
- <h2>2. 공정 ESP32 · RTOS · 남는 보드 <small class="ref">RTOS 도입 제안서</small></h2>
+ <h2>2. 상태 RGB LED · 주문 <small><span class="urgent">다음 주(11-30)부터 온라인 위크</span> · 받을 곳을 먼저</small></h2>
  <table>
-  <tr><td class="n">2-1</td><td class="q"><b>공정 4곳은 ESP32가 혼자 맡는다</b> <span class="sub">(사용자 확정 · 팀 확인)</span>. 공정마다 ESP32 한 개가 RFID 판독, 설비(서보·모터·상태등·부저·버튼), Wi-Fi·MQTT 통신을 모두 한다</td><td class="d"><span class="opt">확인</span><span class="opt">다시 논의</span><span class="line"></span></td></tr>
-  <tr><td class="n">2-2</td><td class="q"><b>RTOS</b> <span class="sub">(사용자 확정 · 팀 확인)</span>. 공정 ESP32 펌웨어를 FreeRTOS 두 태스크(통신 코어 0 / 설비 코어 1, 큐로만 주고받음)로 짠다. P2에서 먼저 검증, <b>12-01 판정</b>. 안정되지 않으면 지금의 loop판(modem.ino)으로 간다</td><td class="d"><span class="opt">확인</span><span class="opt">다시 논의</span><br>담당 <span class="fill"></span></td></tr>
-  <tr><td class="n">2-3</td><td class="q"><b>공정 ESP32가 어디까지 판단하나.</b> 작업 허가를 거부할 수 있게 할지(거부권), 작업 순서를 혼자 끝까지 진행할지. 채택하면 관제 Pi5의 허가는 '요청'이 된다</td><td class="d"><span class="opt">채택</span><span class="opt">일부</span><span class="opt">안 함</span><span class="line"></span></td></tr>
-  <tr><td class="n">2-4</td><td class="q"><b>공정별 핀표.</b> ESP32 핀이 빠듯하다. 마음 놓고 쓸 출력은 약 15개(추정)이고 RC522가 5개를 쓴다. 공정마다 서보·등·부저·버튼·센서 핀을 표로 정한다</td><td class="d">담당 <span class="fill"></span><br>날짜 <span class="fill"></span></td></tr>
-  <tr><td class="n">2-5</td><td class="q"><b>공정별 센서.</b> 아직 정하지 않았다. 후보: P1 진동, P2 초음파 등. 핀표(2-4)와 함께 정한다</td><td class="d">P1 <span class="fill" style="min-width:20mm"></span> P2 <span class="fill" style="min-width:20mm"></span><br>P3 <span class="fill" style="min-width:20mm"></span> P4 <span class="fill" style="min-width:20mm"></span></td></tr>
-  <tr><td class="n">2-6</td><td class="q"><b>남는 보드(STM32 2, RA6E1 2)를 쓰나.</b> 꼭 필요한 역할은 없다. 쓴다면 관제 Pi5에 USB로 붙는 입출력 담당: 노랑 투입대(STM32) / 관제 조작반·안돈판(RA6E1). <span class="sub">투입대를 쓰면 3-2의 '태그와 차체를 P1에서 묶음'이 '노랑 투입 때 묶음'으로 바뀐다</span></td><td class="d"><span class="opt">투입대</span><span class="opt">조작반·안돈</span><br><span class="opt">안 씀</span><span class="line"></span></td></tr>
+  <tr><td class="n">2-1</td><td class="q"><b>LED 종류.</b> 키트에 없어 따로 산다. 종류에 따라 쓰는 핀 수가 다르다 <span class="sub">(예: 다리 4개 RGB = 3핀 / 한 선으로 색을 정하는 WS2812 = 1핀)</span></td><td class="d">종류 <span class="fill" style="min-width:48mm"></span></td></tr>
+  <tr><td class="n">2-2</td><td class="q"><b>수량 · 주문.</b> 5개(P1~P4 + 태그) + 여유분. 받을 곳과 날짜, 주문하는 쪽</td><td class="d">여유분 <span class="fill" style="min-width:10mm"></span>개 · 받을 곳 <span class="opt">집</span><span class="opt">교육장</span><br>주문 날짜 <span class="fill" style="min-width:16mm"></span> 주문 <span class="fill" style="min-width:16mm"></span></td></tr>
+  <tr><td class="n">2-3</td><td class="q"><b>색 규칙</b> <span class="sub">(제안 — 다시 정한다)</span>. 꺼짐 = 대기 · 노랑 깜빡 = 작업 중 · 초록 = 완료 · 빨강 = 이상 · 빨강 깜빡 = 점검 중. <b>통신이 끊긴 공정의 모양</b>(RTOS의 '끊김' 표시)도 여기서</td><td class="d"><span class="opt">제안대로</span><span class="opt">고침</span><br>끊김 <span class="fill" style="min-width:48mm"></span></td></tr>
  </table>
- <div class="foot">다음 쪽에 계속 · 데이터 흐름, 스마트태그, 담당, 일정</div>
+
+ <h2>3. 공정 ESP32 · RTOS <small>도입은 정함 — 남은 것만 · <span class="ref">RTOS 도입 제안서</span></small></h2>
+ <table>
+  <tr><td class="n">3-1</td><td class="q"><b>RTOS 판정일과 담당.</b> 문서마다 날짜가 다르다. 판정 규칙은 그대로: 30분 연속 + Pi5 끄기 10번 + 비상정지 10번, 못 넘으면 loop판</td><td class="d"><span class="opt">12-01 (제안서)</span><span class="opt">12-08 (개발 단계 순서)</span><br>담당 <span class="fill"></span></td></tr>
+  <tr><td class="n">3-2</td><td class="q"><b>큐에 담는 모양.</b> 두 태스크 사이 큐에 지금 메시지 줄 형식 그대로(권장) / C 구조체</td><td class="d"><span class="opt">줄 형식</span><span class="opt">C 구조체</span></td></tr>
+  <tr><td class="n">3-3</td><td class="q"><b>공정별 핀표.</b> 마음 놓고 쓸 출력 약 15개(추정), RC522가 5개를 쓴다. 서보 · 상태 LED · 부저 · 버튼 · 센서 핀을 공정마다 표로</td><td class="d">담당 <span class="fill"></span><br>날짜 <span class="fill"></span></td></tr>
+ </table>
+ <div class="foot">다음 쪽에 계속 · 스마트태그, 데이터 흐름, 일 나누기, 일정</div>
 </div>
 
 <!-- 2쪽 -->
 <div class="page">
  <div class="kick">팀 회의 · 안건지 (2/2)</div>
 
- <h2 style="margin-top:2mm">3. 데이터 흐름 <small class="ref">데이터 흐름 설명서 · 8쪽</small></h2>
+ <h2 style="margin-top:2mm">4. 스마트태그 <small>MPU6050 + 상태 RGB LED는 정함 — 나머지</small></h2>
  <table>
-  <tr><td class="n">3-1</td><td class="q"><b>작업 허가를 관제 Pi5가 낸다.</b> 설명서 전체의 전제다 (2-3을 채택하면 Pi5 허가는 '요청'이 된다)</td><td class="d"><span class="opt">확정</span><span class="opt">다시 논의</span></td></tr>
-  <tr><td class="n">3-2</td><td class="q"><b>노랑(출발)에서의 시작과 복귀.</b> 제안: 현장 화면의 '투입'·'복귀' 버튼. 태그와 차체는 P1에서 처음 읽힐 때 묶는다</td><td class="d"><span class="opt">제안대로</span><span class="line"></span></td></tr>
-  <tr><td class="n">3-3</td><td class="q"><b>AGV 이상은 어느 버튼으로 푸나.</b> AGV에는 버튼이 없다. 제안: 직전 공정의 버튼 / 다른 안: AGV에 버튼 하나 달기</td><td class="d"><span class="opt">직전 공정</span><span class="opt">AGV 버튼</span></td></tr>
-  <tr><td class="n">3-4</td><td class="q"><b>버튼 쓰는 법.</b> 제안: 비상정지 버튼은 정지만, 이상 중에는 완료 버튼이 확인(짧게)·해제(길게 2초). 해제 버튼을 따로 달지</td><td class="d"><span class="opt">제안대로</span><span class="opt">버튼 추가</span></td></tr>
-  <tr><td class="n">3-5</td><td class="q"><b>'작업 끝'을 누가 내나.</b> 공정마다 설비 동작이 끝나면 자동 / 작업자가 완료 버튼</td><td class="d">P1 <span class="fill" style="min-width:12mm"></span> P2 <span class="fill" style="min-width:12mm"></span> P3 <span class="fill" style="min-width:12mm"></span> P4 <span class="fill" style="min-width:12mm"></span></td></tr>
-  <tr><td class="n">3-6</td><td class="q"><b>통신이 끊긴 공정의 상태등 모양</b></td><td class="d"><span class="line"></span></td></tr>
-  <tr><td class="n">3-7</td><td class="q"><b>공유기.</b> ESP32는 2.4GHz만 붙는다. 교내 Wi-Fi는 기기끼리 통신을 막을 수 있다. 전용 공유기를 쓰나</td><td class="d"><span class="opt">전용 공유기</span><span class="opt">핫스팟</span><span class="line"></span></td></tr>
-  <tr><td class="n">3-8</td><td class="q"><b>서버와 트윈.</b> Spring의 DB 종류·버전과 실행 위치(같은 공유기의 PC / 클라우드), 언리얼에서 되는 통신(HTTP · MQTT), JETANK의 Python·paho-mqtt 버전</td><td class="d">DB <span class="fill"></span><br>위치 <span class="fill"></span><br>언리얼 <span class="fill"></span></td></tr>
+  <tr><td class="n">4-1</td><td class="q"><b>상태 LED의 위치 · 핀 · 색 규칙.</b> 덮개 위에 붙여 보니 별로였다(덮개의 LED 구멍은 그대로) <span class="sub">(예: 차체 상태 작업 중 · 정상 · 보류)</span></td><td class="d">위치 <span class="fill" style="min-width:48mm"></span><br>색 <span class="fill" style="min-width:52mm"></span></td></tr>
+  <tr><td class="n">4-2</td><td class="q"><b>MPU6050으로 무엇을 알리나.</b> 제안: 충격이면 라인을 세우지 않고 차체만 '보류', 검사에서 판정. 문턱값은 교육장에서 잰다</td><td class="d"><span class="opt">충격</span><span class="opt">기울어짐</span><span class="opt">실제 정지</span><span class="line"></span></td></tr>
+  <tr><td class="n">4-3</td><td class="q"><b>버튼을 두나 · 태그 ID.</b> 버튼 = 작업자가 차체에서 직접 이상 신고. ID는 키태그 번호 / ESP32 고유번호(MAC)</td><td class="d">버튼 <span class="opt">둠</span><span class="opt">안 둠</span><br>ID <span class="opt">키태그</span><span class="opt">MAC</span></td></tr>
+  <tr><td class="n">4-4</td><td class="q"><b>예비 태그를 만드나.</b> 만들면 ESP32가 공정 4 + 태그 2 = 6개. 보유 4개라 2개 구매</td><td class="d"><span class="opt">만듦</span><span class="opt">안 만듦</span></td></tr>
+  <tr><td class="n">4-5</td><td class="q"><b>배터리.</b> 개발은 USB. 쓸지, 언제 살지. 후보: 3.3V 변환기(S7V8F3, 해외 배송) + 충전 모듈 + 500mAh LiPo. 납땜을 도와줄 사람</td><td class="d"><span class="opt">씀</span><span class="opt">나중에</span> 주문 <span class="fill" style="min-width:16mm"></span><br>납땜 <span class="fill"></span></td></tr>
  </table>
 
- <h2>4. 스마트태그</h2>
+ <h2>5. 데이터 흐름 <small class="ref">데이터 흐름 설명서 · 8쪽</small></h2>
  <table>
-  <tr><td class="n">4-1</td><td class="q"><b>역할 선택지</b> <span class="sub">(제안)</span>. A 지금대로(RFID + LED + 이력 사본) / B MPU6050 + 버튼 추가(충격·기울어짐·정지 감지, 작업자 이상 신고) / C ESP32를 빼고 키태그만</td><td class="d"><span class="opt">A</span><span class="opt">B</span><span class="opt">C</span><span class="line"></span></td></tr>
-  <tr><td class="n">4-2</td><td class="q"><b>불빛.</b> 파란 LED 하나(지금 핀 배정) / RGB LED(상태 5가지 표시 가능). 위치는 아직 보류</td><td class="d"><span class="opt">파랑 하나</span><span class="opt">RGB</span><br>위치 <span class="fill"></span></td></tr>
-  <tr><td class="n">4-3</td><td class="q"><b>버튼의 뜻과 태그 ID.</b> ID는 키태그 번호 / ESP32 고유번호(MAC)</td><td class="d">버튼 <span class="fill"></span><br><span class="opt">키태그</span><span class="opt">MAC</span></td></tr>
-  <tr><td class="n">4-4</td><td class="q"><b>예비 태그를 만드나.</b> 만들면 ESP32가 공정 4 + 태그 2 = 6개. 보유 4개라 2개 구매</td><td class="d"><span class="opt">만듦</span><span class="opt">안 만듦</span></td></tr>
-  <tr><td class="n">4-5</td><td class="q"><b>배터리 부품.</b> 3.3V 변환기(S7V8F3, 해외 배송) + 충전 모듈 + 500mAh LiPo. 납땜을 도와줄 사람</td><td class="d">주문 <span class="fill"></span><br>납땜 <span class="fill"></span></td></tr>
+  <tr><td class="n">5-1</td><td class="q"><b>작업 허가를 엣지 서버 Pi5가 낸다</b>(설명서 전체의 전제). 공정 ESP32에 <b>허가 거부권</b>(태그 없음 · 이상 · 비상정지면 거부하고 이유를 답함)을 주나. 주면 Pi5 허가는 '요청'이 된다</td><td class="d">전제 <span class="opt">확정</span><span class="opt">다시 논의</span><br>거부권 <span class="opt">줌</span><span class="opt">일부</span><span class="opt">안 줌</span></td></tr>
+  <tr><td class="n">5-2</td><td class="q"><b>노랑에서의 시작 · 복귀와 태그를 차체에 묶는 때.</b> 제안: HMI '투입' · '복귀' 버튼 + P1 첫 판독 때 묶음 / 다른 안: 노랑 투입대. <span class="sub">남는 보드(STM32 투입대 · RA6E1 조작반 + 안돈판)는 사용자 결정 대기</span></td><td class="d"><span class="opt">HMI 버튼 + P1</span><span class="opt">투입대</span><br>남는 보드 <span class="opt">투입대</span><span class="opt">조작반</span><span class="opt">안 씀</span></td></tr>
+  <tr><td class="n">5-3</td><td class="q"><b>이상을 푸는 버튼.</b> AGV 이상: 직전 공정 버튼 / AGV에 버튼 하나. 흐름 · 통신 이상: 이상에 적힌 공정 버튼(제안). 쓰는 법(제안): 비상정지는 정지만, 이상 중 완료 버튼이 확인(짧게) · 해제(길게 2초) / 해제 버튼 따로</td><td class="d">AGV <span class="opt">직전 공정</span><span class="opt">AGV 버튼</span><br>흐름 · 통신 <span class="opt">제안대로</span><br>쓰는 법 <span class="opt">제안대로</span><span class="opt">해제 버튼</span></td></tr>
+  <tr><td class="n">5-4</td><td class="q"><b>'작업 끝'을 누가 내나.</b> 설비가 끝나면 자동 / 작업자가 완료 버튼. <span class="sub">P2 세부(사용자 답 대기): 용접 3곳 시간 배분, 출발 전 태그 기록을 기다릴지, 패널 부족이면 경고만 / 다음 차체를 막음</span></td><td class="d">P1 <span class="fill" style="min-width:20mm"></span> P2 <span class="fill" style="min-width:20mm"></span><br>P3 <span class="fill" style="min-width:20mm"></span> P4 <span class="fill" style="min-width:20mm"></span></td></tr>
+  <tr><td class="n">5-5</td><td class="q"><b>공유기.</b> ESP32는 2.4GHz만 붙는다. 교내 Wi-Fi · 핫스팟은 기기끼리 통신을 막을 수 있다. 보유 공유기를 먼저 확인</td><td class="d"><span class="opt">전용 공유기</span><span class="opt">핫스팟</span></td></tr>
+  <tr><td class="n">5-6</td><td class="q"><b>서버와 트윈.</b> Spring의 DB 종류 · 버전, 실행 위치(같은 공유기 PC / 클라우드, PJT09 배포 요구와의 관계), 언리얼에서 되는 통신(HTTP · WebSocket · SSE · MQTT)과 트윈 수신 경로, 트윈의 'AGV가 공정에서 기다림' 표현, JETANK · Pi5의 Python · paho-mqtt 버전, 검사 Pi5의 RFID 라이브러리</td><td class="d">DB <span class="fill" style="min-width:52mm"></span><br>위치 <span class="fill" style="min-width:50mm"></span><br>언리얼 <span class="fill" style="min-width:47mm"></span></td></tr>
  </table>
 
  <div class="two">
   <div>
-   <h2>5. 담당</h2>
+   <h2>6. 일 나누기 <small>정함 — 쪽만 나눈다</small></h2>
+   <div class="side"><span class="k">하드웨어 쪽</span> AGV · 공정 ESP32 4대(RTOS) · 스마트태그 · 엣지 서버 Pi5</div>
+   <div class="side"><span class="k">디지털 트윈 쪽</span> Spring · DB · 웹 · 언리얼 트윈</div>
+   <div class="sub" style="margin-bottom:.8mm">그 밖의 일은 생기는 대로 맡는다. 경계에서 정할 것:</div>
    <table>
-    <tr><td>토픽·메시지 이름을 맞출 사람</td><td style="width:26mm"><span class="fill" style="min-width:24mm"></span></td></tr>
-    <tr><td>관제 Pi5 기록 프로그램</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
-    <tr><td>공정 ESP32 펌웨어 (4대 공통, RTOS)</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
-    <tr><td>공정별 설비 동작 (각 공정)</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
-    <tr><td>AGV 주행</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
-    <tr><td>Spring · 언리얼 트윈</td><td><span class="fill" style="min-width:24mm"></span></td></tr>
+    <tr><td>토픽 · 메시지 이름 맞추기</td><td style="width:37mm;white-space:nowrap"><span class="opt">하드웨어</span><span class="opt">트윈</span></td></tr>
+    <tr><td>기록 담당 프로그램(엣지 서버 Pi5)</td><td><span class="opt">하드웨어</span><span class="opt">트윈</span></td></tr>
+    <tr><td>정정 권한</td><td><span class="fill" style="min-width:26mm"></span></td></tr>
     <tr><td>GitHub: 저장소 하나 / 언리얼 따로</td><td><span class="opt">하나</span><span class="opt">따로</span></td></tr>
    </table>
   </div>
   <div>
-   <h2>6. 일정 <small>제안</small></h2>
+   <h2>7. 일정 <small>제안 · 개발_단계_순서</small></h2>
    <table>
-    <tr><td style="width:15mm">11-24</td><td>책상 위 ESP32 + RC522 + 버튼 + LED + 서보, connect 막힘 측정, 두 태스크 뼈대</td></tr>
-    <tr><td>11-26</td><td>작업 순서·다시 보내기, Pi5 끄기 시험</td></tr>
-    <tr><td>11-28</td><td>P2 한 곳: 공정 ESP32 + 기록 + 화면</td></tr>
-    <tr><td>12-01</td><td><b>RTOS 판정</b> (안 되면 loop판)</td></tr>
-    <tr><td>12-04</td><td>공정 1안 완성 (공정마다 20번 연속 성공)</td></tr>
-    <tr><td>12-11</td><td>기능 추가 끝</td></tr>
-    <tr><td>12-18</td><td>촬영 마감 · 12-24 제출</td></tr>
+    <tr><td style="width:17mm">11-25~27</td><td>교육장: AGV 한 바퀴 · 실측. 11-27 3D 출력, AGV를 집으로</td></tr>
+    <tr><td>12-04</td><td><b>loop판 P2 완성</b> (관문)</td></tr>
+    <tr><td>12-08</td><td><b>RTOS 판정</b> (판정일은 3-1에서)</td></tr>
+    <tr><td>12-11</td><td>집에서 전 구간 리허설 + 기능 동결</td></tr>
+    <tr><td>12-14~16</td><td>교육장: 설치 · 한 바퀴 · 12-15 18시 조정 동결</td></tr>
+    <tr><td>12-17~18</td><td>본 촬영 · 예비, 촬영 마감</td></tr>
+    <tr><td>12-23~24</td><td>제출물 완성 · 제출</td></tr>
    </table>
    <div class="sub" style="margin-top:1mm">팀 확정 <span class="opt">그대로</span><span class="opt">조정</span></div>
   </div>
@@ -124,6 +147,6 @@ td.d { width:62mm }
 
  <h2>메모 · 다음에 할 일</h2>
  <div class="notes"></div>
- <div class="foot">근거: HANDOFF.md, 제공맵 공정배치도, 데이터 흐름 설명서(8쪽), RTOS 도입 제안서. 회의 뒤 결정 사항은 HANDOFF.md로 옮긴다.</div>
+ <div class="foot">근거: HANDOFF.md(12절 일정, 13절 열린 질문), 데이터 흐름 설명서(8쪽), RTOS 도입 제안서, 개발 단계 순서. 회의 뒤 결정 사항은 HANDOFF.md로 옮긴다.</div>
 </div>
 </body></html>

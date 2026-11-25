@@ -1,4 +1,4 @@
-"""mqtt_tool.py — Windows PC에서 ESP32 실습을 돕는 MQTT 도구 (관제 Pi5 흉내 일부)
+"""mqtt_tool.py — Windows PC에서 ESP32 실습을 돕는 MQTT 도구 (엣지 서버 Pi5 흉내 일부)
 
 설치(한 번):   py -m pip install paho-mqtt
 사용 (PowerShell, 이 파일이 있는 폴더에서):
@@ -9,7 +9,7 @@
   py mqtt_tool.py reply                         공정이 보낸 report·tag에 {"re":n,"ok":1} 답을 자동으로 돌려주기
 옵션: --host 브로커 IP (기본 localhost), --port 1883
 
-reply는 '적고 답한다' 규칙의 흉내다. 진짜 기록 프로그램(관제 Pi5)이 생기기 전 실습용이다. 아무것도 저장하지 않는다.
+reply는 '적고 답한다' 규칙의 흉내다. 진짜 기록 프로그램(엣지 서버 Pi5)이 생기기 전 실습용이다. 아무것도 저장하지 않는다.
 """
 import argparse
 import json

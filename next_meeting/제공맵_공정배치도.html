@@ -114,7 +114,7 @@ ul { margin:0; padding-left:4mm } li { margin-bottom:.5mm }
 <path d="M791,553 L728,511 M791,553 L728,595" stroke="#9aa5b1" stroke-width="1.2" stroke-dasharray="4 4" fill="none"/><rect x="791" y="539" width="34" height="28" rx="3" fill="#fff" stroke="#1f2a37" stroke-width="1.6"/><path d="M791,546 l-11,-6 v26 l11,-6z" fill="#1f2a37"/>
 <text x="877.1" y="619.5" font-size="15.5" fill="#5b6675" text-anchor="end">주 카메라 (촬영)</text>
 <rect x="682.5" y="759.5" width="119" height="77" rx="3" fill="#fff" stroke="#1f2a37" stroke-width="1.6" stroke-dasharray="6 4" transform="rotate(-25 742 798)"/>
-<text x="742" y="887.6" font-size="15.5" fill="#5b6675" text-anchor="middle">관제 HMI 7인치</text>
+<text x="742" y="887.6" font-size="15.5" fill="#5b6675" text-anchor="middle">HMI 7인치</text>
 <path d="M560,372 L574,397 L546,397Z" fill="#111" stroke="#fff" stroke-width="2"/><text x="560" y="394" font-size="13.5" font-weight="700" fill="#fff" text-anchor="middle">A</text>
 <path d="M630,67.5 L644,92.5 L616,92.5Z" fill="#111" stroke="#fff" stroke-width="2"/><text x="630" y="89.5" font-size="13.5" font-weight="700" fill="#fff" text-anchor="middle">B</text>
 <path d="M199.5,305.5 L213.5,330.5 L185.5,330.5Z" fill="#111" stroke="#fff" stroke-width="2"/><text x="199.5" y="327.5" font-size="13.5" font-weight="700" fill="#fff" text-anchor="middle">C</text>
@@ -186,7 +186,7 @@ ul { margin:0; padding-left:4mm } li { margin-bottom:.5mm }
 <div class="page">
  <div class="kick">제공 맵 공정 배치도 · 2쪽</div>
  <h1>공정 한 칸 — 바깥 기둥 하나와 ㄱ자 팔</h1>
- <div class="meta">단위 cm · 2026-11-24 실측 위에서 계산한 제안 · P1~P4 공통(검사는 틀 + 지붕) · 두 그림은 같은 축척 · △ = 아직 재지 않은 값(그림의 크기는 임시)</div>
+ <div class="meta">단위 cm · 2026-11-24 실측 위에서 계산한 제안 · P1~P4 공통(검사는 틀 + 지붕, 상태 LED 대신 OLED) · 두 그림은 같은 축척 · △ = 아직 재지 않은 값(그림의 크기는 임시)</div>
  <div style="height:91mm;margin-top:2mm"><svg style="width:100%;height:100%" xmlns="http://www.w3.org/2000/svg" viewBox="0 40 960 335" font-family="Apple SD Gothic Neo, Malgun Gothic, sans-serif"><defs><pattern id="h2" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#8a94a1" stroke-width="1.2"/></pattern></defs>
 <text x="10" y="56" font-size="14" fill="#1f2a37" text-anchor="start" font-weight="700">① 위에서 본 모습 (진행 방향 ↑ · 오른쪽이 고리 바깥쪽 = 차의 오른쪽)</text>
 <rect x="255" y="80" width="145" height="210" fill="#f1f3f5"/>
@@ -267,7 +267,7 @@ ul { margin:0; padding-left:4mm } li { margin-bottom:.5mm }
 <text x="782.5" y="168" font-size="11.5" fill="#1f2a37" text-anchor="start">도구 (정지 뒤 안으로)</text>
 <text x="782.5" y="182" font-size="11.5" fill="#5b6675" text-anchor="start">무엇이 움직일지는 미정</text>
 <circle cx="762.5" cy="103.5" r="5" fill="#fff" stroke="#1f2a37" stroke-width="1.5"/>
-<text x="774.5" y="108" font-size="11.5" fill="#1f2a37" text-anchor="start">상태등</text>
+<text x="774.5" y="108" font-size="11.5" fill="#1f2a37" text-anchor="start">상태 LED (RGB 1개)</text><text x="782.5" y="123" font-size="11" fill="#5b6675" text-anchor="start">검사는 OLED</text>
 <rect x="783.5" y="289" width="84" height="56" rx="3" fill="#fff" stroke="#1f2a37" stroke-width="1.5" stroke-dasharray="6 4"/>
 <text x="825.5" y="322.6" font-size="11.5" fill="#5b6675" text-anchor="middle">제어 상자</text>
 <rect x="843.5" y="284.5" width="10" height="4.5" fill="#fff" stroke="#1f2a37" stroke-width="1.3"/>
@@ -301,7 +301,7 @@ ul { margin:0; padding-left:4mm } li { margin-bottom:.5mm }
    <li>태그 팟은 차 옆면에서 약 4 나와 맵 끝의 리더기와 틈 약 1(제안, △).</li>
    <li>검사는 틀 + 지붕 + 안쪽 흰 배경판으로 줄인다(길이 30 이내, 안쪽 높이 = 20 + 차체 높이 + 여유). 바깥 다리는 맵 밖, 안쪽 다리는 고리 안.</li>
    <li>버튼은 상자 윗면: 가림띠 뒤라 AGV 카메라(몸통 앞 고정, 높이 20 아래)에 색이 잡히지 않는다.</li>
-   <li>전원은 왼쪽 위 모서리 한 곳, 관제 HMI는 검사 옆 오른쪽 아래.</li></ul></div>
+   <li>전원은 왼쪽 위 모서리 한 곳, HMI(엣지 서버 Pi5의 7인치 화면)는 검사 옆 오른쪽 아래.</li></ul></div>
   <div><h2>먼저 확인할 것</h2>
    <ul><li>차체 모형의 크기(가로 · 세로 · 높이)와 몸통 윗면에 싣는 자리</li>
    <li>팔을 뗀 뒤 윗면의 평평한 넓이, 떼고 남는 부품, 안테나 끝 높이</li>
