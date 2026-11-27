@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="ko">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>공정 ESP32 RTOS 개발 가이드</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column, a work manual. Stages are numbered because they are a real sequence. Drawings and tables scroll inside their own box. */
+:root{
+  --paper:#eef1ee; --sheet:#f8faf8; --ink:#1c2b33; --ink2:#52646d; --rule:#c5cfcc;
+  --move:#d2571e; --ok:#1f8a5b; --warn:#b98207; --info:#2f6f9f; --bad:#b3372f; --mute:#a9b4b6; --code:#e6ebe8;
+  --sans:"IBM Plex Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#12191c; --sheet:#182226; --ink:#e3ebe9; --ink2:#9db0b3; --rule:#33444a;
+  --move:#f08a55; --ok:#4fc490; --warn:#e2b23c; --info:#6fb0de; --bad:#ee7b72; --mute:#566a70; --code:#0e1416; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --paper:#12191c; --sheet:#182226; --ink:#e3ebe9; --ink2:#9db0b3; --rule:#33444a;
+  --move:#f08a55; --ok:#4fc490; --warn:#e2b23c; --info:#6fb0de; --bad:#ee7b72; --mute:#566a70; --code:#0e1416; color-scheme:dark }
+
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.7;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 72px}
+.wrap{max-width:880px;margin:0 auto;display:flex;flex-direction:column;gap:52px}
+h1{font-size:2.1rem;line-height:1.2;margin:0;font-weight:700;text-wrap:balance}
+h2{font-size:1.4rem;line-height:1.3;margin:0;font-weight:700;text-wrap:balance;padding-top:14px;border-top:2px solid var(--ink);scroll-margin-top:12px}
+h3{font-size:1.08rem;margin:10px 0 0;font-weight:600;text-wrap:balance;scroll-margin-top:12px}
+h4{font-size:.82rem;margin:6px 0 0;font-weight:600;color:var(--ink2);letter-spacing:.04em}
+p{margin:0;max-width:66ch}
+section{display:flex;flex-direction:column;gap:14px;min-width:0}
+.tagline{font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;color:var(--ink2);margin-bottom:8px}
+.lede{color:var(--ink2);margin-top:10px}
+ul,ol{margin:0;padding-left:1.3em;max-width:66ch}
+li{margin:3px 0}
+strong{font-weight:600}
+a{color:var(--info)}
+code{font-family:var(--mono);font-size:.86em;background:var(--code);padding:1px 4px}
+pre{margin:0;background:var(--code);border:1px solid var(--rule);padding:12px 14px;overflow-x:auto;line-height:1.5}
+pre code{background:none;padding:0;font-size:.8rem;white-space:pre}
+.tw{overflow-x:auto;background:var(--sheet);border:1px solid var(--rule)}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-weight:600;font-size:.78rem;color:var(--ink2);white-space:nowrap}
+td:first-child{min-width:7.5em}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.note{border-left:3px solid var(--warn);padding:4px 0 4px 12px;color:var(--ink2);font-size:.93rem;max-width:66ch}
+.note.bad{border-left-color:var(--bad)}
+.fig{background:var(--sheet);border:1px solid var(--rule);padding:12px;overflow-x:auto}
+.fig svg{display:block;width:100%;min-width:620px;height:auto}
+.cap{font-size:.85rem;color:var(--ink2);max-width:66ch}
+.toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:4px 24px;padding:0;list-style:none;max-width:none;font-size:.95rem}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.cols > div{min-width:0}
+.box{background:var(--sheet);border:1px solid var(--rule);padding:12px 14px}
+.stage{display:flex;flex-direction:column;gap:12px;padding-top:10px;border-top:1px solid var(--rule);min-width:0}
+.stage > h3{display:flex;gap:10px;align-items:baseline;margin:0}
+.stage > h3 .no{font-family:var(--mono);font-size:.85rem;color:var(--sheet);background:var(--ink);padding:1px 8px;white-space:nowrap}
+.pass{border-left:3px solid var(--ok);padding:4px 0 4px 12px;max-width:66ch}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.84rem;color:var(--ink2)}
+.legend i{display:inline-block;width:.9em;height:.9em;margin-right:5px;vertical-align:-.1em;border:1px solid var(--ink2)}
+
+/* drawings */
+svg text{font-family:var(--sans);fill:var(--ink2)}
+svg text.strong{fill:var(--ink);font-weight:600}
+svg text.pt{font-family:var(--mono);fill:var(--ink)}
+.board{fill:var(--sheet);stroke:var(--ink);stroke-width:1.5}
+.ant{fill:var(--code);stroke:var(--ink2);stroke-width:1}
+.core{fill:none;stroke:var(--ink2);stroke-width:1;stroke-dasharray:5 4}
+.bx{fill:var(--sheet);stroke:var(--ink2);stroke-width:1}
+.bx-a{stroke:var(--move);stroke-width:1.5}
+.bx-b{stroke:var(--info);stroke-width:1.5}
+.bx-w{stroke:var(--warn);stroke-width:1.5}
+.res{fill:var(--sheet);stroke:var(--ink2);stroke-width:1}
+.wire{stroke-width:1.6;fill:none}
+.w-a{stroke:var(--move)} .w-b{stroke:var(--info)} .w-w{stroke:var(--warn)} .w-g{stroke:var(--ink2)}
+.ahp{fill:var(--ink2)}
+.pin{stroke:var(--ink);stroke-width:.8}
+.p-safe{fill:color-mix(in srgb,var(--ok) 30%,var(--sheet))}
+.p-cond{fill:color-mix(in srgb,var(--warn) 34%,var(--sheet))}
+.p-in{fill:color-mix(in srgb,var(--info) 30%,var(--sheet))}
+.p-strap{fill:color-mix(in srgb,var(--move) 34%,var(--sheet))}
+.p-flash{fill:color-mix(in srgb,var(--bad) 40%,var(--sheet))}
+.p-uart{fill:color-mix(in srgb,var(--mute) 60%,var(--sheet))}
+.p-pwr{fill:var(--sheet)}
+</style>
+
+<div class="wrap">
+
+<header>
+  <div class="tagline">공정 ESP32 P1~P4 · Arduino-ESP32 코어 3.3.x · FreeRTOS 두 태스크</div>
+  <h1>공정 ESP32 RTOS 개발 가이드</h1>
+  <p class="lede">공정 보드 한 대(P2)에 FreeRTOS 태스크 두 개로 된 펌웨어를 올리고, 같은 코드를 나머지 보드로 넓히는 순서입니다. 날짜 없이 단계 순서로만 적었습니다. 앞 단계의 "통과"를 확인한 뒤 다음 단계로 갑니다.</p>
+  <p class="note bad" style="margin-top:14px">이 문서의 코드는 아직 컴파일하거나 보드에 올려 본 적이 없습니다. 함수 이름과 인자는 Espressif 문서와 라이브러리 원본에 대조했지만, 실물에서 처음 올릴 때 고칠 곳이 나올 수 있습니다. 숫자 가운데 "처음 값", "제안"이라고 적은 것은 실측으로 바꿉니다.</p>
+</header>
+
+<section>
+  <h2>차례</h2>
+  <ol class="toc">
+    <li><a href="#picture">전체 그림</a></li>
+    <li><a href="#why">RTOS를 썼다고 말할 수 있는 이유</a></li>
+    <li><a href="#env">준비물과 개발 환경</a></li>
+    <li><a href="#pins">핀 배치와 쓰면 안 되는 핀</a></li>
+    <li><a href="#wiring">공통 핀표와 배선</a></li>
+    <li><a href="#msg">주고받는 줄과 토픽</a></li>
+    <li><a href="#stages">단계 0~9</a></li>
+    <li><a href="#measure">측정 결과표와 발표 문장</a></li>
+    <li><a href="#layout">코드 한 벌과 둘째 보드</a></li>
+    <li><a href="#trouble">문제가 생겼을 때</a></li>
+    <li><a href="#open">아직 정해야 할 것</a></li>
+  </ol>
+</section>
+
+<section id="picture">
+  <h2>전체 그림</h2>
+  <p>공정 보드 한 대가 하는 일은 두 종류입니다. 리더기를 읽고 버튼을 보고 설비를 움직이는 일은 <strong>기다리면 안 됩니다.</strong> Wi-Fi와 MQTT는 상대가 답하지 않으면 몇 초씩 <strong>기다릴 수밖에 없습니다.</strong> 이 둘을 태스크 두 개로 나누고, 사이를 큐 두 개로만 잇습니다.</p>
+  <div class="fig"><svg viewBox="0 0 760 380" role="img" aria-label="코어 0의 통신 태스크와 코어 1의 설비 태스크가 큐 두 개로 이어진 구조"><rect x="20" y="40" width="300" height="300" rx="3" class="core"/><text x="34" y="62" font-size="13" text-anchor="start" class="strong">코어 0</text><rect x="440" y="40" width="300" height="300" rx="3" class="core"/><text x="454" y="62" font-size="13" text-anchor="start" class="strong">코어 1</text><rect x="40" y="80" width="260" height="34" rx="3" class="bx"/><text x="52" y="101" font-size="11" text-anchor="start">Wi-Fi 드라이버 (우선순위 23) · lwIP (18)</text><rect x="40" y="150" width="260" height="120" rx="3" class="bx bx-b"/><text x="52" y="172" font-size="12" text-anchor="start" class="strong">통신 태스크 comm · 우선순위 2</text><text x="52" y="194" font-size="11" text-anchor="start">Wi-Fi 유지, MQTT 접속·수신·발행</text><text x="52" y="212" font-size="11" text-anchor="start">막혀도 되는 일은 전부 여기</text><text x="52" y="230" font-size="11" text-anchor="start">Serial 출력도 여기서만</text><text x="52" y="256" font-size="10.5" text-anchor="start">쓰는 장치: Wi-Fi, MQTT, Serial</text><rect x="460" y="150" width="260" height="120" rx="3" class="bx bx-a"/><text x="472" y="172" font-size="12" text-anchor="start" class="strong">설비 태스크 ctrl · 우선순위 3</text><text x="472" y="194" font-size="11" text-anchor="start">10ms 박자: 버튼, 리더기, 상태 기계,</text><text x="472" y="212" font-size="11" text-anchor="start">출력, 다시 보낼 목록</text><text x="472" y="230" font-size="11" text-anchor="start">기다리지 않는다</text><text x="472" y="256" font-size="10.5" text-anchor="start">쓰는 장치: RC522(SPI), 공정 핀</text><line x1="460" y1="180" x2="306" y2="180" class="wire w-a" marker-end="url(#ah)"/><text x="380" y="172" font-size="10.5" text-anchor="middle">신고 큐 (8칸 × 160B)</text><line x1="300" y1="240" x2="454" y2="240" class="wire w-b" marker-end="url(#ah)"/><text x="380" y="258" font-size="10.5" text-anchor="middle">명령 큐 (8칸 × 160B)</text><rect x="500" y="80" width="180" height="34" rx="3" class="bx bx-w"/><text x="512" y="101" font-size="11" text-anchor="start">비상정지 핀 인터럽트 (ISR)</text><line x1="590" y1="114" x2="590" y2="144" class="wire w-w" marker-end="url(#ah)"/><text x="598" y="134" font-size="10.5" text-anchor="start">알림으로 깨움</text><text x="52" y="300" font-size="11" text-anchor="start">↕ Wi-Fi</text><text x="52" y="322" font-size="11" text-anchor="start">브로커 (엣지 서버 Pi5 / 노트북)</text><text x="472" y="300" font-size="11" text-anchor="start">↕ 핀</text><text x="472" y="322" font-size="11" text-anchor="start">리더기 · 버튼 · 상태 LED · 구동기</text><text x="380" y="24" font-size="12" text-anchor="middle">칩 하나 (ESP32) 안의 두 코어</text><defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ahp"/></marker></defs></svg></div>
+  <h3>지키는 규칙 다섯 가지</h3>
+  <ol>
+    <li><strong>같이 쓰는 변수는 0개.</strong> 두 태스크가 주고받는 것은 모두 큐로 보냅니다.</li>
+    <li><strong>한 장치는 한 태스크만 만집니다.</strong> Wi-Fi, MQTT, Serial은 통신 태스크만. 리더기(SPI)와 공정 핀은 설비 태스크만.</li>
+    <li><strong>설비 태스크는 기다리지 않습니다.</strong> 큐는 기다림 0으로 꺼내고 <code>delay()</code>를 쓰지 않습니다.</li>
+    <li><strong>큐가 차도 신고는 버리지 않습니다.</strong> "다시 보낼 목록"에 남겨 같은 번호로 다시 보냅니다.</li>
+    <li><strong>로그는 한 줄씩, 통신 태스크가 찍습니다.</strong> 설비 태스크의 로그도 큐를 거쳐 나갑니다.</li>
+  </ol>
+  <h3>설비 태스크의 상태</h3>
+  <div class="tw"><table>
+    <tr><th>상태</th><th>뜻</th><th>다음으로 넘어가는 때</th></tr>
+    <tr><td class="n">BOOT</td><td>막 켜짐. 안전 자세를 잡고 "켜졌다"를 신고</td><td>신고를 넣으면 바로 IDLE</td></tr>
+    <tr><td class="n">IDLE</td><td>차체를 기다림. 리더기를 50ms마다 읽음</td><td>태그를 읽으면 "태그 읽음"을 신고하고 WAIT</td></tr>
+    <tr><td class="n">WAIT</td><td>작업 허가를 기다림</td><td>엣지 서버가 "작업 중(WORK)"을 보내면 WORK</td></tr>
+    <tr><td class="n">WORK</td><td>작업 동작을 함</td><td>동작이 끝나면 "작업 끝"을 신고하고 DONE</td></tr>
+    <tr><td class="n">DONE</td><td>"작업 끝"에 대한 답을 기다림</td><td>답이 오면 IDLE</td></tr>
+    <tr><td class="n">FAULT</td><td>비상정지나 이상. 설비를 안전 자세로 두고 멈춤</td><td>원인이 없어지고 현장 버튼을 길게 누르면 IDLE</td></tr>
+  </table></div>
+  <p>"끊김"은 상태가 아니라 덧씌우는 표시입니다. 끊겨도 하던 작업은 끝내고, 새 작업만 받지 않고, "작업 끝" 신고는 쥐고 있다가 다시 붙으면 같은 번호로 보냅니다.</p>
+</section>
+
+<section id="why">
+  <h2>RTOS를 썼다고 말할 수 있는 이유</h2>
+  <p>말할 수 있습니다. 다만 "RTOS를 올렸다"는 틀린 말입니다. ESP32의 Arduino 환경에는 FreeRTOS가 원래 올라가 있기 때문입니다. 맞는 문장은 이것입니다.</p>
+  <p class="pass"><strong>"FreeRTOS의 태스크, 우선순위, 큐, 알림, 워치독으로 통신과 설비 제어를 나눠 설계했고, 그 효과를 숫자로 쟀습니다."</strong></p>
+
+  <h3>바탕이 되는 사실</h3>
+  <div class="tw"><table>
+    <tr><th>항목</th><th>내용</th></tr>
+    <tr><td>FreeRTOS의 종류</td><td>ESP-IDF에 들어 있는 FreeRTOS는 원본 FreeRTOS(v10.5.1)를 코어 두 개용으로 고친 것입니다. Arduino 코어 3.3.0은 ESP-IDF v5.5를 씁니다.</td></tr>
+    <tr><td><code>setup()</code>과 <code>loop()</code></td><td>이미 태스크 안에서 돕니다. 이름은 <code>loopTask</code>, 우선순위 1, 스택 8192바이트, 코어 1입니다.</td></tr>
+    <tr><td>틱</td><td>1틱 = 1ms입니다. 10ms 박자는 10틱입니다.</td></tr>
+    <tr><td>Wi-Fi 쪽 태스크</td><td>Wi-Fi 드라이버는 우선순위 23, lwIP(TCP/IP)는 18이고 둘 다 코어 0에서 돕니다.</td></tr>
+    <tr><td>순서를 정하는 방식</td><td>코어마다 따로, 그 코어에서 돌 수 있는 태스크 중 우선순위가 가장 높은 것이 돕니다. 코어에 고정한 태스크는 다른 코어가 비어도 옮겨 가지 않습니다.</td></tr>
+    <tr><td><code>vTaskDelayUntil</code></td><td>"지난번 깨어난 시각 + 주기"에 깨워서 오차가 쌓이지 않습니다. 보장하는 것은 깨어날 시각까지이고, 실제로 도는 시각은 인터럽트 등에 밀릴 수 있습니다.</td></tr>
+    <tr><td>인터럽트에서 보내는 알림</td><td>알림을 기다리며 자던 태스크를 바로 깨웁니다. 인터럽트를 나가기 전에 양보를 요청해야 하고, 빼면 최대 1ms 더 늦습니다.</td></tr>
+    <tr><td>내장 플래시에 쓰는 동안</td><td>모든 태스크가 잠깐 멈춥니다.</td></tr>
+  </table></div>
+
+  <h3>RTOS 기능을 어디에 쓰는가</h3>
+  <div class="tw"><table>
+    <tr><th>기능</th><th>우리 설계에서 쓰는 곳</th><th>없으면</th></tr>
+    <tr><td>태스크</td><td>설비 태스크, 통신 태스크</td><td>MQTT 접속을 기다리는 동안 버튼, 리더기, 상태 흐름이 멈춤</td></tr>
+    <tr><td>코어 고정</td><td>설비 = 코어 1, 통신 = 코어 0</td><td>설비 태스크가 Wi-Fi 쪽 태스크와 같은 코어에서 밀려 박자가 흔들림</td></tr>
+    <tr><td>우선순위와 선점</td><td>설비(3) &gt; 통신(2)</td><td>둘이 같은 코어에 있게 될 때 통신의 계산이 설비 박자를 밂</td></tr>
+    <tr><td>절대 주기</td><td>설비 태스크의 10ms 박자</td><td><code>delay(10)</code>은 일한 시간만큼 주기가 늘고 오차가 쌓임</td></tr>
+    <tr><td>큐</td><td>신고 큐, 명령 큐</td><td>같이 쓰는 변수와 잠금이 필요해지고, 설비가 통신을 기다리게 될 수 있음</td></tr>
+    <tr><td>인터럽트 → 태스크 알림</td><td>비상정지</td><td>박자만큼 늦게 알거나, 인터럽트 안에서 긴 일을 하게 됨</td></tr>
+    <tr><td>태스크 워치독</td><td>두 태스크 모두 등록</td><td>한 태스크가 멈춰도 칩은 살아 있는 척함</td></tr>
+  </table></div>
+
+  <h3>틀리게 말하기 쉬운 두 가지</h3>
+  <ul>
+    <li><strong>"통신이 막혀도 설비가 멀쩡한 것"은 우선순위가 아니라 코어를 나눈 덕입니다.</strong> 두 태스크가 다른 코어에 고정돼 있어서 우선순위를 뒤집어도 결과가 같습니다. 우선순위의 효과는 둘을 같은 코어에 올려야 보입니다(<a href="#measure">측정</a>의 우선순위 시연).</li>
+    <li><strong>비상정지 알림은 대기 방식을 맞춰야 실제로 깨웁니다.</strong> <code>vTaskDelayUntil</code>로 자는 태스크는 알림이 와도 다음 박자까지 깨어나지 않습니다. 5단계에서 대기를 <code>ulTaskNotifyTake</code>로 바꿉니다.</li>
+  </ul>
+
+  <h3>한계</h3>
+  <ul>
+    <li>우리가 가진 것은 "30분 동안 잰 최대값"입니다. 어떤 경우에도 넘지 않는다는 증명이 아닙니다.</li>
+    <li>Wi-Fi 쪽 인터럽트와 플래시 쓰기는 코어 1의 설비 태스크도 늦출 수 있습니다.</li>
+    <li>칩이 통째로 리셋되면 두 태스크가 같이 멈춥니다. 나눈 것은 고장이 아니라 작업입니다. 진짜 차단은 비상정지 접점이 모터 전원을 끊는 배선이 맡습니다.</li>
+    <li>잘 짠 loop 하나로도 같은 동작을 만들 수 있습니다. RTOS는 그것을 구조로 지키게 해 주는 방법입니다.</li>
+  </ul>
+</section>
+
+<section id="env">
+  <h2>준비물과 개발 환경</h2>
+  <div class="cols">
+    <div class="box"><h3 style="margin-top:0">책상에 놓을 것</h3>
+      <ul>
+        <li>ESP32 NodeMCU-32 한 대, 데이터가 되는 USB 케이블</li>
+        <li>RC522 리더기와 키태그</li>
+        <li>버튼 2개(완료, 비상정지 대용), LED, 저항 220Ω·330Ω·10kΩ</li>
+        <li>브레드보드, 점퍼선</li>
+        <li>노트북(브로커 역할). 엣지 서버 Pi5는 7단계까지 필요 없습니다</li>
+        <li>ESP32와 노트북이 같이 붙을 2.4GHz Wi-Fi</li>
+      </ul></div>
+    <div class="box"><h3 style="margin-top:0">설치</h3>
+      <ul>
+        <li>Arduino IDE 2</li>
+        <li>보드 패키지 <strong>esp32 by Espressif 3.3.x</strong> (4.x는 확인하지 않았습니다)</li>
+        <li>라이브러리: PubSubClient 2.8, ArduinoJson 7.x, MFRC522 1.4.x</li>
+        <li>보드: NodeMCU-32S (없으면 ESP32 Dev Module)</li>
+        <li>시리얼 모니터: 115200, 줄 끝 New Line</li>
+        <li>mosquitto, Python과 <code>paho-mqtt</code></li>
+      </ul></div>
+  </div>
+  <ul>
+    <li><strong>폴더:</strong> 한글과 빈칸이 있는 경로를 피해 <code>C:\esp32\</code>로 복사해서 엽니다. 폴더 이름과 <code>.ino</code> 이름이 같아야 합니다.</li>
+    <li><strong>비밀번호 파일:</strong> 스케치 폴더의 <code>secrets.example.h</code>를 <code>secrets.h</code>로 복사해 <code>WIFI_SSID</code>, <code>WIFI_PASS</code>, <code>MQTT_HOST</code>(브로커 PC의 IP), <code>MQTT_PORT 1883</code>을 채웁니다. <code>secrets.h</code>는 git에 올리지 않습니다.</li>
+  </ul>
+
+  <h3>노트북을 브로커로 쓰기 (Windows)</h3>
+  <ol>
+    <li><code>C:\Program Files\mosquitto\mosquitto.conf</code> 끝에 두 줄을 넣습니다: <code>listener 1883</code>, <code>allow_anonymous true</code>.</li>
+    <li>관리자 PowerShell에서 <code>Restart-Service mosquitto</code>.</li>
+    <li>Windows 방화벽에서 1883 포트를 엽니다.</li>
+  </ol>
+  <p class="cap">Mac에서는 <code>brew install mosquitto</code> 뒤 같은 두 줄을 담은 설정 파일로 <code>mosquitto -c 파일 -v</code>를 실행하고, <code>python3 -m pip install paho-mqtt</code>를 설치합니다.</p>
+
+  <h3>PC 도구 (<code>next_meeting/esp32_book/code/pc/mqtt_tool.py</code>)</h3>
+<pre><code>py -m pip install paho-mqtt
+py mqtt_tool.py --host 192.168.0.10 watch               # factory/# 전부 보기
+py mqtt_tool.py --host 192.168.0.10 reply               # 신고·태그에 {"re":n,"ok":1} 자동 답
+py mqtt_tool.py --host 192.168.0.10 send P2 re=42 ok=1  # cmd 토픽으로 {"re":42,"ok":1}
+py mqtt_tool.py --host 192.168.0.10 state P2 WORK 7     # state 토픽에 "작업 중, 작업 번호 7" (보관)
+py mqtt_tool.py --host 192.168.0.10 state P2 IDLE 0 --lamp 0</code></pre>
+  <ul>
+    <li><code>--host</code>는 <code>watch</code>, <code>reply</code> 같은 명령 <strong>앞</strong>에 씁니다.</li>
+    <li><code>reply</code>는 답만 합니다. "작업 중"은 손으로 <code>state P2 WORK n</code>을 쳐서 보냅니다.</li>
+    <li><code>watch</code> 창은 하나만 띄웁니다. 두 개를 띄우면 서로 끊습니다.</li>
+    <li>엣지 서버가 보내는 이상(<code>fault</code>)은 이 도구로 만들 수 없습니다.</li>
+  </ul>
+</section>
+
+<section id="pins">
+  <h2>핀 배치와 쓰면 안 되는 핀</h2>
+  <p>안테나를 위로, USB를 아래로 두고 부품이 있는 면을 본 모습입니다. 양쪽 글자는 이 프로젝트에서 그 핀에 다는 것입니다.</p>
+  <div class="fig"><svg viewBox="0 0 700 500" role="img" aria-label="ESP32 38핀 보드의 핀 배치와 이 프로젝트에서의 용도"><rect x="270" y="30" width="160" height="450" rx="8" class="board"/><rect x="310" y="14" width="80" height="40" rx="2" class="ant"/><text x="350" y="38" font-size="10" text-anchor="middle">안테나</text><rect x="325" y="462" width="50" height="26" rx="2" class="ant"/><text x="350" y="479" font-size="10" text-anchor="middle">USB</text><text x="350" y="250" font-size="15" text-anchor="middle" class="strong">ESP32</text><text x="350" y="268" font-size="10" text-anchor="middle">NodeMCU-32S</text><rect x="214" y="57.0" width="52" height="17" rx="2" class="pin p-pwr"/><text x="240" y="69.5" font-size="10" text-anchor="middle" class="pt">3V3</text><text x="206" y="69.5" font-size="10.5" text-anchor="end">전원</text><rect x="214" y="78.5" width="52" height="17" rx="2" class="pin p-pwr"/><text x="240" y="91.0" font-size="10" text-anchor="middle" class="pt">EN</text><text x="206" y="91.0" font-size="10.5" text-anchor="end">전원</text><rect x="214" y="100.0" width="52" height="17" rx="2" class="pin p-in"/><text x="240" y="112.5" font-size="10" text-anchor="middle" class="pt">VP</text><text x="206" y="112.5" font-size="10.5" text-anchor="end">예비 입력</text><rect x="214" y="121.5" width="52" height="17" rx="2" class="pin p-in"/><text x="240" y="134.0" font-size="10" text-anchor="middle" class="pt">VN</text><text x="206" y="134.0" font-size="10.5" text-anchor="end">예비 입력</text><rect x="214" y="143.0" width="52" height="17" rx="2" class="pin p-in"/><text x="240" y="155.5" font-size="10" text-anchor="middle" class="pt">34</text><text x="206" y="155.5" font-size="10.5" text-anchor="end">예비 입력</text><rect x="214" y="164.5" width="52" height="17" rx="2" class="pin p-in"/><text x="240" y="177.0" font-size="10" text-anchor="middle" class="pt">35</text><text x="206" y="177.0" font-size="10.5" text-anchor="end">예비 입력</text><rect x="214" y="186.0" width="52" height="17" rx="2" class="pin p-safe"/><text x="240" y="198.5" font-size="10" text-anchor="middle" class="pt">32</text><text x="206" y="198.5" font-size="10.5" text-anchor="end">부저</text><rect x="214" y="207.5" width="52" height="17" rx="2" class="pin p-safe"/><text x="240" y="220.0" font-size="10" text-anchor="middle" class="pt">33</text><text x="206" y="220.0" font-size="10.5" text-anchor="end">완료 버튼</text><rect x="214" y="229.0" width="52" height="17" rx="2" class="pin p-safe"/><text x="240" y="241.5" font-size="10" text-anchor="middle" class="pt">25</text><text x="206" y="241.5" font-size="10.5" text-anchor="end">예비 (I2C SDA)</text><rect x="214" y="250.5" width="52" height="17" rx="2" class="pin p-safe"/><text x="240" y="263.0" font-size="10" text-anchor="middle" class="pt">26</text><text x="206" y="263.0" font-size="10.5" text-anchor="end">예비 (I2C SCL)</text><rect x="214" y="272.0" width="52" height="17" rx="2" class="pin p-safe"/><text x="240" y="284.5" font-size="10" text-anchor="middle" class="pt">27</text><text x="206" y="284.5" font-size="10.5" text-anchor="end">상태 LED</text><rect x="214" y="293.5" width="52" height="17" rx="2" class="pin p-cond"/><text x="240" y="306.0" font-size="10" text-anchor="middle" class="pt">14</text><text x="206" y="306.0" font-size="10.5" text-anchor="end">구동기 3 (스텝모터만)</text><rect x="214" y="315.0" width="52" height="17" rx="2" class="pin p-strap"/><text x="240" y="327.5" font-size="10" text-anchor="middle" class="pt">12</text><text x="206" y="327.5" font-size="10.5" text-anchor="end">쓰지 않음</text><rect x="214" y="336.5" width="52" height="17" rx="2" class="pin p-pwr"/><text x="240" y="349.0" font-size="10" text-anchor="middle" class="pt">GND</text><text x="206" y="349.0" font-size="10.5" text-anchor="end">전원</text><rect x="214" y="358.0" width="52" height="17" rx="2" class="pin p-safe"/><text x="240" y="370.5" font-size="10" text-anchor="middle" class="pt">13</text><text x="206" y="370.5" font-size="10.5" text-anchor="end">구동기 0 (서보)</text><rect x="214" y="379.5" width="52" height="17" rx="2" class="pin p-flash"/><text x="240" y="392.0" font-size="10" text-anchor="middle" class="pt">D2</text><text x="206" y="392.0" font-size="10.5" text-anchor="end">플래시 (금지)</text><rect x="214" y="401.0" width="52" height="17" rx="2" class="pin p-flash"/><text x="240" y="413.5" font-size="10" text-anchor="middle" class="pt">D3</text><text x="206" y="413.5" font-size="10.5" text-anchor="end">플래시 (금지)</text><rect x="214" y="422.5" width="52" height="17" rx="2" class="pin p-flash"/><text x="240" y="435.0" font-size="10" text-anchor="middle" class="pt">CMD</text><text x="206" y="435.0" font-size="10.5" text-anchor="end">플래시 (금지)</text><rect x="214" y="444.0" width="52" height="17" rx="2" class="pin p-pwr"/><text x="240" y="456.5" font-size="10" text-anchor="middle" class="pt">5V</text><text x="206" y="456.5" font-size="10.5" text-anchor="end">전원</text><rect x="434" y="57.0" width="52" height="17" rx="2" class="pin p-pwr"/><text x="460" y="69.5" font-size="10" text-anchor="middle" class="pt">GND</text><text x="494" y="69.5" font-size="10.5" text-anchor="start">전원</text><rect x="434" y="78.5" width="52" height="17" rx="2" class="pin p-safe"/><text x="460" y="91.0" font-size="10" text-anchor="middle" class="pt">23</text><text x="494" y="91.0" font-size="10.5" text-anchor="start">RC522 MOSI</text><rect x="434" y="100.0" width="52" height="17" rx="2" class="pin p-safe"/><text x="460" y="112.5" font-size="10" text-anchor="middle" class="pt">22</text><text x="494" y="112.5" font-size="10.5" text-anchor="start">RC522 RST</text><rect x="434" y="121.5" width="52" height="17" rx="2" class="pin p-uart"/><text x="460" y="134.0" font-size="10" text-anchor="middle" class="pt">TX</text><text x="494" y="134.0" font-size="10.5" text-anchor="start">USB 로그</text><rect x="434" y="143.0" width="52" height="17" rx="2" class="pin p-uart"/><text x="460" y="155.5" font-size="10" text-anchor="middle" class="pt">RX</text><text x="494" y="155.5" font-size="10.5" text-anchor="start">USB 로그</text><rect x="434" y="164.5" width="52" height="17" rx="2" class="pin p-safe"/><text x="460" y="177.0" font-size="10" text-anchor="middle" class="pt">21</text><text x="494" y="177.0" font-size="10.5" text-anchor="start">RC522 SDA(SS)</text><rect x="434" y="186.0" width="52" height="17" rx="2" class="pin p-pwr"/><text x="460" y="198.5" font-size="10" text-anchor="middle" class="pt">GND</text><text x="494" y="198.5" font-size="10.5" text-anchor="start">전원</text><rect x="434" y="207.5" width="52" height="17" rx="2" class="pin p-safe"/><text x="460" y="220.0" font-size="10" text-anchor="middle" class="pt">19</text><text x="494" y="220.0" font-size="10.5" text-anchor="start">RC522 MISO</text><rect x="434" y="229.0" width="52" height="17" rx="2" class="pin p-safe"/><text x="460" y="241.5" font-size="10" text-anchor="middle" class="pt">18</text><text x="494" y="241.5" font-size="10.5" text-anchor="start">RC522 SCK</text><rect x="434" y="250.5" width="52" height="17" rx="2" class="pin p-strap"/><text x="460" y="263.0" font-size="10" text-anchor="middle" class="pt">5</text><text x="494" y="263.0" font-size="10.5" text-anchor="start">쓰지 않음</text><rect x="434" y="272.0" width="52" height="17" rx="2" class="pin p-safe"/><text x="460" y="284.5" font-size="10" text-anchor="middle" class="pt">17</text><text x="494" y="284.5" font-size="10.5" text-anchor="start">구동기 2</text><rect x="434" y="293.5" width="52" height="17" rx="2" class="pin p-safe"/><text x="460" y="306.0" font-size="10" text-anchor="middle" class="pt">16</text><text x="494" y="306.0" font-size="10.5" text-anchor="start">구동기 1</text><rect x="434" y="315.0" width="52" height="17" rx="2" class="pin p-safe"/><text x="460" y="327.5" font-size="10" text-anchor="middle" class="pt">4</text><text x="494" y="327.5" font-size="10.5" text-anchor="start">비상정지 신호</text><rect x="434" y="336.5" width="52" height="17" rx="2" class="pin p-strap"/><text x="460" y="349.0" font-size="10" text-anchor="middle" class="pt">0</text><text x="494" y="349.0" font-size="10.5" text-anchor="start">BOOT 버튼 (쓰지 않음)</text><rect x="434" y="358.0" width="52" height="17" rx="2" class="pin p-strap"/><text x="460" y="370.5" font-size="10" text-anchor="middle" class="pt">2</text><text x="494" y="370.5" font-size="10.5" text-anchor="start">내장 LED (쓰지 않음)</text><rect x="434" y="379.5" width="52" height="17" rx="2" class="pin p-strap"/><text x="460" y="392.0" font-size="10" text-anchor="middle" class="pt">15</text><text x="494" y="392.0" font-size="10.5" text-anchor="start">쓰지 않음</text><rect x="434" y="401.0" width="52" height="17" rx="2" class="pin p-flash"/><text x="460" y="413.5" font-size="10" text-anchor="middle" class="pt">D1</text><text x="494" y="413.5" font-size="10.5" text-anchor="start">플래시 (금지)</text><rect x="434" y="422.5" width="52" height="17" rx="2" class="pin p-flash"/><text x="460" y="435.0" font-size="10" text-anchor="middle" class="pt">D0</text><text x="494" y="435.0" font-size="10.5" text-anchor="start">플래시 (금지)</text><rect x="434" y="444.0" width="52" height="17" rx="2" class="pin p-flash"/><text x="460" y="456.5" font-size="10" text-anchor="middle" class="pt">CLK</text><text x="494" y="456.5" font-size="10.5" text-anchor="start">플래시 (금지)</text></svg></div>
+  <div class="legend">
+    <span><i class="p-safe" style="background:color-mix(in srgb,var(--ok) 30%,var(--sheet))"></i>마음 놓고 쓰는 핀</span>
+    <span><i style="background:color-mix(in srgb,var(--warn) 34%,var(--sheet))"></i>조건부 (켜질 때 신호가 잠깐 나옴)</span>
+    <span><i style="background:color-mix(in srgb,var(--info) 30%,var(--sheet))"></i>입력 전용</span>
+    <span><i style="background:color-mix(in srgb,var(--move) 34%,var(--sheet))"></i>부팅 설정 핀</span>
+    <span><i style="background:color-mix(in srgb,var(--bad) 40%,var(--sheet))"></i>플래시 (금지)</span>
+    <span><i style="background:color-mix(in srgb,var(--mute) 60%,var(--sheet))"></i>USB 통신</span>
+  </div>
+  <p class="note">이 배치는 Espressif ESP32-DevKitC V4의 38핀 배열입니다. 한쪽이 19핀이고, 왼쪽 맨 위가 3V3, 맨 아래가 5V이면 같은 배열입니다. NodeMCU-32S 실물의 핀 순서는 문서로 확인하지 못했으니, 첫 배선 전에 보드에 인쇄된 글자와 한 번 맞춰 봅니다. 한쪽이 15핀인 30핀 보드는 순서가 다릅니다.</p>
+  <div class="tw"><table>
+    <tr><th>분류</th><th>GPIO</th><th>주의</th></tr>
+    <tr><td>마음 놓고 쓰는 핀</td><td class="n">4, 13, 16, 17, 18, 19, 21, 22, 23, 25, 26, 27, 32, 33</td><td>14개</td></tr>
+    <tr><td>조건부</td><td class="n">14</td><td>켜질 때 신호가 잠깐 나옵니다. 바로 움직이면 안 되는 부품은 달지 않습니다</td></tr>
+    <tr><td>입력 전용</td><td class="n">34, 35, 36, 39</td><td>출력이 안 되고 내부 풀업이 없습니다. 버튼을 달려면 바깥에 10kΩ이 필요합니다</td></tr>
+    <tr><td>부팅 설정 핀</td><td class="n">0, 2, 5, 12, 15</td><td>켜질 때의 전압으로 부팅 방식이 정해집니다. 0이 LOW면 스케치가 안 돌고, 12가 HIGH면 부팅이 안 됩니다. 부품을 달지 않습니다</td></tr>
+    <tr><td>플래시</td><td class="n">6 ~ 11</td><td>절대 쓰지 않습니다. 선을 꽂으면 재부팅을 되풀이합니다</td></tr>
+    <tr><td>USB 통신</td><td class="n">1, 3</td><td>올리기와 로그에 씁니다</td></tr>
+    <tr><td>아날로그 입력</td><td class="n">32 ~ 36, 39</td><td>Wi-Fi를 켜면 나머지 아날로그 핀(0, 2, 4, 12~15, 25~27)은 아날로그로 못 읽습니다. 디지털로는 됩니다</td></tr>
+  </table></div>
+</section>
+
+<section id="wiring">
+  <h2>공통 핀표와 배선</h2>
+  <p>네 공정이 같은 핀표를 씁니다. 공정마다 다른 것은 구동기 핀 네 개에 무엇을 다는가뿐입니다. 아래는 제안이고, 공정 구성이 정해지면 확정합니다.</p>
+  <div class="tw"><table>
+    <tr><th>기능</th><th>GPIO</th><th>저항 등</th><th>비고</th></tr>
+    <tr><td>RC522 SCK / MISO / MOSI / SDA / RST</td><td class="n">18 / 19 / 23 / 21 / 22</td><td>없음</td><td>기존 <code>rfid.ino</code>와 같음</td></tr>
+    <tr><td>상태 LED (WS2812B 데이터)</td><td class="n">27</td><td>직렬 330Ω</td><td>다리 4개짜리 RGB LED면 25 / 26 / 27, 색마다 220Ω</td></tr>
+    <tr><td>부저</td><td class="n">32</td><td>1kΩ → 2N2222A 베이스</td><td></td></tr>
+    <tr><td>작업 완료 버튼</td><td class="n">33</td><td>내부 풀업, 반대쪽은 GND</td><td>눌림 = LOW</td></tr>
+    <tr><td>비상정지 신호</td><td class="n">4</td><td>3V3으로 10kΩ 풀업</td><td>평소 닫힘 접점. 정상 = LOW, 눌림이나 선 빠짐 = HIGH</td></tr>
+    <tr><td>구동기 0</td><td class="n">13</td><td>서보 220Ω / 모터 330Ω + 10kΩ 풀다운</td><td>서보 신호, DC 모터, 스텝모터 IN1</td></tr>
+    <tr><td>구동기 1, 2</td><td class="n">16, 17</td><td>없음</td><td>스텝모터 IN2, IN3</td></tr>
+    <tr><td>구동기 3</td><td class="n">14</td><td>없음</td><td>스텝모터 IN4 전용. 서보와 모터는 달지 않음</td></tr>
+    <tr><td>예비</td><td class="n">25, 26 / 34, 35, 36, 39</td><td></td><td>25·26은 I2C나 센서, 34~39는 입력만</td></tr>
+  </table></div>
+
+  <h3>신호선</h3>
+  <div class="fig"><svg viewBox="0 0 760 470" role="img" aria-label="ESP32 핀과 리더기, 상태 LED, 부저, 버튼, 비상정지, 서보의 신호선 연결"><rect x="30" y="20" width="150" height="430" rx="6" class="board"/><text x="105" y="42" font-size="13" text-anchor="middle" class="strong">ESP32</text><rect x="120" y="67" width="60" height="18" rx="2" class="pin p-pwr"/><text x="150" y="80" font-size="10" text-anchor="middle" class="pt">3V3</text><rect x="120" y="103" width="60" height="18" rx="2" class="pin p-safe"/><text x="150" y="116" font-size="10" text-anchor="middle" class="pt">GPIO 18</text><rect x="120" y="127" width="60" height="18" rx="2" class="pin p-safe"/><text x="150" y="140" font-size="10" text-anchor="middle" class="pt">GPIO 19</text><rect x="120" y="151" width="60" height="18" rx="2" class="pin p-safe"/><text x="150" y="164" font-size="10" text-anchor="middle" class="pt">GPIO 23</text><rect x="120" y="175" width="60" height="18" rx="2" class="pin p-safe"/><text x="150" y="188" font-size="10" text-anchor="middle" class="pt">GPIO 21</text><rect x="120" y="199" width="60" height="18" rx="2" class="pin p-safe"/><text x="150" y="212" font-size="10" text-anchor="middle" class="pt">GPIO 22</text><rect x="120" y="247" width="60" height="18" rx="2" class="pin p-safe"/><text x="150" y="260" font-size="10" text-anchor="middle" class="pt">GPIO 27</text><rect x="120" y="291" width="60" height="18" rx="2" class="pin p-safe"/><text x="150" y="304" font-size="10" text-anchor="middle" class="pt">GPIO 32</text><rect x="120" y="335" width="60" height="18" rx="2" class="pin p-safe"/><text x="150" y="348" font-size="10" text-anchor="middle" class="pt">GPIO 33</text><rect x="120" y="379" width="60" height="18" rx="2" class="pin p-safe"/><text x="150" y="392" font-size="10" text-anchor="middle" class="pt">GPIO 4</text><rect x="120" y="423" width="60" height="18" rx="2" class="pin p-safe"/><text x="150" y="436" font-size="10" text-anchor="middle" class="pt">GPIO 13</text><rect x="470" y="60" width="260" height="164" rx="3" class="bx bx-b"/><text x="600" y="52" font-size="11.5" text-anchor="middle" class="strong">RC522 리더기 (3.3V 전용)</text><text x="482" y="80" font-size="10.5" text-anchor="start">3.3V</text><line x1="180" y1="76" x2="470" y2="76" class="wire w-w"/><text x="482" y="116" font-size="10.5" text-anchor="start">SCK</text><line x1="180" y1="112" x2="470" y2="112" class="wire w-b"/><text x="482" y="140" font-size="10.5" text-anchor="start">MISO</text><line x1="180" y1="136" x2="470" y2="136" class="wire w-b"/><text x="482" y="164" font-size="10.5" text-anchor="start">MOSI</text><line x1="180" y1="160" x2="470" y2="160" class="wire w-b"/><text x="482" y="188" font-size="10.5" text-anchor="start">SDA</text><line x1="180" y1="184" x2="470" y2="184" class="wire w-b"/><text x="482" y="212" font-size="10.5" text-anchor="start">RST</text><line x1="180" y1="208" x2="470" y2="208" class="wire w-b"/><text x="560" y="80" font-size="10" text-anchor="start">GND → GND · IRQ는 연결 안 함</text><text x="560" y="140" font-size="10" text-anchor="start">선은 15cm 이하</text><rect x="470" y="239" width="260" height="34" rx="3" class="bx bx-a"/><text x="482" y="254" font-size="11" text-anchor="start" class="strong">상태 LED (WS2812B) DIN</text><text x="482" y="267" font-size="9.5" text-anchor="start">전원 5V · GND, 옆에 100nF</text><line x1="180" y1="256" x2="470" y2="256" class="wire w-a"/><rect x="286" y="247" width="78" height="18" rx="2" class="res"/><text x="325" y="260" font-size="10" text-anchor="middle">330Ω</text><rect x="470" y="283" width="260" height="34" rx="3" class="bx bx-a"/><text x="482" y="298" font-size="11" text-anchor="start" class="strong">부저</text><text x="482" y="311" font-size="9.5" text-anchor="start">2N2222A로 구동, 부저 +는 5V</text><line x1="180" y1="300" x2="470" y2="300" class="wire w-a"/><rect x="286" y="291" width="78" height="18" rx="2" class="res"/><text x="325" y="304" font-size="10" text-anchor="middle">1kΩ → 베이스</text><rect x="470" y="327" width="260" height="34" rx="3" class="bx bx-a"/><text x="482" y="342" font-size="11" text-anchor="start" class="strong">작업 완료 버튼</text><text x="482" y="355" font-size="9.5" text-anchor="start">반대쪽 다리는 GND (내부 풀업)</text><line x1="180" y1="344" x2="470" y2="344" class="wire w-a"/><rect x="470" y="371" width="260" height="34" rx="3" class="bx bx-w"/><text x="482" y="386" font-size="11" text-anchor="start" class="strong">비상정지 신호 (평소 닫힘)</text><text x="482" y="399" font-size="9.5" text-anchor="start">접점 → GND · 3V3으로 10kΩ 풀업</text><line x1="180" y1="388" x2="470" y2="388" class="wire w-a"/><rect x="470" y="415" width="260" height="34" rx="3" class="bx bx-a"/><text x="482" y="430" font-size="11" text-anchor="start" class="strong">서보 신호 (주황 선)</text><text x="482" y="443" font-size="9.5" text-anchor="start">전원은 별도 5V · GND는 공통</text><line x1="180" y1="432" x2="470" y2="432" class="wire w-a"/><rect x="286" y="423" width="78" height="18" rx="2" class="res"/><text x="325" y="436" font-size="10" text-anchor="middle">220Ω</text></svg></div>
+  <ul>
+    <li><strong>RC522는 3.3V 전용입니다.</strong> 5V를 넣으면 망가집니다. GND도 잇고, IRQ 핀은 비워 둡니다.</li>
+    <li><strong>WS2812B의 데이터 전압:</strong> LED를 5V로 켜면 규격상 데이터가 3.5V 이상이어야 하는데 ESP32는 3.3V를 냅니다. LED 한 개에 짧은 선이면 대개 동작하지만 실물로 확인합니다. 깜빡이거나 색이 틀리면 LED 전원을 3V3으로 바꿉니다.</li>
+    <li><strong>부저:</strong> 3.3V를 대어 "삐" 하고 계속 울리면 능동, "딱" 소리만 나면 수동입니다. 수동이면 코드에서 소리 주파수를 내 줘야 합니다.</li>
+    <li><strong>버튼:</strong> 네 다리 택트 스위치는 대각선 다리를 씁니다. 같은 쪽 다리를 쓰면 항상 눌린 것으로 읽힙니다.</li>
+    <li><strong>비상정지 스위치:</strong> 키트의 택트 스위치는 눌러야 닫히는 종류라 쓸 수 없습니다. 눌리면 잠기는 "평소 닫힘" 스위치를 따로 구해야 합니다. 책상 시험에서는 점퍼선을 GND에 꽂았다 빼는 것으로 대신합니다(빼면 비상정지).</li>
+  </ul>
+
+  <h3>전원</h3>
+  <div class="fig"><svg viewBox="0 0 760 300" role="img" aria-label="USB 전원과 별도 5V 전원의 분리, 비상정지 접점이 모터 전원선을 끊는 배선"><rect x="20" y="30" width="130" height="44" rx="3" class="bx"/><text x="85" y="57" font-size="12" text-anchor="middle" class="strong">USB 5V</text><rect x="210" y="30" width="150" height="44" rx="3" class="board"/><text x="285" y="57" font-size="12" text-anchor="middle" class="strong">ESP32 보드</text><rect x="430" y="14" width="310" height="32" rx="3" class="bx bx-b"/><text x="442" y="35" font-size="11" text-anchor="start">3V3 핀 → RC522</text><rect x="430" y="56" width="310" height="32" rx="3" class="bx bx-b"/><text x="442" y="77" font-size="11" text-anchor="start">5V 핀 → 상태 LED, 부저</text><line x1="150" y1="52" x2="210" y2="52" class="wire w-b" marker-end="url(#ah2)"/><line x1="360" y1="40" x2="430" y2="30" class="wire w-b" marker-end="url(#ah2)"/><line x1="360" y1="62" x2="430" y2="72" class="wire w-b" marker-end="url(#ah2)"/><rect x="20" y="150" width="130" height="44" rx="3" class="bx"/><text x="85" y="170" font-size="12" text-anchor="middle" class="strong">별도 5V 전원</text><text x="85" y="186" font-size="10" text-anchor="middle">1A 이상</text><rect x="210" y="150" width="150" height="44" rx="3" class="bx bx-w"/><text x="285" y="170" font-size="12" text-anchor="middle" class="strong">비상정지 접점</text><text x="285" y="186" font-size="10" text-anchor="middle">평소 닫힘, 누르면 끊김</text><rect x="430" y="150" width="310" height="44" rx="3" class="bx bx-a"/><text x="442" y="170" font-size="11" text-anchor="start">모터 전원선 → 서보, DC 모터, 스텝모터</text><text x="442" y="186" font-size="10" text-anchor="start">서보 옆에 470~1000µF</text><line x1="150" y1="172" x2="210" y2="172" class="wire w-a" marker-end="url(#ah2)"/><line x1="360" y1="172" x2="430" y2="172" class="wire w-a" marker-end="url(#ah2)"/><text x="180" y="164" font-size="12" text-anchor="middle">+</text><line x1="85" y1="194" x2="85" y2="250" class="wire w-g"/><line x1="20" y1="250" x2="740" y2="250" class="wire w-g"/><line x1="585" y1="194" x2="585" y2="250" class="wire w-g"/><path d="M285 74 V118 H388 V250" class="wire w-g" fill="none"/><text x="380" y="272" font-size="11.5" text-anchor="middle" class="strong">GND는 모두 한 줄로 잇는다. 두 전원의 +끼리는 잇지 않는다.</text><text x="300" y="112" font-size="10" text-anchor="start"></text><defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" class="ahp"/></marker></defs></svg></div>
+  <div class="tw"><table>
+    <tr><th>부품</th><th>전류 (대표값)</th><th>전원</th></tr>
+    <tr><td>ESP32 (Wi-Fi 사용)</td><td>평균 80~150mA, 순간 약 240mA</td><td>USB</td></tr>
+    <tr><td>RC522</td><td>15~30mA</td><td>보드의 3V3 핀</td></tr>
+    <tr><td>WS2812B 1개</td><td>최대 약 60mA</td><td>보드의 5V 핀</td></tr>
+    <tr><td>서보 (SG90)</td><td>움직일 때 100~250mA, 막히면 650mA 이상</td><td><strong>별도 5V</strong></td></tr>
+    <tr><td>스텝모터 (28BYJ-48)</td><td>160~240mA</td><td><strong>별도 5V</strong></td></tr>
+    <tr><td>소형 DC 모터</td><td>100~300mA, 멈추면 약 1A</td><td><strong>별도 5V</strong></td></tr>
+  </table></div>
+  <ul>
+    <li>모터와 서보는 보드의 5V나 3V3 핀에 달지 않습니다. 움직이는 순간 전압이 떨어져 보드가 재부팅합니다.</li>
+    <li>비상정지 접점은 모터 전원선의 + 쪽만 끊습니다. ESP32의 전원은 끊지 않습니다. 그래야 멈춘 뒤에도 신고를 보낼 수 있습니다.</li>
+    <li>DC 모터를 2N2222A로 켤 때는 모터 양쪽에 다이오드를 거꾸로 달아야 합니다(띠가 있는 쪽이 +). 다이오드는 키트에 없어 따로 구합니다.</li>
+  </ul>
+
+  <h3>저녁을 날리기 쉬운 실수</h3>
+  <div class="tw"><table>
+    <tr><th>실수</th><th>증상</th></tr>
+    <tr><td>충전 전용 USB 케이블</td><td>PC에 포트가 안 뜸</td></tr>
+    <tr><td>RC522에 5V</td><td>리더기 손상, 버전이 0x00 또는 0xFF</td></tr>
+    <tr><td>서보를 보드 전원 핀에 연결</td><td>움직일 때 재부팅, <code>Brownout detector</code></td></tr>
+    <tr><td>GND를 서로 잇지 않음</td><td>서보가 떨리거나 신호를 무시</td></tr>
+    <tr><td>12번 핀에 풀업 부품</td><td>부팅이 안 됨</td></tr>
+    <tr><td>0번, 2번 핀에 부품</td><td>올리기 실패, "Connecting…"에서 멈춤</td></tr>
+    <tr><td>34~39에 내부 풀업으로 버튼</td><td>값이 제멋대로 바뀜</td></tr>
+    <tr><td>30핀 그림을 보고 38핀 보드에 배선</td><td>끝없는 재부팅</td></tr>
+    <tr><td>MISO와 MOSI를 바꿔 꽂음</td><td>태그가 안 읽힘</td></tr>
+    <tr><td>모터 다이오드를 빼거나 거꾸로</td><td>트랜지스터 파손, 모터가 돌 때 재부팅</td></tr>
+  </table></div>
+</section>
+
+<section id="msg">
+  <h2>주고받는 줄과 토픽</h2>
+  <p>설비 태스크와 통신 태스크는 큐에 "줄"을 담아 주고받습니다. 줄의 모양은 기존 코드(<code>modem.ino</code>)와 데이터흐름 설명서의 규격 그대로입니다.</p>
+  <div class="tw"><table>
+    <tr><th>방향</th><th>줄 → 토픽</th><th>내용</th></tr>
+    <tr><td>올라감</td><td class="n">$T → …/tag</td><td>태그 읽음</td></tr>
+    <tr><td>올라감</td><td class="n">$R → …/report</td><td>BOOT(번호 0), DONE, FAULT, SEEN, CLEAR</td></tr>
+    <tr><td>올라감</td><td class="n">$H → …/alive</td><td>2초마다 살아 있다는 표시. 설비 태스크가 만듦</td></tr>
+    <tr><td>내려옴</td><td class="n">…/cmd → $C</td><td><code>re</code>가 있으면 신고에 대한 답</td></tr>
+    <tr><td>내려옴</td><td class="n">…/state → $S</td><td>상태, 작업 번호, 등 모양, 이상. 브로커에 보관되는 메시지</td></tr>
+    <tr><td>칩 안에서만</td><td class="n">$L,up=1 / 0</td><td>통신 태스크가 2초마다 보내는 연결 상태. 5초 없으면 끊김으로 봄</td></tr>
+    <tr><td>연결 표시</td><td class="n">…/link</td><td>붙으면 1, 끊기면 브로커가 대신 0을 올림(약 6초 뒤)</td></tr>
+  </table></div>
+  <p class="cap">토픽의 앞부분은 <code>factory/station/P2/</code>처럼 공정 이름에서 만듭니다. USB로 줄을 직접 칠 때는 끝에 <code>*</code>와 검사값 두 자리를 붙이고, 칩 안의 큐에서는 뺍니다.</p>
+<pre><code>$T{"n":41,"k":"TAG","uid":"04A1B2C3"}        →  factory/station/P2/tag
+$R{"n":42,"k":"DONE"}                        →  factory/station/P2/report
+{"st":"WORK","job":7,"lamp":"Yb","fault":0}  →  $S,st=WORK,job=7,lamp=Yb,fault=0
+{"re":42,"ok":1}                             →  $C,re=42,ok=1</code></pre>
+  <ul>
+    <li><strong>신고 번호 n:</strong> 1~255를 돌려 씁니다. 0은 BOOT에만 씁니다. 다시 보낼 때는 같은 번호입니다.</li>
+    <li><strong>다시 보내기:</strong> 답이 올 때까지 1초마다 5번, 그 뒤에는 5초마다 계속. 쥐고 있는 신고는 최대 4건.</li>
+    <li><strong>답과 허가는 다릅니다.</strong> "태그 읽음"에 대한 답은 "적었다"는 뜻입니다. 작업은 <code>st=WORK</code>가 올 때 시작합니다.</li>
+    <li><strong>같은 작업 번호의 "작업 중"이 다시 오면 무시합니다.</strong></li>
+  </ul>
+</section>
+
+<section id="stages">
+  <h2>단계 0~9</h2>
+  <p>한 대(P2)에서 0~8단계를 하고 9단계에서 넓힙니다. 박자와 스택을 재는 코드는 2단계부터 넣어 둡니다. 뒤 단계에서 박자가 깨지면 어느 단계에서 깨졌는지 바로 보입니다.</p>
+  <div class="tw"><table>
+    <tr><th>단계</th><th>만드는 것</th><th>통과</th></tr>
+    <tr><td class="n">0</td><td>올리기가 된다</td><td>LED가 1초마다 깜빡임</td></tr>
+    <tr><td class="n">1</td><td>태스크 없는 기존 코드로 기준 숫자</td><td>"막힌 시간" 표가 채워짐</td></tr>
+    <tr><td class="n">2</td><td>태스크 2개, 큐 2개, 10ms 박자</td><td>박자를 놓친 횟수 0</td></tr>
+    <tr><td class="n">3</td><td>리더기, 버튼, 상태 LED, 상태 흐름 (작업은 타이머)</td><td>한 사이클 10번</td></tr>
+    <tr><td class="n">4</td><td>통신 태스크, 끊김 처리, 다시 보낼 목록</td><td>끊었다 붙여도 "작업 끝"이 같은 번호로 한 번</td></tr>
+    <tr><td class="n">5</td><td>비상정지, 워치독, 안전한 부팅</td><td>비상정지 10번, 일부러 멈추면 8초 뒤 되살아남</td></tr>
+    <tr><td class="n">6</td><td>숫자 표</td><td>표의 모든 칸에 실측값</td></tr>
+    <tr><td class="n">7</td><td>판정 시험</td><td>30분 + 끊기 10번 + 비상정지 10번</td></tr>
+    <tr><td class="n">8</td><td>진짜 작업 동작</td><td>20번 연속, 박자 유지</td></tr>
+    <tr><td class="n">9</td><td>다른 보드로</td><td>두 대가 서로 간섭하지 않음</td></tr>
+  </table></div>
+
+  <div class="stage" id="s0">
+    <h3><span class="no">0단계</span>올리기가 된다</h3>
+    <ul>
+      <li>예제 Blink를 LED 핀 2로 바꿔 올립니다.</li>
+      <li>"Connecting…"에서 멈추면 BOOT 버튼을 누른 채 올립니다.</li>
+    </ul>
+    <p class="pass"><strong>통과:</strong> 보드의 파란 LED가 1초마다 깜빡입니다.</p>
+    <p class="cap">흔한 실수: 충전 전용 케이블, 시리얼 모니터가 포트를 쥐고 있음, 핀 0·2·12·15에 선이 달려 있음.</p>
+  </div>
+
+  <div class="stage" id="s1">
+    <h3><span class="no">1단계</span>태스크 없는 코드로 기준 숫자 얻기</h3>
+    <p>발표에서 "전 ○초 → 후 ○ms"라고 말할 때의 "전"입니다. 태스크판을 만들기 전에 먼저 재 둡니다.</p>
+    <ol>
+      <li><code>modem/modem.ino</code>를 그대로 올립니다(<code>TEST_MODE 1</code>, <code>MEASURE 1</code>).</li>
+      <li>브로커에 붙은 것을 확인한 뒤, 아래 세 경우를 20번씩 만듭니다.
+        <ul>
+          <li>가. 브로커 PC의 Wi-Fi를 끔 (엣지 서버가 꺼진 것과 같음)</li>
+          <li>나. 공유기나 핫스팟을 끔</li>
+          <li>다. <code>Stop-Service mosquitto</code> (브로커 프로그램만 끔)</li>
+        </ul></li>
+      <li>시리얼에 찍히는 <code># [측정] connect … ms</code>와 <code>10초 동안 loop 최대 간격</code>을 적습니다.</li>
+    </ol>
+    <p class="pass"><strong>통과:</strong> 세 경우의 최소, 평균, 최대가 표에 채워집니다.</p>
+    <ul>
+      <li>예상은 "가"에서 약 3초이고 길면 6초입니다. 기존 코드의 <code>setSocketTimeout(3)</code>은 접속 대기를 줄이지 않고 그 뒤의 응답 대기에만 쓰여서, 둘이 더해질 수 있습니다.</li>
+      <li>"다"는 거절이 바로 와서 짧게 나옵니다. "나"에서는 connect 줄이 아예 안 찍히는 것이 정상입니다.</li>
+      <li><strong>숫자가 수십 ms로 짧게 나오면 그대로 적고, 태스크판을 계속할지 팀에 다시 묻습니다.</strong> 이미 정한 약속입니다.</li>
+    </ul>
+  </div>
+
+  <div class="stage" id="s2">
+    <h3><span class="no">2단계</span>태스크 2개, 큐 2개, 10ms 박자</h3>
+    <p><code>rtos_step1/rtos_step1.ino</code>를 바탕으로 새 스케치 <code>station/station.ino</code>를 만듭니다. 이 단계에서는 Wi-Fi 없이, 설비 태스크가 박자를 지키는지만 봅니다.</p>
+<pre><code>#include &lt;Arduino.h&gt;
+
+struct Msg { char line[160]; };
+QueueHandle_t qReport, qCmd;          // 신고 큐(설비 → 통신), 명령 큐(통신 → 설비)
+TaskHandle_t  hCtrl, hComm;
+
+void ctrlTask(void *) {
+  TickType_t wake = xTaskGetTickCount();
+  uint32_t tick = 0, lastUs = micros(), jitMax = 0, late = 0;
+  for (;;) {
+    uint32_t nowUs = micros(), dt = nowUs - lastUs; lastUs = nowUs;
+    uint32_t dev = dt &gt; 10000 ? dt - 10000 : 10000 - dt;
+    if (tick &gt; 10 &amp;&amp; dev &gt; jitMax) jitMax = dev;       // 박자가 10ms에서 벗어난 최대값
+    tick++;
+
+    Msg in;
+    while (xQueueReceive(qCmd, &amp;in, 0) == pdTRUE) { /* 3단계부터 */ }
+
+    if (tick % 200 == 0) {                             // 2초마다
+      Msg m;
+      snprintf(m.line, sizeof m.line, "$H{\"up\":%lu,\"st\":\"IDLE\"}", (unsigned long)(millis() / 1000));
+      xQueueSend(qReport, &amp;m, 0);
+      snprintf(m.line, sizeof m.line, "#[C] jit=%luus late=%lu stk=%u", (unsigned long)jitMax,
+               (unsigned long)late, (unsigned)uxTaskGetStackHighWaterMark(nullptr));
+      xQueueSend(qReport, &amp;m, 0);                      // '#'으로 시작하면 로그. Serial은 통신 태스크만 쓴다
+      jitMax = 0;
+    }
+    if (xTaskDelayUntil(&amp;wake, pdMS_TO_TICKS(10)) == pdFALSE) late++;   // 박자를 놓치면 pdFALSE
+  }
+}
+
+void commTask(void *) {
+  for (;;) {
+    Msg out;                                           // 큐에서 5ms까지 기다린다 = 쉬는 시간
+    if (xQueueReceive(qReport, &amp;out, pdMS_TO_TICKS(5)) == pdTRUE)
+      Serial.printf("[N] %s\n", out.line);
+  }
+}
+
+void setup() {
+  Serial.setTxBufferSize(1024);                        // begin 전에
+  Serial.begin(115200);
+  qReport = xQueueCreate(8, sizeof(Msg));
+  qCmd    = xQueueCreate(8, sizeof(Msg));
+  configASSERT(qReport &amp;&amp; qCmd);
+  xTaskCreatePinnedToCore(commTask, "comm", 8192, nullptr, 2, &amp;hComm, 0);
+  xTaskCreatePinnedToCore(ctrlTask, "ctrl", 6144, nullptr, 3, &amp;hCtrl, 1);   // 마지막에 만든다
+}
+void loop() { vTaskDelete(nullptr); }                  // loop 태스크는 쓰지 않는다</code></pre>
+    <ul>
+      <li><strong>인자 읽는 법:</strong> <code>xTaskCreatePinnedToCore(함수, 이름, 스택 바이트, 인자, 우선순위, 핸들, 코어)</code>.</li>
+      <li><strong>설비 태스크를 마지막에 만드는 이유:</strong> <code>setup()</code>은 코어 1의 우선순위 1 태스크에서 돕니다. 우선순위 3인 설비 태스크는 만들어지는 순간 <code>setup()</code>을 밀어내고 돌기 시작합니다. 그 전에 큐와 통신 태스크가 준비돼 있어야 합니다.</li>
+      <li><strong><code>xTaskDelayUntil</code>을 쓰는 이유:</strong> <code>vTaskDelayUntil</code>과 같은 동작인데, 박자를 놓쳤는지 돌려줘서 셀 수 있습니다.</li>
+    </ul>
+    <p class="pass"><strong>통과:</strong> <code>[N] $H…</code>가 2초마다 나옵니다. <code>jit</code>(박자가 벗어난 최대)가 수백 µs 이하, <code>late</code>(놓친 횟수)가 0, <code>stk</code>(남은 스택)가 1000 이상입니다. 기준값은 처음 잡은 값입니다.</p>
+    <p class="cap">흔한 실수: 설비 태스크에서 <code>Serial.printf</code>를 직접 부름, <code>delay()</code>를 씀, 큐를 만들기 전에 태스크를 만듦. <code>stk</code>의 단위(바이트인지)는 6144바이트 태스크를 만든 직후 값이 6000 근처인지로 한 번 확인합니다.</p>
+  </div>
+
+  <div class="stage" id="s3">
+    <h3><span class="no">3단계</span>리더기, 버튼, 상태 LED, 상태 흐름</h3>
+    <p>작업 동작은 아직 "3초 기다리기"로 대신합니다. 통신 태스크도 아직 Wi-Fi 없이, USB로 친 줄을 명령 큐에 넣는 역할만 합니다.</p>
+
+    <h4>3-가. 리더기가 박자를 깨는지 먼저 재기</h4>
+    <p>MFRC522 라이브러리는 태그가 없을 때 응답을 25ms 동안 기다립니다. 50ms마다 읽으면 그때마다 설비 태스크가 25ms씩 막혀 10ms 박자가 깨집니다. <code>rfid.ino</code>에서 <code>PICC_IsNewCardPresent()</code> 앞뒤로 <code>micros()</code>를 재서 확인하고, 아래처럼 기다리는 시간을 5ms로 줄인 뒤 다시 잽니다.</p>
+<pre><code>#include &lt;SPI.h&gt;
+#include &lt;MFRC522.h&gt;
+static MFRC522 rfid(PIN_SS, PIN_RST);
+
+static void readerInit() {                      // 설비 태스크 시작부에서 한 번 (안에 delay(50)이 있다)
+  SPI.begin(PIN_SCK, PIN_MISO, PIN_MOSI, PIN_SS);
+  rfid.PCD_Init();
+  rfid.PCD_WriteRegister(MFRC522::TReloadRegH, 0x00);   // 응답 대기 25ms → 5ms
+  rfid.PCD_WriteRegister(MFRC522::TReloadRegL, 0xC8);
+}
+static bool readUid(char *uid, size_t cap) {    // cap은 21 이상
+  if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial()) return false;
+  size_t k = 0;
+  for (byte i = 0; i &lt; rfid.uid.size &amp;&amp; i &lt; 10; i++)
+    k += snprintf(uid + k, cap - k, "%02X", rfid.uid.uidByte[i]);
+  rfid.PICC_HaltA();
+  return true;
+}</code></pre>
+    <p class="note">5ms로 줄여도 태그가 잘 읽히는지는 실물로 확인해야 합니다. 그래도 박자가 깨지면 리더기를 우선순위가 낮은 셋째 태스크로 빼는 길이 있지만, "태스크 두 개" 결정을 바꾸는 일이라 팀과 정합니다.</p>
+
+    <h4>3-나. 버튼 (짧게 / 길게 2초)</h4>
+<pre><code>enum BtnEv { EV_NONE, EV_SHORT, EV_LONG };
+struct Btn { uint8_t pin; bool stable = HIGH, last = HIGH, longDone = false; uint32_t tEdge = 0, tDown = 0; };
+
+static BtnEv pollBtn(Btn &amp;b, uint32_t tick) {   // 10ms마다 부른다
+  bool now = digitalRead(b.pin);
+  if (now != b.last) { b.last = now; b.tEdge = tick; }
+  if (now != b.stable &amp;&amp; tick - b.tEdge &gt;= 3) {             // 30ms 동안 같아야 인정 (떨림 거름)
+    b.stable = now;
+    if (now == LOW) { b.tDown = tick; b.longDone = false; }
+    else if (!b.longDone) return EV_SHORT;
+  }
+  if (b.stable == LOW &amp;&amp; !b.longDone &amp;&amp; tick - b.tDown &gt;= 200) { b.longDone = true; return EV_LONG; }
+  return EV_NONE;
+}</code></pre>
+
+    <h4>3-다. 상태 흐름</h4>
+<pre><code>enum St : uint8_t { ST_BOOT, ST_IDLE, ST_WAIT, ST_WORK, ST_DONE, ST_FAULT };
+static St st = ST_BOOT;
+static bool linkUp = false;
+static uint32_t lastLinkTick = 0, workT0 = 0;
+static int job = 0, lastJob = -1;
+static uint8_t doneN = 0;
+
+// "$S,st=WORK,job=7" 같은 줄에서 값 꺼내기
+static bool kv(const char *line, const char *key, char *out, size_t cap) {
+  size_t kl = strlen(key);
+  for (const char *p = strchr(line, ','); p; p = strchr(p, ',')) {
+    p++;
+    if (!strncmp(p, key, kl) &amp;&amp; p[kl] == '=') {
+      size_t n = strcspn(p + kl + 1, ",*");
+      if (n &gt;= cap) return false;
+      memcpy(out, p + kl + 1, n); out[n] = 0;
+      return true;
+    }
+  }
+  return false;
+}
+
+static void onCmd(const char *l, uint32_t tick) {          // 명령 큐에서 꺼낸 줄마다
+  char v[24];
+  if (l[1] == 'L') { linkUp = kv(l, "up", v, sizeof v) &amp;&amp; v[0] == '1'; lastLinkTick = tick; }
+  else if (l[1] == 'C') { if (kv(l, "re", v, sizeof v)) answered((uint8_t)atoi(v)); }
+  else if (l[1] == 'S' &amp;&amp; st == ST_WAIT &amp;&amp; linkUp
+           &amp;&amp; kv(l, "st", v, sizeof v) &amp;&amp; !strcmp(v, "WORK")
+           &amp;&amp; kv(l, "job", v, sizeof v) &amp;&amp; atoi(v) != lastJob) {   // 같은 작업 번호는 다시 하지 않는다
+    job = atoi(v); work-&gt;begin(); workT0 = tick; st = ST_WORK;
+  }
+}
+
+static void stepState(uint32_t tick) {                     // 10ms마다
+  char uid[21], extra[40];
+  if (tick - lastLinkTick &gt; 500) linkUp = false;           // $L이 5초 없으면 끊김
+  switch (st) {
+    case ST_BOOT: report('R', "BOOT", "", true); st = ST_IDLE; break;
+    case ST_IDLE:                                          // 끊김이면 새 작업을 받지 않는다
+      if (linkUp &amp;&amp; tick % 5 == 0 &amp;&amp; readUid(uid, sizeof uid)) {   // 리더기는 50ms마다
+        snprintf(extra, sizeof extra, ",\"uid\":\"%s\"", uid);
+        report('T', "TAG", extra); st = ST_WAIT;
+      }
+      break;
+    case ST_WAIT: break;                                   // onCmd가 st=WORK를 기다린다
+    case ST_WORK:                                          // 끊겨도 하던 동작은 끝낸다
+      if (work-&gt;step((tick - workT0) * 10)) {
+        work-&gt;safe(); lastJob = job;
+        doneN = report('R', "DONE", ""); st = ST_DONE;
+      }
+      break;
+    case ST_DONE: if (!pending(doneN)) st = ST_IDLE; break;   // 답이 오면 목록에서 빠진다
+    case ST_FAULT: break;                                  // 5단계
+  }
+}</code></pre>
+    <ul>
+      <li><code>report</code>, <code>answered</code>, <code>pending</code>은 4단계에서 완성합니다. 지금은 <code>report</code>가 줄을 만들어 신고 큐에 한 번 넣고, <code>pending</code>은 <code>$C</code>가 올 때까지 참을 돌려주면 됩니다.</li>
+      <li><code>work</code>는 8단계의 작업 동작 묶음입니다. 지금은 <code>step(ms)</code>가 3000ms가 지나면 참을 돌려주는 가짜를 씁니다.</li>
+      <li>상태 LED는 <code>$S</code>의 <code>lamp</code> 값(0, Yb, G, R, Rb)을 따릅니다.</li>
+    </ul>
+
+    <h4>3-라. 책상 시험</h4>
+    <p>통신 태스크에, 시리얼 모니터로 친 줄을 명령 큐에 넣는 코드를 잠깐 둡니다.</p>
+<pre><code>static void serialToCtrl() {                    // commTask 루프 안에서 부른다
+  static char buf[160]; static size_t n = 0;
+  while (Serial.available()) {
+    char c = Serial.read();
+    if (c == '\n') {
+      buf[n] = 0;
+      if (n &gt; 1) { Msg m; strlcpy(m.line, buf, sizeof m.line); xQueueSend(qCmd, &amp;m, 0); }
+      n = 0;
+    } else if (c != '\r' &amp;&amp; n &lt; sizeof buf - 1) buf[n++] = c;
+  }
+}</code></pre>
+    <ol>
+      <li><code>$L,up=1</code>을 칩니다. (연결된 척. 5초 안에 다음으로 가거나 다시 칩니다)</li>
+      <li>태그를 댑니다 → <code>$T{…}</code>가 찍힙니다.</li>
+      <li><code>$S,st=WORK,job=1,lamp=Yb,fault=0</code>을 칩니다 → 3초 뒤 <code>$R{"n":…,"k":"DONE"}</code>.</li>
+      <li><code>$C,re=번호,ok=1</code>을 칩니다 → IDLE로 돌아갑니다.</li>
+    </ol>
+    <p class="pass"><strong>통과:</strong> 위 순서를 10번 되풀이합니다. 같은 <code>job</code>을 다시 치면 무시합니다. <code>late</code>는 계속 0입니다.</p>
+    <ul>
+      <li>태그는 한 번 읽히면 뗐다가 다시 대야 또 읽힙니다. 고장이 아닙니다.</li>
+      <li>허가가 끝내 오지 않을 때 WAIT에서 빠져나오는 규칙은 아직 없습니다. 30초 뒤 IDLE을 제안으로 둡니다.</li>
+    </ul>
+  </div>
+
+  <div class="stage" id="s4">
+    <h3><span class="no">4단계</span>통신 태스크, 끊김, 다시 보낼 목록</h3>
+    <p>통신 태스크에 <code>modem.ino</code>의 Wi-Fi와 MQTT 코드를 옮깁니다. <code>serviceWifi()</code>, <code>serviceMqtt()</code>, <code>onMqtt()</code>는 거의 그대로 쓰고, 줄을 다른 보드로 보내던 자리만 큐 넣기로 바꿉니다.</p>
+<pre><code>static uint32_t dropCmd = 0;
+
+static void toCtrl(const char *body) {                     // body 예: "C,re=42,ok=1"
+  Msg m;
+  if (snprintf(m.line, sizeof m.line, "$%s", body) &gt;= (int)sizeof m.line) return;   // 160B를 넘으면 버림
+  if (xQueueSend(qCmd, &amp;m, 0) != pdTRUE) dropCmd++;
+}
+
+static void handleOut(const char *line) {                  // 신고 큐에서 꺼낸 줄
+  if (line[0] == '#') { Serial.printf("%s\n", line + 1); return; }   // 로그
+  const char *topic = line[1] == 'T' ? BASE "tag"
+                    : line[1] == 'R' ? BASE "report"
+                    : line[1] == 'H' ? BASE "alive" : nullptr;
+  if (!topic || !mqtt.connected()) return;                 // 못 보내면 버린다. 설비 태스크가 다시 보낸다
+  mqtt.publish(topic, (const uint8_t *)line + 2, strlen(line + 2), false);
+}
+
+void commTask(void *) {
+  WiFi.mode(WIFI_STA); WiFi.setSleep(false); WiFi.begin(WIFI_SSID, WIFI_PASS);
+  mqtt.setServer(MQTT_HOST, MQTT_PORT); mqtt.setCallback(onMqtt);
+  mqtt.setBufferSize(512); mqtt.setKeepAlive(4); mqtt.setSocketTimeout(3);
+  for (;;) {
+    serviceWifi(); serviceMqtt();                          // 막혀도 여기서만 막힌다
+    Msg out;
+    if (xQueueReceive(qReport, &amp;out, pdMS_TO_TICKS(5)) == pdTRUE) handleOut(out.line);
+  }
+}</code></pre>
+    <p>설비 태스크에는 답을 받을 때까지 신고를 쥐고 있는 목록을 둡니다.</p>
+<pre><code>struct Pend { bool used; uint8_t n, tries; uint32_t nextAt; Msg m; };
+static Pend pend[4];
+static uint8_t seqN = 0;
+
+static uint8_t report(char type, const char *kind, const char *extra, bool boot = false) {
+  uint8_t n = boot ? 0 : (seqN = seqN % 255 + 1);          // 1~255를 돈다. 0은 BOOT만
+  for (Pend &amp;p : pend) if (!p.used) {
+    p.used = true; p.n = n; p.tries = 0; p.nextAt = millis();
+    snprintf(p.m.line, sizeof p.m.line, "$%c{\"n\":%u,\"k\":\"%s\"%s}", type, (unsigned)n, kind, extra);
+    break;
+  }
+  return n;
+}
+
+static void serviceResend() {                              // 매 박자 끝에
+  uint32_t now = millis();
+  for (Pend &amp;p : pend) {
+    if (!p.used || !linkUp || (int32_t)(now - p.nextAt) &lt; 0) continue;   // 끊김이면 쥐고만 있는다
+    if (xQueueSend(qReport, &amp;p.m, 0) == pdTRUE) {
+      p.tries++;
+      p.nextAt = now + (p.tries &lt;= 5 ? 1000 : 5000);       // 1초마다 5번, 그 뒤 5초마다
+    }                                                      // 큐가 가득이면 다음 박자에 다시
+  }
+}
+static void answered(uint8_t re) { for (Pend &amp;p : pend) if (p.used &amp;&amp; p.n == re) p.used = false; }
+static bool pending(uint8_t n)   { for (Pend &amp;p : pend) if (p.used &amp;&amp; p.n == n) return true; return false; }</code></pre>
+    <h4>시험</h4>
+    <p>창 세 개를 띄웁니다: <code>watch</code>, <code>reply</code>, 그리고 <code>state</code>를 손으로 칠 창.</p>
+    <ol>
+      <li>태그를 대고 <code>state P2 WORK 1</code>을 보냅니다.</li>
+      <li>작업 중에 브로커 PC의 Wi-Fi를 끕니다.</li>
+      <li>설비가 작업을 끝내고 "작업 끝"을 쥡니다. 약 6초 뒤 <code>watch</code>에 <code>link 0</code>이 보입니다.</li>
+      <li>Wi-Fi를 켭니다 → 같은 번호의 "작업 끝"이 올라오고, 답을 받아 IDLE로 갑니다.</li>
+    </ol>
+    <p class="pass"><strong>통과:</strong> 10번 모두 "작업 끝"의 번호가 끊기기 전과 같습니다. 끊긴 동안 태그를 대도 새 작업이 시작되지 않습니다. 끊긴 동안에도 <code>jit</code>와 <code>late</code>가 변하지 않습니다.</p>
+    <ul>
+      <li><strong>브로커에 보관된 옛 상태가 다시 붙자마자 옵니다.</strong> 시험이 끝나면 <code>state P2 IDLE 0 --lamp 0</code>을 보내 지웁니다. 안 그러면 켜자마자 작업이 시작될 수 있습니다.</li>
+      <li>재부팅하면 <code>lastJob</code>이 사라져 옛 "작업 중"을 새 작업으로 볼 수 있습니다. 저장해 둘지는 팀이 정합니다.</li>
+      <li>반복 시험을 손으로 하기 번거로우면, 태그에 답하고 "작업 중"을 내고 "작업 끝"에 답하는 것을 자동으로 하는 모드를 PC 도구에 더합니다.</li>
+      <li>흔한 실수: 설비 태스크에서 <code>mqtt</code>나 <code>WiFi</code>를 부름, 다시 붙은 뒤 구독을 다시 하지 않음.</li>
+    </ul>
+  </div>
+
+  <div class="stage" id="s5">
+    <h3><span class="no">5단계</span>비상정지, 워치독, 안전한 부팅</h3>
+    <h4>비상정지가 설비 태스크를 바로 깨우게 하기</h4>
+    <p>2단계의 대기(<code>xTaskDelayUntil</code>)를 아래 모양으로 바꿉니다. 다음 박자까지 남은 시간 동안 "알림"을 기다리므로, 비상정지 인터럽트가 오면 박자를 기다리지 않고 바로 깨어납니다. 알림이 없으면 원래대로 10ms마다 돕니다.</p>
+<pre><code>#include &lt;esp_task_wdt.h&gt;
+static volatile uint32_t estopUs = 0;          // 측정용. "같이 쓰는 변수 0개" 규칙의 유일한 예외
+
+void IRAM_ATTR onEstop() {                     // 인터럽트: 짧게. Serial, digitalWrite 금지
+  estopUs = micros();
+  BaseType_t hp = pdFALSE;
+  vTaskNotifyGiveFromISR(hCtrl, &amp;hp);          // 설비 태스크를 깨운다
+  if (hp) portYIELD_FROM_ISR();                // 빼면 최대 1ms 더 늦는다
+}
+
+void ctrlTask(void *) {
+  readerInit();
+  pinMode(PIN_ESTOP, INPUT_PULLUP);            // 평소 닫힘: 정상 LOW, 눌리거나 선이 빠지면 HIGH
+  attachInterrupt(PIN_ESTOP, onEstop, RISING); // 설비 태스크 안에서 등록한다
+  esp_task_wdt_add(nullptr);                   // 이 태스크를 워치독에 등록
+
+  const TickType_t P = pdMS_TO_TICKS(10);
+  TickType_t next = xTaskGetTickCount() + P;
+  uint32_t tick = 0, late = 0;
+  for (;;) {
+    int32_t wait = (int32_t)(next - xTaskGetTickCount());
+    if (wait &lt; 0) { wait = 0; late++; }
+    bool woke = ulTaskNotifyTake(pdTRUE, wait);            // 박자까지 자되, 알림이 오면 바로 깬다
+
+    if (woke || digitalRead(PIN_ESTOP) == HIGH) {          // 알림을 놓쳐도 핀을 다시 본다
+      if (st != ST_FAULT) {
+        work-&gt;safe();                                      // 먼저 멈추고
+        st = ST_FAULT;
+        report('R', "FAULT", ",\"c\":\"E00\",\"t\":0");     // 그다음 신고
+      }
+      if (woke) continue;                                  // 남은 박자만큼 다시 잔다
+    }
+    next += P; tick++;
+    esp_task_wdt_reset();                                  // "나 살아 있다"
+    // 버튼 → 명령 큐 → stepState(tick) → 출력 → serviceResend()
+  }
+}</code></pre>
+    <h4>워치독</h4>
+<pre><code>static void wdtSetup() {                       // setup()에서 한 번
+  const esp_task_wdt_config_t cfg = { .timeout_ms = 8000, .idle_core_mask = (1 &lt;&lt; 0), .trigger_panic = true };
+  if (esp_task_wdt_reconfigure(&amp;cfg) != ESP_OK) esp_task_wdt_init(&amp;cfg);
+}</code></pre>
+    <ul>
+      <li>Arduino는 켜질 때 워치독을 이미 켜 둡니다. 그래서 <code>init</code>이 아니라 <code>reconfigure</code>로 설정을 바꿉니다.</li>
+      <li>통신 태스크도 <code>esp_task_wdt_add(nullptr)</code>로 등록하고 한 바퀴마다 <code>esp_task_wdt_reset()</code>을 부릅니다.</li>
+      <li>MQTT 접속이 길면 6초까지 막힐 수 있어 8초는 여유가 크지 않습니다. 1단계에서 잰 최대값을 보고 정합니다.</li>
+    </ul>
+    <h4>이상을 푸는 법과 부팅</h4>
+    <ul>
+      <li><strong>풀기:</strong> 완료 버튼을 짧게 누르면 "봤다"(SEEN), 2초 길게 누르면 "해제"(CLEAR)입니다. 해제는 비상정지 핀이 정상(LOW)일 때만 받습니다. 해제 뒤 1초는 버튼을 무시합니다.</li>
+      <li><strong>부팅:</strong> <code>setup()</code> 맨 앞에서 서보를 원위치로, LED와 부저를 끕니다. <code>esp_reset_reason()</code>을 로그로 찍고, 그다음 BOOT를 신고합니다.</li>
+      <li><strong>서보:</strong> 코어 3.x에서는 <code>ledcAttach(PIN_SERVO, 50, 14);</code> 뒤 <code>ledcWrite(PIN_SERVO, us * 16384UL / 20000UL);</code>로 씁니다. 부저 소리도 같은 기능을 쓰므로 서로 주파수가 바뀌지 않는지 확인합니다.</li>
+    </ul>
+    <p class="pass"><strong>통과:</strong> 비상정지 10번 모두 LED와 부저가 바로 반응하고 FAULT 신고가 올라옵니다. 비상정지를 누른 채로는 해제되지 않습니다. 설비 태스크에 일부러 <code>for(;;);</code>를 넣으면 8초 뒤 리셋되고, 안전 자세를 잡은 뒤 BOOT가 올라옵니다.</p>
+    <p class="cap">흔한 실수: 인터럽트 안에서 <code>Serial</code>을 씀, <code>IRAM_ATTR</code>을 빠뜨림, 태스크가 만들어지기 전에 <code>attachInterrupt</code>를 부름. 펌웨어가 하는 것은 표시와 신고이고, 진짜 차단은 접점이 모터 전원을 끊는 배선입니다.</p>
+  </div>
+
+  <div class="stage" id="s6">
+    <h3><span class="no">6단계</span>숫자 표 채우기</h3>
+    <p>새로 만드는 것은 없습니다. 2~5단계에서 넣어 둔 계측으로 <a href="#measure">측정 결과표</a>의 칸을 채웁니다. 측정값은 설비 태스크가 10초마다 한 줄로 만들어 신고 큐에 넣고, 통신 태스크가 찍습니다.</p>
+<pre><code>struct Stat { uint32_t n = 0; int64_t mn = INT64_MAX, mx = 0, sum = 0; };
+static inline void statAdd(Stat &amp;s, int64_t v) { s.n++; s.sum += v; if (v &lt; s.mn) s.mn = v; if (v &gt; s.mx) s.mx = v; }
+
+static Stat per, lat;              // 박자 간격, 비상정지 지연
+static uint32_t dropRpt, qPeak;    // 신고 큐에 못 넣은 횟수, 가장 많이 찼을 때의 칸 수
+
+// 박자마다:        statAdd(per, 지금 - 지난번);            (esp_timer_get_time() 사용)
+// 비상정지로 깬 직후: statAdd(lat, micros() - estopUs);
+// 신고 큐에 넣을 때:  실패하면 dropRpt++, 성공하면 uxQueueMessagesWaiting(qReport)로 qPeak 갱신
+
+// 10초마다:
+snprintf(m.line, sizeof m.line,
+  "#[C] per=%lld/%lld/%lld late=%lu lat=%lld stk=%u qpk=%lu drop=%lu",
+  per.mn, per.sum / (per.n ? per.n : 1), per.mx, (unsigned long)late, lat.mx,
+  (unsigned)uxTaskGetStackHighWaterMark(nullptr), (unsigned long)qPeak, (unsigned long)dropRpt);</code></pre>
+    <ul>
+      <li>비상정지 지연은 버튼 떨림으로 알림이 여러 번 오므로 첫 번째만 셉니다.</li>
+      <li>이 지연에는 "핀이 바뀐 순간 → 인터럽트가 시작된 순간"이 빠져 있습니다. 표에 "소프트웨어 시각 기준"이라고 적습니다.</li>
+      <li>통신 태스크도 자기 스택 남은 양과 명령 큐에 못 넣은 횟수를 같은 식으로 찍습니다.</li>
+    </ul>
+    <p class="pass"><strong>통과:</strong> 결과표의 모든 칸에 실측값이 들어갑니다.</p>
+  </div>
+
+  <div class="stage" id="s7">
+    <h3><span class="no">7단계</span>판정 시험</h3>
+    <p>태스크판으로 갈지, 기존 코드로 돌아갈지를 정하는 시험입니다. 이미 정한 조건은 <strong>30분 연속 + 엣지 서버 끄기 10번 + 비상정지 10번</strong>입니다. 책상에서는 브로커 PC의 Wi-Fi 끄기로 엣지 서버 끄기를 대신합니다.</p>
+    <p class="pass"><strong>통과 (제안):</strong> 리셋 0번(BOOT가 처음 한 번만). <code>late</code> 0. "작업 끝" 누락 0. 같은 작업을 두 번 한 것 0. 비상정지 10번 모두 현장 버튼으로 해제.</p>
+    <p>못 넘으면 기존 코드(<code>modem.ino</code> 바탕)로 돌아갑니다. 이미 있는 코드라 잃는 것이 없습니다.</p>
+  </div>
+
+  <div class="stage" id="s8">
+    <h3><span class="no">8단계</span>진짜 작업 동작 끼우기</h3>
+    <p>"3초 기다리기"를 P2의 실제 움직임으로 바꿉니다. 작업 동작은 네 가지 함수의 묶음으로 약속해 두면, 나머지 코드는 건드리지 않습니다.</p>
+<pre><code>struct WorkAction {
+  void (*begin)();               // 작업 시작: 첫 자세
+  bool (*step)(uint32_t ms);     // 10ms마다 부른다. 기다리지 않는다. 끝났으면 true
+  bool (*done)();                // 끝났는지 (상태 조회용)
+  void (*safe)();                // 안전 자세: 부팅, 이상, 작업 끝에 부른다
+};
+extern const WorkAction workFake, workPress, workWeld, workPaint, workTurn;
+static const WorkAction *work = &amp;WORK_ACTION;   // config.h에서 고른다</code></pre>
+    <ul>
+      <li><code>step(ms)</code> 안에서 <code>delay()</code>를 쓰지 않습니다. "시작한 지 몇 ms인가"에 따라 서보 각도를 정하는 표로 짭니다.</li>
+      <li>스텝모터는 10ms 박자로는 펄스가 너무 느립니다. 별도 타이머가 필요합니다.</li>
+      <li>등을 끄고 1초 뒤에 "작업 끝"을 냅니다. 태그를 읽는 동안에는 모터를 돌리지 않습니다.</li>
+    </ul>
+    <p class="pass"><strong>통과:</strong> 20번 연속 성공. 작업 중에도 <code>late</code> 0. 작업 중 비상정지를 누르면 안전 자세로 갑니다. 그 뒤 4, 5, 7단계의 시험을 다시 통과합니다.</p>
+  </div>
+
+  <div class="stage" id="s9">
+    <h3><span class="no">9단계</span>다른 보드로 넓히기</h3>
+    <p><a href="#layout">코드 한 벌과 둘째 보드</a>의 점검표대로 합니다. 둘째 보드는 진짜 작업 동작을 넣기 전에, 가짜 작업으로 먼저 붙여 봅니다. 이름이 겹치거나 메시지가 섞이는 문제는 두 대일 때 가장 고치기 쉽습니다.</p>
+    <p class="pass"><strong>통과:</strong> 두 대를 같이 켰을 때 서로의 토픽에 반응하지 않고, 접속이 번갈아 끊기지 않습니다.</p>
+  </div>
+</section>
+
+<section id="measure">
+  <h2>측정 결과표와 발표 문장</h2>
+  <p>아래 표의 숫자는 <strong>전부 예시</strong>입니다. 실측으로 바꿔 넣습니다.</p>
+  <div class="tw"><table>
+    <tr><th>항목</th><th>조건</th><th>태스크 없는 코드</th><th>태스크판</th><th>기준 (제안)</th></tr>
+    <tr><td>설비가 멈춘 최대 시간</td><td>엣지 서버 끔 20번</td><td class="n">(예시) 3,050ms</td><td class="n">(예시) 10.4ms</td><td class="n">12ms 이하</td></tr>
+    <tr><td>설비가 멈춘 최대 시간</td><td>공유기 끔 20번</td><td class="n">(예시) 420ms</td><td class="n">(예시) 10.3ms</td><td class="n">12ms 이하</td></tr>
+    <tr><td>박자 최소 / 평균 / 최대</td><td>30분</td><td class="n">없음</td><td class="n">(예시) 9.71 / 10.00 / 10.62ms</td><td class="n">최대 12ms 이하</td></tr>
+    <tr><td>박자를 놓친 횟수</td><td>30분</td><td class="n">없음</td><td class="n">(예시) 0</td><td class="n">0</td></tr>
+    <tr><td>비상정지 지연 최대</td><td>10번, 소프트웨어 시각 기준</td><td class="n">(예시) 2,900ms</td><td class="n">(예시) 0.18ms</td><td class="n">1ms 미만</td></tr>
+    <tr><td>스택 남은 양 (설비 / 통신)</td><td>30분 뒤</td><td class="n">없음</td><td class="n">(예시) 3.1KB / 3.6KB</td><td class="n">25% 이상</td></tr>
+    <tr><td>신고 큐 최고 / 못 넣음 / 잃은 기록</td><td>엣지 서버 끔 10번</td><td class="n">없음</td><td class="n">(예시) 8칸 / 14번 / 0건</td><td class="n">잃은 기록 0</td></tr>
+    <tr><td>우선순위 시연: 박자 최대</td><td>같은 코어, 정상 / 뒤집음</td><td class="n">없음</td><td class="n">(예시) 10.5ms / 301ms</td><td class="n">차이가 보임</td></tr>
+  </table></div>
+  <ul>
+    <li>큐는 "못 넣은 횟수 0"이 아니라 <strong>"잃은 기록 0"</strong>을 봅니다. 끊긴 동안 못 넣은 것이 있어도, 다시 붙은 뒤 엣지 서버 쪽 기록이 번호마다 한 번이면 통과입니다.</li>
+    <li>박자 최대가 한두 번 튀면, 그 시각에 무엇이 있었는지(리더기 읽기, 다시 접속)를 같이 적습니다.</li>
+  </ul>
+
+  <h3>우선순위 시연 (선택)</h3>
+  <p>통신 태스크에 일부러 300ms 동안 쉬지 않고 도는 코드를 넣고, 설비 태스크의 박자 최대값을 세 번 비교합니다.</p>
+<pre><code>void burn(uint32_t ms) { uint32_t t = millis(); while (millis() - t &lt; ms) { } }
+// commTask 루프 안: burn(300); vTaskDelay(pdMS_TO_TICKS(50));</code></pre>
+  <div class="tw"><table>
+    <tr><th>배치</th><th>기대하는 결과</th><th>보여 주는 것</th></tr>
+    <tr><td>원래 설계 (다른 코어)</td><td>변화 없음</td><td>코어를 나눈 효과</td></tr>
+    <tr><td>둘 다 코어 1, 설비 3 &gt; 통신 2</td><td>변화 없음</td><td>우선순위가 높으면 끼어든다(선점)</td></tr>
+    <tr><td>둘 다 코어 1, 설비 2 &lt; 통신 3</td><td>박자 최대 약 300ms</td><td>우선순위가 낮으면 밀린다</td></tr>
+  </table></div>
+
+  <h3>발표에서</h3>
+  <div class="cols">
+    <div class="box"><h3 style="margin-top:0">말해도 되는 문장</h3>
+      <ul>
+        <li>"FreeRTOS 태스크 두 개로 통신과 설비 제어를 나눴고, 엣지 서버를 꺼도 설비 태스크의 최대 간격은 ○ms였습니다."</li>
+        <li>"태스크로 나누기 전에는 같은 상황에서 최대 ○초 동안 버튼을 보지 못했습니다."</li>
+        <li>"30분 동안 잰 값이고, 최악의 경우를 증명한 것은 아닙니다."</li>
+      </ul></div>
+    <div class="box"><h3 style="margin-top:0">말하면 안 되는 문장</h3>
+      <ul>
+        <li><strong>"10ms를 보장합니다."</strong> 잰 것은 관측한 최대값입니다.</li>
+        <li><strong>"RTOS를 탑재했습니다", "RTOS라서 가능합니다."</strong> 원래 있던 것이고, 잘 짠 loop로도 됩니다.</li>
+        <li><strong>"통신이 죽어도 설비는 안전합니다."</strong> 칩이 리셋되면 둘 다 멈춥니다. 안전은 접점 배선이 맡습니다.</li>
+      </ul></div>
+  </div>
+
+  <h3>받을 만한 질문</h3>
+  <div class="tw"><table>
+    <tr><th>질문</th><th>답</th></tr>
+    <tr><td>ESP32 Arduino는 이미 FreeRTOS인데 무엇을 더했나요?</td><td>커널은 그대로입니다. 더한 것은 설계입니다. loop 하나에 있던 일을 우선순위가 다른 두 태스크로 나누고 큐, 알림, 워치독으로 묶었으며, 차이를 숫자로 쟀습니다.</td></tr>
+    <tr><td>왜 태스크가 넷이 아니라 둘인가요?</td><td>나누는 기준이 "기다려도 되는가" 하나이기 때문입니다. 태스크가 늘면 같이 쓰는 자원과 스택, 살펴볼 범위만 늘어납니다. 리더기와 핀을 설비 태스크 혼자 써야 잠금이 필요 없습니다.</td></tr>
+    <tr><td>왜 코어에 고정하나요?</td><td>Wi-Fi 쪽 태스크가 코어 0에 있습니다. 설비 태스크를 코어 1에 두면 그것들과 CPU를 다투지 않습니다.</td></tr>
+    <tr><td>10ms가 보장되나요?</td><td>아닙니다. 깨어날 시각은 정해지지만 실제로 도는 시각은 밀릴 수 있습니다. 저희 값은 30분 동안 관측한 최대 ○ms입니다.</td></tr>
+    <tr><td>큐가 가득 차면요?</td><td>설비 태스크는 기다리지 않고 실패를 바로 압니다. 신고는 "다시 보낼 목록"에 남겨 같은 번호로 다시 보냅니다. 못 넣은 횟수를 세어 표에 적었습니다.</td></tr>
+    <tr><td>왜 잠금(뮤텍스)과 같이 쓰는 변수가 아닌가요?</td><td>잠금은 설비 태스크가 통신 태스크를 기다리게 만들 수 있고, 한 번 빠뜨리면 찾기 어렵습니다. 큐는 값을 복사해 넘기므로 같이 쓰는 메모리가 없습니다.</td></tr>
+    <tr><td>비상정지를 왜 인터럽트 안에서 바로 끄지 않나요?</td><td>인터럽트는 짧아야 하고, 상태와 출력은 설비 태스크만 만진다는 규칙 때문입니다. 알림으로 ○µs 안에 설비 태스크가 깨어나며, 실제 차단은 배선이 합니다.</td></tr>
+    <tr><td>워치독이 터지면요?</td><td>칩이 리셋되고, 안전 자세를 잡은 뒤 "켜졌다"를 신고합니다. 워치독은 되살리는 수단이지 나누는 수단이 아닙니다.</td></tr>
+  </table></div>
+</section>
+
+<section id="layout">
+  <h2>코드 한 벌과 둘째 보드</h2>
+  <p>보드마다 코드를 복사하지 않습니다. 한 벌을 두고, 보드마다 다른 것은 설정 파일의 한 줄로 고릅니다.</p>
+<pre><code>station/
+  station.ino        setup: 안전 자세 → 큐 → 워치독 → 통신 태스크 → 설비 태스크
+  config.h           공정 번호, 핀표, 작업 동작 선택
+  msg.h              Msg, 큐와 핸들, kv()
+  ctrl.cpp / .h      버튼, 리더기, 상태 흐름, 다시 보낼 목록, 비상정지
+  comm.cpp / .h      modem.ino에서 옮긴 Wi-Fi와 MQTT
+  work.h             WorkAction
+  work_fake.cpp  work_p1_press.cpp  work_p2_weld.cpp  work_p3_paint.cpp  work_p4_turn.cpp
+  secrets.example.h  (secrets.h는 git에 올리지 않는다)</code></pre>
+<pre><code>// config.h
+#pragma once
+#define STATION_ID 2                 // ← 보드마다 이 한 줄만 바꾼다
+#define USE_FAKE_WORK 0              // 1이면 "3초 기다리기"
+
+#if   STATION_ID == 1
+  #define STATION "P1"
+  #define WORK_REAL workPress
+#elif STATION_ID == 2
+  #define STATION "P2"
+  #define WORK_REAL workWeld
+#elif STATION_ID == 3
+  #define STATION "P3"
+  #define WORK_REAL workPaint
+#elif STATION_ID == 4
+  #define STATION "P4"
+  #define WORK_REAL workTurn
+#else
+  #error "STATION_ID는 1~4"
+#endif
+
+#define WORK_ACTION (USE_FAKE_WORK ? workFake : WORK_REAL)
+#define BASE      "factory/station/" STATION "/"     // 토픽 앞부분
+#define CLIENT_ID "modem-" STATION                   // 브로커에 붙는 이름. 보드마다 달라야 한다
+
+// 공통 핀 (제안). 공정마다 다른 핀은 위 #if 안에 둔다
+#define PIN_SCK 18
+#define PIN_MISO 19
+#define PIN_MOSI 23
+#define PIN_SS 21
+#define PIN_RST 22
+#define PIN_LED 27
+#define PIN_BUZZ 32
+#define PIN_BTN_DONE 33
+#define PIN_ESTOP 4
+#define PIN_ACT0 13</code></pre>
+  <ul>
+    <li>토픽은 공정 이름에서 자동으로 만들어집니다. 코드 어디에도 "P2"를 직접 쓰지 않습니다.</li>
+    <li>부팅할 때 <code># station P1</code> 한 줄을 찍게 하고, 보드에 이름표를 붙입니다.</li>
+  </ul>
+  <h3>둘째 보드 점검표</h3>
+  <ol>
+    <li>0단계 Blink로 보드와 케이블을 확인합니다.</li>
+    <li><code>STATION_ID</code>를 바꾸고 <code>USE_FAKE_WORK 1</code>로 올립니다.</li>
+    <li>부팅 줄의 이름을 확인하고, <code>watch</code>에서 <code>factory/station/P1/link 1</code>을 봅니다.</li>
+    <li>RC522 버전 줄이 0x91, 0x92, 0x88 가운데 하나인지 봅니다.</li>
+    <li>가짜 작업으로 한 사이클을 돌립니다.</li>
+    <li>끊김 한 번, 비상정지 한 번을 해 봅니다.</li>
+    <li>P2와 동시에 켜서, 서로의 토픽에 반응하지 않는지와 접속이 번갈아 끊기지 않는지 봅니다.</li>
+    <li><code>jit</code>, <code>late</code>, 스택 남은 양을 확인합니다.</li>
+    <li>진짜 작업으로 바꿔 20번 돌립니다.</li>
+    <li>그 공정의 핀표를 문서에 적습니다.</li>
+  </ol>
+</section>
+
+<section id="trouble">
+  <h2>문제가 생겼을 때</h2>
+  <div class="tw"><table>
+    <tr><th>증상</th><th>유력한 원인</th><th>먼저 볼 것</th></tr>
+    <tr><td>Wi-Fi를 켜는 순간 재부팅, <code>Brownout detector</code></td><td>USB 전류 부족, 서보를 보드 전원에 물림</td><td>짧은 케이블로 PC에 직접. 서보는 별도 5V</td></tr>
+    <tr><td><code>Guru Meditation … LoadProhibited</code></td><td>만들어지기 전의 큐나 태스크 핸들을 씀</td><td>만드는 순서: 큐 → 통신 태스크 → 설비 태스크</td></tr>
+    <tr><td><code>Stack canary watchpoint triggered</code></td><td>스택 부족 (큰 지역 배열, <code>Msg</code> 여러 개)</td><td><code>stk</code> 값. 6144 → 8192</td></tr>
+    <tr><td><code>task_wdt: … comm</code> 뒤 리셋</td><td>MQTT 접속이 막힌 시간이 제한보다 김</td><td>1단계의 최대값, 워치독 제한 시간</td></tr>
+    <tr><td><code>task_wdt: … IDLE0</code></td><td>통신 태스크에 쉬는 지점이 없음</td><td>루프에 큐 대기 5ms가 있는지</td></tr>
+    <tr><td>켜도 안 돌거나 부팅을 되풀이</td><td>부팅 설정 핀 0·2·5·12·15에 부품</td><td>그 핀의 선을 뺌. 특히 12번의 풀업</td></tr>
+    <tr><td><code>late</code>가 계속 늘거나 <code>jit</code>가 20ms대</td><td>리더기 읽기, 설비 태스크 안의 <code>delay</code>나 <code>Serial</code></td><td>3-가의 측정과 응답 대기 설정</td></tr>
+    <tr><td>RC522 버전이 0x00 또는 0xFF</td><td>배선, 전원, SDA·RST 핀</td><td>SDA → 21, 3.3V, GND</td></tr>
+    <tr><td>태그가 한 번만 읽힘</td><td>한 번 읽은 태그는 뗐다 다시 대야 함</td><td>정상 동작</td></tr>
+    <tr><td><code>MQTT 실패 rc=-2</code></td><td>브로커에 닿지 못함</td><td>PC의 IP, 설정 두 줄, 방화벽 1883, 같은 Wi-Fi</td></tr>
+    <tr><td><code>rc=-4</code></td><td>연결은 됐는데 브로커가 답하지 않음</td><td>브로커 로그, 포트 번호</td></tr>
+    <tr><td><code>rc=-3</code>이 되풀이됨</td><td>보드 두 대가 같은 이름으로 접속</td><td><code>STATION_ID</code></td></tr>
+    <tr><td><code>rc=5</code></td><td>익명 접속이 막힘</td><td><code>allow_anonymous true</code></td></tr>
+    <tr><td>켜자마자 또는 다시 붙자마자 작업 시작</td><td>브로커에 보관된 옛 "작업 중"</td><td><code>state P2 IDLE 0 --lamp 0</code>으로 덮어씀</td></tr>
+    <tr><td>긴 메시지가 안 옴</td><td>MQTT 버퍼가 기본 256</td><td><code>setBufferSize(512)</code></td></tr>
+    <tr><td>비상정지가 가끔 안 먹음</td><td>인터럽트에 <code>IRAM_ATTR</code> 없음, 핀을 다시 보지 않음</td><td>박자마다 <code>digitalRead</code>로 다시 보는 코드</td></tr>
+    <tr><td><code>watch</code> 창이 번갈아 끊김</td><td>PC 도구의 접속 이름이 고정</td><td>창을 하나만</td></tr>
+  </table></div>
+</section>
+
+<section id="open">
+  <h2>아직 정해야 할 것</h2>
+  <div class="cols">
+    <div><h3 style="margin-top:0">팀이 정할 것</h3>
+      <ul>
+        <li>버튼 두 개의 역할. 문서에 "완료 · 비상정지 겸 확인"과 "완료 버튼 짧게/길게"가 함께 적혀 있습니다. 이 가이드의 코드는 뒤쪽을 따랐습니다.</li>
+        <li>공정별 구동기와 센서, 그에 따른 핀표.</li>
+        <li>허가가 오지 않을 때 WAIT에서 빠져나오는 시간.</li>
+        <li>"거부" 답의 모양.</li>
+        <li>엣지 서버가 보낸 이상을, 현장에서 해제한 뒤 언제 0으로 내려 줄지.</li>
+        <li>마지막 작업 번호를 꺼져도 남게 저장할지.</li>
+        <li>"끊김"을 상태 LED로 어떻게 보여 줄지.</li>
+        <li>워치독 제한 시간(1단계 실측 뒤).</li>
+      </ul></div>
+    <div><h3 style="margin-top:0">실물로 확인할 것</h3>
+      <ul>
+        <li>이 문서의 모든 코드가 컴파일되는지.</li>
+        <li>보드의 핀 순서가 그림과 같은지, 내장 LED가 2번인지.</li>
+        <li>리더기 응답 대기를 5ms로 줄여도 태그가 읽히는지.</li>
+        <li>WS2812B가 3.3V 데이터로 켜지는지.</li>
+        <li>키트 부저가 능동인지 수동인지.</li>
+        <li>남은 스택 값의 단위.</li>
+        <li>워치독의 기본 제한 시간.</li>
+        <li>MQTT 접속이 실제로 얼마나 막히는지(1단계).</li>
+      </ul></div>
+  </div>
+  <h3>근거로 본 자료</h3>
+  <ul>
+    <li>프로젝트: <code>HANDOFF.md</code> 6·7절, <code>RTOS_도입_제안서</code>, <code>데이터흐름_설명서</code> 부록, <code>esp32_book/code/</code>의 스케치와 PC 도구, ESP32 교본.</li>
+    <li>ESP-IDF v5.5 문서: <a href="https://docs.espressif.com/projects/esp-idf/en/v5.5/esp32/api-reference/system/freertos_idf.html">FreeRTOS (IDF)</a>, <a href="https://docs.espressif.com/projects/esp-idf/en/v5.5/esp32/api-reference/system/wdts.html">Watchdogs</a>, <a href="https://docs.espressif.com/projects/esp-idf/en/v5.5/esp32/api-guides/performance/speed.html">Speed Optimization</a>.</li>
+    <li>핀: <a href="https://docs.espressif.com/projects/esp-dev-kits/en/latest/esp32/esp32-devkitc/user_guide.html">ESP32-DevKitC V4 User Guide</a>, <a href="https://docs.espressif.com/projects/esp-idf/en/stable/esp32/api-reference/peripherals/gpio.html">GPIO</a>, <a href="https://docs.espressif.com/projects/esptool/en/latest/esp32/advanced-topics/boot-mode-selection.html">Boot Mode Selection</a>.</li>
+    <li>원본 코드: <a href="https://github.com/espressif/arduino-esp32/tree/3.3.0/cores/esp32">arduino-esp32 3.3.0</a>, <a href="https://github.com/knolleary/pubsubclient/tree/master/src">PubSubClient</a>, MFRC522 라이브러리.</li>
+  </ul>
+</section>
+
+</div>
