@@ -1,0 +1,283 @@
+{
+  "_note": "AGV 설정. 주행 방식은 상황별 주행(situ.py) 하나다. 설계와 근거: 설계안_1126_상황별주행.md",
+  "camera": {
+    "width": 224,
+    "height": 224,
+    "servo_enabled": true,
+    "servo_id": 5,
+    "servo_angle": 50,
+    "_note": "PJT08 모델은 224x224, 서보 5번 50도로 찍은 사진으로 학습했다. 팔을 떼어 카메라 각도가 바뀌면 servo_*를 다시 정하고 모델은 다시 학습한다."
+  },
+  "drive": {
+    "speed": 0.4,
+    "approach_speed": 0.25,
+    "align_speed": 0.25,
+    "max_motor": 0.6,
+    "min_motor": -0.5,
+    "motor_deadband": 0.05,
+    "cm_s_per_unit": 16.7,
+    "_note_motor": "실측: 초속 = (모터 - motor_deadband) × cm_s_per_unit. 0.40 -> 약 5.8cm/s. 달리며 꺾기(0.25/0.55)는 8~11°/s뿐, 제자리 회전 ±0.35는 13~17°/s (11-26). 배터리에 따라 달라진다.",
+    "_note": "speed = 직선 속도(모터 값). 궤도 값은 0, 0.18 이상, -0.25 이하로만 쓴다(0.05~0.17은 돌 때 실제로 멈춤 — 11-25 영상). approach_speed·align_speed는 색 구역에서 설 때."
+  },
+  "ctrl": {
+    "_note_situ": "상황별 주행(situ.py, 11-26). 선 기억·추측 항법 없음. LINE = 직선 3단계 조향(s = ψ + e/line_e_len_cm: line_dead_deg 이하 직진 / 그 위는 달리며 꺾기 line_turn_min~max / line_align_deg 넘으면 서서 제자리 회전(±pivot_motor)으로 line_align_done_deg까지). APP = 휨 각도 > bend_deg가 bend_frames장 연속(모서리 접근, cor_speed로 느리게 직진). COR = 아랫줄 선 위치 yb가 cor_y_hi_cm에 닿으면 cor_extra_cm 더 가서 제자리 좌회전, yb가 cor_y_lo_cm로 돌아오면 직진(cor_speed). 나가는 곧은 선이 보이면 차체가 그 위에 올 때까지(e ≥ -cor_e_stop_cm) 가서 방향을 cor_exit_psi_deg 안으로 맞추고 LINE. near_* = 아랫줄 선 검출기(갈림길에서 구간 규칙 쪽으로는 near_fork_jump_cm까지 넘어감). 모서리는 corner_targets 구간에서 구간당 한 번, 노랑을 본 뒤 corner_after_yellow_s 동안과 앞 모서리 직후 lockout_cm 동안은 시작하지 않는다. 이 값들은 11-26 낮에 사용자가 \"여태 한 것 중에 제일 잘됐다\"고 한 버전 그대로다. 그 뒤의 부드럽게 시도와 되돌린 이유는 부드럽게_시도_기록_1126.md.",
+    "pivot_motor": 0.35,
+    "cor_speed": 0.25,
+    "bend_deg": 10.0,
+    "bend_frames": 3,
+    "cor_y_hi_cm": 7.0,
+    "cor_y_lo_cm": 6.0,
+    "cor_extra_cm": 1.0,
+    "cor_e_stop_cm": 0.5,
+    "cor_exit_psi_deg": 5.0,
+    "cor_turn_max_s": 6.0,
+    "app_max_s": 8.0,
+    "line_e_len_cm": 12.0,
+    "line_dead_deg": 2.0,
+    "line_turn_min": 0.1,
+    "line_turn_max": 0.15,
+    "line_align_deg": 10.0,
+    "line_align_done_deg": 3.0,
+    "x_max_psi_deg": 15.0,
+    "x_max_e_cm": 3.0,
+    "lost_hold_s": 0.3,
+    "lost_max_s": 2.5,
+    "near_y_min_cm": -1.0,
+    "near_y_min_app_cm": -4.0,
+    "near_jump_cm": 3.5,
+    "near_fork_jump_cm": 9.0,
+    "near_hold_s": 0.3,
+    "corner_enabled": true,
+    "corner_targets": [
+      "orange",
+      "green",
+      "blue",
+      "yellow"
+    ],
+    "corner_after_yellow_s": 1.0,
+    "lockout_cm": 5.0,
+    "lost_corner_psi_deg": 15.0,
+    "_note_lost": "선을 lost_hold_s 넘게 못 보면: 모서리 구간이고 마지막에 본 선이 왼쪽으로 lost_corner_psi_deg 이상 꺾여 있었을 때만 모서리(왼쪽 회전)로 본다. 마지막에 본 선이 곧게 정면(|ψ| < lost_straight_psi_deg, 옆 lost_straight_y_cm 안)이었으면 색 구역이 가린 것 -> 돌지 않고 cor_speed로 곧게(LOST_GO). 아니면 마지막으로 선이 있던 쪽으로 돌며 찾고 lost_max_s 넘으면 정지. (제일 잘됐던 버전에 더한 유일한 수정 — 보라 위에서 선이 0.3초 가려지자 6초 좌회전하던 것)",
+    "lost_straight_psi_deg": 10.0,
+    "lost_straight_y_cm": 3.0,
+    "_note_1127": "11-27 사용자 요청: 모서리에서 '지금보다 좀 빠르게 돌기 시작하고, 속도는 좀 느려도 좋다'. cor_extra_cm 2.0 -> 1.0 (회전 전 더 가는 거리), cor_speed 0.30 -> 0.25 (모서리 안 전진). 되돌리려면 2.0 / 0.30.",
+    "cor_same_line_rules": [
+      "left"
+    ],
+    "cor_same_line_cm": 1.5,
+    "cor_same_line_e_max_cm": 3.0,
+    "_note_same_line": "11-27 에이전트 팀 결론: 구간 규칙이 cor_same_line_rules(빨강->노랑 = 'left')일 때, 모서리의 '나가는 곧은 선'은 그 선이 아랫줄을 지나는 자리가 아랫줄 검출기 yb와 cor_same_line_cm 안이고 옆 오차가 cor_same_line_e_max_cm 이하일 때만 믿는다. 아니면 끝내지 않고 yb로 계속 돈다. 근거: 11-27 b 두 바퀴·e에서 곧은 바깥 갈래(차이 2.2~2.5cm, e에선 왼쪽 5.4cm 선)로 모서리를 끝내 S자로 감. 다른 모서리 16번은 차이 0~0.9cm. rules를 []로 하면 예전과 같다.",
+    "cor_steer": true,
+    "cor_steer_targets": [
+      "blue"
+    ],
+    "cor_steer_tight": [
+      -0.2,
+      0.6
+    ],
+    "cor_steer_wide": [
+      0.2,
+      0.5
+    ],
+    "cor_steer_max_s": 6.0,
+    "_note_steer": "11-27 사용자: '끼익 끼익 멈추며 각도를 바꾸는 느낌 -> 핸들링 느낌으로'. 에이전트 팀 결론: Corner 판단은 그대로, 모서리 안 모터 값만 바꾼다. 첫 회전 뒤부터 TURN -> cor_steer_tight(안쪽 궤도 살짝 뒤, 바깥 세게 앞: 앞으로 가며 돎), GO/EXT -> cor_steer_wide(살짝 휘며 감). 나가는 곧은 선을 한 번 보면 그 모서리는 예전 동작으로 마무리, cor_steer_max_s 넘으면 예전 동작. cor_steer_targets = 모서리를 시작할 때의 목표 구역(처음엔 보라->파랑 'blue' 한 곳만). 궤도 값 0.05~0.17은 멈추므로 쓰지 않음. 끄려면 cor_steer false.",
+    "cor_fork_rules": [
+      "left"
+    ],
+    "cor_fork_gap_cm": 2.0,
+    "cor_fork_psi_deg": 12.0,
+    "cor_fork_yb_min_cm": 4.5,
+    "cor_fork_y_lo_cm": 2.0,
+    "cor_fork_max_s": 2.5,
+    "_note_fork": "11-27 둘째 팀 회의(빨강->노랑): 구간 규칙이 cor_fork_rules('left')이고 첫 회전 뒤, 곧은 선(|ψ|<cor_fork_psi_deg)이 아랫줄을 지나는 자리가 yb보다 cor_fork_gap_cm 넘게 오른쪽이며 yb ≥ cor_fork_yb_min_cm이면 '갈림길 장면' -> 바로 회전, yb ≤ cor_fork_y_lo_cm이면 모서리 끝. cor_fork_max_s 넘으면 예전 동작. 근거: h·e·c·b2바퀴는 이 장면 뒤 6cm에서 회전을 멈추고 곁길과 나란히 직진, g는 이 장면 0번. rules []면 예전과 같다.",
+    "near_fork_min_w_px": 12,
+    "_note_fork_min_w": "near_fork_min_w_px: 구간 규칙 'left'(빨강->노랑)에서 아랫줄 검출기가 왼쪽으로 near_jump_cm 넘게 건너뛸 때는 폭이 이 값 이상인 덩어리만 받는다. 11-27 f·i: 화면 왼쪽 아래 같은 자리의 폭 5~7칸 가짜 검정(y 8.0)으로 건너뛰어 빨강 지나자마자 6초 제자리 회전 후 정지(첫 팀 회의에서 찾은 문제). 0이면 예전과 같다.",
+    "cor_fork_reset_tracker": true,
+    "_note_fork_reset": "cor_fork_reset_tracker: 갈림길 회전(cor_fork_*)으로 모서리가 끝나면 선 추적기를 처음 상태로 되돌린다. 11-27 071743: 갈림길 회전은 맞게 켜지고 본길 기준 ψ 7°로 맞게 끝났지만, 추적기가 11.2초부터 곁길에 붙어 있어 끝난 뒤 곁길을 따라 매트 밖으로. false면 예전과 같다."
+  },
+  "track": {
+    "band_top": 0.3,
+    "band_bottom": 0.95,
+    "rows": 16,
+    "max_floor_x_cm": 25.0,
+    "min_points": 5,
+    "base_points": 5,
+    "base_depth_cm": 4.0,
+    "bend_run": 3,
+    "bend_last_cm": 2.5,
+    "gate_px": 12,
+    "gate_per_row": 0.15,
+    "gate_first_px": 40,
+    "corner_trigger_deg": 25,
+    "bend_dev_cm": 1.0,
+    "near_fit_x_cm": 18.0,
+    "near_min_points": 4,
+    "_note": "선 추적(line_tracker.FloorLineTracker): 줄 rows개를 아래에서 위로 예측하며 따라간다. 후보가 둘 이상이면 구간 규칙(branch)으로 고른다. max_floor_x_cm = 차체에서 이 거리 안쪽 줄만 쓴다."
+  },
+  "branch": {
+    "rules": {
+      "yellow": "left",
+      "orange": "right",
+      "green": "right",
+      "purple": "right"
+    },
+    "straight_after_yellow_s": 0.3,
+    "straight_max_s": 4.0,
+    "left_max_s": 25.0,
+    "_note": "구간 규칙: 목표 구역(target)별로 갈림길에서 고를 선. 빨강→노랑(target yellow) = 왼쪽 선(오른쪽 아래 코너 끝에서 S자 곁길이 바깥으로 갈라짐), 노랑이 띠에 보이는 동안 + 떠난 뒤 1초 = 직진(X자 교차), 노랑→주황 = 오른쪽 선(오른쪽 위 코너 앞에서 곁길이 안쪽에서 합류), 초록·보라 = 오른쪽 선(초록 안에서 안쪽 혹이 갈라지고 보라 앞에서 합류). 'left'는 left_max_s 넘게 이어지면 끈다(노랑을 놓쳐 노랑 위까지 왼쪽을 고르면 곁길로 들어감). 그 밖 = 예측에 가장 가까운 선.",
+    "reset_tracker_after_x": true,
+    "_note_reset_x": "reset_tracker_after_x: 노랑이 사라져 '직진'이 '오른쪽'으로 바뀌는 순간 선 추적기를 처음 상태로. 11-27 074121: X자 안에서 추적기 기억이 왼쪽 호에 붙어 규칙이 바뀐 뒤에도 곁길을 탐. 사진 확인: 되돌리면 본길, 잘 된 7번(t063316~t064648, g 두 바퀴, b)은 결과 같음. false면 예전과 같다."
+  },
+  "floor": {
+    "line_width_cm": 2.0,
+    "default_img_pts": [
+      [
+        57,
+        200
+      ],
+      [
+        167,
+        200
+      ],
+      [
+        137,
+        95
+      ],
+      [
+        87,
+        95
+      ]
+    ],
+    "default_floor_pts": [
+      [
+        17,
+        7.5
+      ],
+      [
+        17,
+        -7.5
+      ],
+      [
+        40,
+        -7.5
+      ],
+      [
+        40,
+        7.5
+      ]
+    ],
+    "_note": "default_*는 대략값(시험용). 실주행 전에 calib_floor.py로 재면 floor_calib.json이 쓰인다. 바닥 좌표: 원점 차체 중심, x 앞, y 왼쪽(cm)."
+  },
+  "line": {
+    "band_top": 0.6,
+    "band_bottom": 0.95,
+    "dark_ratio": 0.7,
+    "dark_max_gray": 125,
+    "dark_max_sat": 55,
+    "blackhat_min": 18,
+    "blackhat_kernel": 61,
+    "blackhat_max_gray": 140,
+    "mat_min_sat": 40,
+    "min_width_px": 4,
+    "max_width_px": 90,
+    "_note": "선 판정(검은 선 마스크). 기준은 PJT08 자동 라벨 실측: 선 회색 65~110·채도 5~40, 매트 150~230. band_top/bottom은 화면 표시용 띠.",
+    "reject_hues": [
+      [
+        75,
+        12,
+        25
+      ]
+    ],
+    "_note_reject": "reject_hues = [[색조, 허용 차이, 최소 채도], ...]: 이 색조에 가깝고 채도가 최소 채도 이상인 점은 선으로 보지 않는다. 11-27 낮: 초록 구역이 채도 34~61로 흐리게 찍혀 일부가 선으로 잡힘 -> 첫 모서리에서 아랫줄 선 위치가 3~5cm로 잘못 나와 회전을 멈추고 직진, 바깥으로 나감, 초록을 못 봐서 목표가 초록에 머묾. 이 줄을 지우면 예전과 똑같이 동작한다.",
+    "dim_flank_gray": 130,
+    "_note_dim_flank": "dim_flank_gray: 선 후보의 한쪽 옆이 확실한 매트(>150)·검정이면 반대쪽 옆은 이 밝기만 넘어도 받는다(이 줄이 없으면 예전처럼 양옆 모두 매트·검정이어야 함). 11-27 둘째 바퀴 빨강->노랑 모서리 끝: 화면 왼쪽 아래의 안쪽 갈래 왼쪽 매트가 136~149로 찍혀 후보에서 빠짐 -> 규칙 'left'인데 고를 것이 바깥 갈래뿐이라 바깥으로 감. dim_flank_rules: 이 구간 규칙일 때만 켠다(11-27: 모든 구간에 켜니 다른 모서리의 판단도 달라져서 'left'로 좁힘).",
+    "dim_flank_rules": [
+      "left"
+    ]
+  },
+  "color": {
+    "band_top": 0.75,
+    "band_bottom": 1.0,
+    "band_width": 0.6,
+    "min_s": 45,
+    "min_v": 60,
+    "min_fill": 0.3,
+    "max_h_dist": 10,
+    "confirm_frames": 3,
+    "unlock_empty_frames": 10,
+    "ignore_after_depart_s": 0.3,
+    "hues": {
+      "red": 3,
+      "orange": 12,
+      "yellow": 25,
+      "green": 75,
+      "blue": 109,
+      "purple": 129
+    },
+    "_note": "hues는 도면 색에서 계산한 처음 값(OpenCV H 0~179). calib_hsv.py로 매트에서 다시 재면 hsv_calib.json이 이 값을 덮어쓴다. min_s: 가이드 처음 값 80이었으나 PJT08 사진 실측에서 초록 구역 채도가 61~74라 45로 내림(흰 매트 5~15, 검은 선 5~40은 그대로 빠짐). 실측 H: 빨강 0~4, 주황 10~14, 노랑 20~29, 초록 74, 파랑 105~109, 보라 125~129.",
+    "start_min_fill": 0.1,
+    "start_window_s": 0.5,
+    "start_frames": 2,
+    "catchup_max": 1,
+    "catchup_frames": 5,
+    "_note_catchup": "11-27 팀 회의(색 놓침): start_window_s 안에서 다음 차례 색이 채움 start_min_fill 이상으로 start_frames장 보이면 그 구역 위에서 출발한 것으로 보고 PASS(start). 달리는 중 목표를 놓쳤는데 그다음 색(catchup_max칸까지)이 catchup_frames장 이어지면 CATCHUP:놓친색 -> 따라잡기. 근거: 064900(빨강 끝 출발, 채움 0.16), 024316(초록 0.28로 놓친 뒤 보라·파랑·빨강 SKIP). start_window_s 0, catchup_max 0이면 예전과 같다."
+  },
+  "route": {
+    "order": [
+      "yellow",
+      "orange",
+      "green",
+      "purple",
+      "blue",
+      "red"
+    ],
+    "names": {
+      "yellow": "노랑 출발",
+      "orange": "P1 프레스",
+      "green": "P2 차체",
+      "purple": "P3 도장",
+      "blue": "P4 의장",
+      "red": "검사"
+    },
+    "start_after": "yellow",
+    "_note": "반시계 순서. start_after = 출발할 때 막 떠난 구역(노랑에 서서 시작하면 yellow, 다음 목표는 orange)."
+  },
+  "stop": {
+    "mode": "pass",
+    "sec_per_cm": 0.12,
+    "extra_cm": {
+      "yellow": 6,
+      "orange": 6,
+      "green": 6,
+      "purple": 6,
+      "blue": 6,
+      "red": 6
+    },
+    "wait_s": 5.0,
+    "stop_zones": [
+      "yellow",
+      "orange",
+      "green",
+      "purple",
+      "blue",
+      "red"
+    ],
+    "_note": "mode: color(색을 보고 가운데에 섬) / pass(서지 않고 색 이름만 출력, 3단계). 색이 아래 띠에서 사라진 뒤 extra_cm(=4+d)만큼 더 간다. sec_per_cm는 30cm 직선을 달린 시간으로 구한다(align_speed 기준)."
+  },
+  "safety": {
+    "loop_timeout_s": 0.3,
+    "frame_timeout_s": 0.3,
+    "no_color_max_s": 120.0,
+    "_note": "선을 lost_hold_s 넘게 놓치면 이상. 색 없이 no_color_max_s(가장 긴 구간 46.5cm 시간의 2배) 넘게 달리면 이상. 한 바퀴 일이 loop_timeout_s를 넘거나 사진이 frame_timeout_s 동안 새로 안 오면 정지."
+  },
+  "loop": {
+    "hz": 20,
+    "save_every_n": 0,
+    "_note": "save_every_n > 0 이면 n장마다 사진을 logs/frames/에 저장(한 바퀴 연속 사진, 집에서 매트 대신 쓴다)."
+  },
+  "mqtt": {
+    "host": "",
+    "port": 1883,
+    "_note": "지금은 비워 둔다. 나중에 should_stop/should_depart를 MQTT '태그 읽음'/'작업 완료'로 바꾼다."
+  }
+}
